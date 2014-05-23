@@ -1,0 +1,13 @@
+{
+	"name": "DEGen",
+	"url" : "",
+	"license": "MIT",
+	"tags": ["procedural", "game"],
+	"description": "A procedural generation library",
+	"version": "0.0.1",
+	"releasenote": "Initial release",
+	"contributors": ["Ben Van Treese"],
+	"dependencies": {
+		"polygonal-ds" : "*"
+	}
+}
