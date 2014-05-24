@@ -11,19 +11,19 @@ class Node {
     public var x:Int = 0;
     public var y:Int = 0;
 
-    public function new(ops:Dynamic){
+    public function new(?ops:Dynamic = null){
         Extender.extend(this, ops);
     }
 
-    function isLeaf(){
+    public function isLeaf(){
         return this.left == null && this.right == null;
     }
 
-    function isRoot(){
+    public function isRoot(){
         return this.parent == null;
     }
 
-    function traversePreOrder(callback){
+    public function traversePreOrder(callback){
         callback(this);
 
         if(left != null){
@@ -34,7 +34,7 @@ class Node {
         }
     }
 
-    function traverseInOrder(callback){
+    public function traverseInOrder(callback){
         if(left != null){
             left.traverseInOrder(callback);
         }
@@ -46,7 +46,7 @@ class Node {
         }
     }
 
-    function traversePostOrder(callback){
+    public function traversePostOrder(callback){
         if(left != null){
             left.traversePostOrder(callback);
         }

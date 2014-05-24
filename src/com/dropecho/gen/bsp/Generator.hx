@@ -1,5 +1,7 @@
 package com.dropecho.gen.bsp;
 
+import com.dropecho.gen.utils.Extender;
+
 class Generator {
     public var width:Int = 256;
     public var height:Int = 256;
@@ -8,6 +10,10 @@ class Generator {
     public var minNodeHeight:Int = 10;
     public var x:Int = 0;
     public var y:Int = 0;
+
+    public function new(ops:Dynamic){
+        Extender.extend(this, ops);
+    }
 
     public function generate(root:Node = null){
         buildTree(new Node({height: height, width: width, x: x, y: y}));

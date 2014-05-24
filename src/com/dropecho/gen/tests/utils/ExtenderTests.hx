@@ -25,4 +25,28 @@ class ExtenderTests extends haxe.unit.TestCase {
         Extender.extend(base, ex);
         assertEquals(0, base.a.b);
     }
+
+    public function test_extender_should_handle_null_extension_object(){
+        var good = false;
+        try {
+            Extender.extend(base, null);
+            good = true;
+        } catch(e:Dynamic) {
+            good = false;
+        }
+
+        assertTrue(good);
+    }
+
+    public function test_extender_should_handle_null_base_object(){
+        var good = false;
+        try {
+            Extender.extend(null, ex);
+            good = true;
+        } catch(e:Dynamic) {
+            good = false;
+        }
+
+        assertTrue(good);
+    }
 }
