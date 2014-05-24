@@ -1,8 +1,7 @@
 --times
 
 -cp src
--js bin/js/deagent.js
+-js bin/js/degen.js
 
---macro include('com.dropecho.gen');
---macro exclude('com.dropecho.gen.tests');
-
+--macro include('com.dropecho.gen.bsp')
+--macro include('com.dropecho.gen.utils')

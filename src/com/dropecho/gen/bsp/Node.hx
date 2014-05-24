@@ -1,7 +1,8 @@
 package com.dropecho.gen.bsp;
 
-import com.dropecho.gen.utils.*;
+import com.dropecho.gen.utils.Extender;
 
+@:expose("degen.bspNode")
 class Node {
     public var width:Int = 0;
     public var height:Int = 0;

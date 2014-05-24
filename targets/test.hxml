@@ -2,5 +2,5 @@
 
 -cp src
 -neko bin/tests/tests.n
---macro include('com.dropecho')
+--macro include('com.dropecho.gen')
 -main com.dropecho.gen.tests.TestRunner
