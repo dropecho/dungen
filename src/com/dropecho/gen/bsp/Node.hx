@@ -1,5 +1,7 @@
 package com.dropecho.gen.bsp;
 
+import com.dropecho.gen.utils.*;
+
 class Node {
     public var width:Int = 0;
     public var height:Int = 0;
@@ -10,7 +12,7 @@ class Node {
     public var y:Int = 0;
 
     public function new(ops:Dynamic){
-
+        Extender.extend(this, ops);
     }
 
     function isLeaf(){
