@@ -8,6 +8,5 @@
 	"releasenote": "Initial release",
 	"contributors": ["Ben Van Treese"],
 	"dependencies": {
-		"polygonal-ds" : "*"
 	}
 }
