@@ -1,7 +1,6 @@
 --times
 
 -cp src
--lib polygonal-ds
 -neko bin/tests/tests.n
 --macro include('com.dropecho')
 -main com.dropecho.gen.tests.TestRunner

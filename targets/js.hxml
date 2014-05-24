@@ -3,7 +3,6 @@
 -cp src
 -js bin/js/deagent.js
 
--lib polygonal-ds
 --macro include('com.dropecho.gen');
 --macro exclude('com.dropecho.gen.tests');
 
