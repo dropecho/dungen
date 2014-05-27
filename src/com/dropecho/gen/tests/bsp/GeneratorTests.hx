@@ -26,8 +26,8 @@ class GeneratorTests extends haxe.unit.TestCase {
     }
 
     public function test_given_a_min_height_every_generated_node_should_have_a_greater_height(){
-        generator.depth = 15;
-        generator.minNodeHeight = 10;
+        generator.depth = 500;
+        generator.minHeight = 10;
         var root = generator.generate();
 
         root.traverseInOrder(function(node){
@@ -36,12 +36,21 @@ class GeneratorTests extends haxe.unit.TestCase {
     }
 
     public function test_given_a_min_width_every_generated_node_should_have_a_greater_width(){
-        generator.depth = 15;
-        generator.minNodeWidth = 10;
+        generator.depth = 500;
+        generator.minWidth = 10;
         var root = generator.generate();
 
         root.traverseInOrder(function(node){
             assertTrue(node.width >= 10);
+        });
+    }
+
+    public function test_given_a_min_width_every_generated_node_should_have_a_ratio_greater_than_given(){
+        generator.depth = 4;
+        var root = generator.generate();
+
+        root.traverseInOrder(function(node){
+            assertTrue(node.width/node.height >= generator.ratio || node.height/node.width >= generator.ratio);
         });
     }
 }
