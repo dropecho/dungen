@@ -5,7 +5,7 @@
   "devDependencies" : {
   },
   "scripts" :{
-  	"build" : "haxe targets/js.hxml",
-	"test" : "haxe targets/test.hxml && neko bin/tests/tests.n"
+  	"build" : "haxe targets/clean.hxml && haxe targets/js.hxml",
+	"test" : "haxe targets/clean.hxml && haxe targets/test.hxml && neko bin/tests/tests.n"
   }
 }
