@@ -1,31 +1,37 @@
-package com.dropecho.gen.tests.utils;
+package utils;
 
+import massive.munit.Assert;
 import com.dropecho.gen.utils.Extender;
 
-class ExtenderTests extends haxe.unit.TestCase {
+class ExtenderTest {
     var base:Dynamic;
     var ex:Dynamic;
 
-    public override function setup(){
+	@Before
+    public function setup(){
         base = {x: 0, y:{ z: 0}, a:{b:0}};
         ex = {x: 12, y:{z: 12}, a:{c:0}};
     }
 
+	@Test
     public function test_extender_should_set_simple_field_on_base(){
         Extender.extend(base, ex);
-        assertEquals(12, base.x);
+        Assert.areEqual(12, base.x);
     }
 
+	@Test
     public function test_extender_should_set_object_field_on_base(){
         Extender.extend(base, ex);
-        assertEquals(12, base.y.z);
+        Assert.areEqual(12, base.y.z);
     }
 
+	@Test
     public function test_extender_should_not_overwrite_existing_field_on_subobject_when_extension_does_not_have_field(){
         Extender.extend(base, ex);
-        assertEquals(0, base.a.b);
+        Assert.areEqual(0, base.a.b);
     }
 
+	@Test
     public function test_extender_should_handle_null_extension_object(){
         var good = false;
         try {
@@ -35,9 +41,10 @@ class ExtenderTests extends haxe.unit.TestCase {
             good = false;
         }
 
-        assertTrue(good);
+        Assert.isTrue(good);
     }
 
+	@Test
     public function test_extender_should_handle_null_base_object(){
         var good = false;
         try {
@@ -47,6 +54,6 @@ class ExtenderTests extends haxe.unit.TestCase {
             good = false;
         }
 
-        assertTrue(good);
+        Assert.isTrue(good);
     }
 }

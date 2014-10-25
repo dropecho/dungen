@@ -3,9 +3,12 @@
   "description" : "A procedural generation library",
   "version": "0.0.1",
   "devDependencies" : {
+	  "gulp":"*",
+	  "gulp-shell":"*",
+	  "mkdirp":"*"
   },
   "scripts" :{
-  	"build" : "haxe targets/clean.hxml && haxe targets/js.hxml",
-	"test" : "haxe targets/clean.hxml && haxe targets/test.hxml && neko bin/tests/tests.n"
+  	"build" : "gulp build",
+	"test" : "gulp test"
   }
 }
