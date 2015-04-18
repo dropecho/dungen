@@ -6,6 +6,4 @@ cache:
 
 before_script:
     - npm install
-
-hxml:
-    - targets/test.hxml
+    - mkdir artifacts
