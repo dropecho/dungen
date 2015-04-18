@@ -1,16 +1,11 @@
-language: node_js
-node_js:
-  - '0.10'
+language: haxe
 cache:
     apt: true
     directories:
         - node_modules
 
 before_script:
-    - sudo apt-get update
-    - sudo apt-get install python-software-properties -y
-    - sudo add-apt-repository ppa:eyecreate/haxe -y
-    - sudo apt-get update
-    - sudo apt-get install haxe -y
-    - sudo haxelib setup /usr/lib/haxe/lib
-    - sudo haxelib install targets/test.hxml --always
+    - npm install
+
+hxml:
+    - targets/test.hxml
