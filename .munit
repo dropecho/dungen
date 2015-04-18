@@ -1,6 +1,6 @@
 version=2.1.0
 src=test
-bin=bin/test
-report=report
+bin=artifacts/test
+report=artifacts/report
 hxml=targets/test.hxml
 classPaths=src

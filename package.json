@@ -1,14 +1,36 @@
 {
-  "name": "degen",
-  "description" : "A procedural generation library",
-  "version": "0.0.1",
-  "devDependencies" : {
-	  "gulp":"*",
-	  "gulp-shell":"*",
-	  "mkdirp":"*"
-  },
-  "scripts" :{
-  	"build" : "gulp build",
-	"test" : "gulp test"
-  }
+    "name": "degen",
+    "description": "A procedural generation toolkit for games",
+    "version": "0.1.0",
+    "homepage": "https://github.com/dropechostudios/degen",
+    "author": {
+        "name": "Ben Van Treese",
+        "email": "vantreeseba@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/dropechostudios/degen.git"
+    },
+    "bugs": {
+        "url": "https://github.com/dropechostudios/degen/issues"
+    },
+    "licenses": [{
+        "type" : "MIT",
+        "url" : "https://github.com///blob/master/LICENSE"
+    }],
+    "main": "artifacts/degen.js",
+    "scripts": {
+        "build": "gulp build",
+        "test": "gulp test"
+    },
+    "dependencies": {
+    },
+    "devDependencies": {
+        "gulp":"*",
+        "gulp-shell":"*",
+        "mkdirp":"*"
+    },
+    "keywords": [
+        "slushgenerator"
+    ]
 }

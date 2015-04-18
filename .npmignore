@@ -1,3 +1,5 @@
 *
-!/bin
-!/bin/js/*
+!/artifacts/js/*
+
+# don't ignore .npmignore files
+!.npmignore

@@ -1,7 +1,6 @@
---times
-
 -cp src
--js bin/js/degen.js
+-js artifacts/js/degen.js
 
---macro include('com.dropecho.gen.bsp')
---macro include('com.dropecho.gen.utils')
+# this lines forces the inclusion of all files under the src dir
+# this is most useful in the case of libs with no "main"
+--macro include('', true, null, ['src'])

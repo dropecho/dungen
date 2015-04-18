@@ -1,4 +1,0 @@
--cmd "rm -rf bin"
--cmd "mkdir bin"
--cmd "mkdir bin\js"
--cmd "mkdir bin\tests"
