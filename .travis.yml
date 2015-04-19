@@ -8,5 +8,5 @@ before_script:
     - npm install
     - mkdir artifacts
 
-haxe:
+hxml:
     - targets/test.hxml
