@@ -22,18 +22,18 @@
 ##
 ##--next
 ##
-## JavaScript
-#-main TestMain
-#-lib munit
-#-lib hamcrest
-#-cp src
 
-#-cp test
-#-js artifacts/test/js_test.js
+# JavaScript
+-main TestMain
+-lib munit
+-lib hamcrest
+-cp src
+-cp test
+-js artifacts/test/js_test.js
 
-#--next
+--next
 
-## Neko
+# Neko
 -main TestMain
 -lib munit
 -lib hamcrest
