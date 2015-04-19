@@ -1,8 +1,4 @@
 language: haxe
-cache:
-    apt: true
-    directories:
-        - node_modules
 
 before_install:
     - npm install
@@ -10,13 +6,7 @@ before_install:
 
 install: true
 
-before_script:
-    - gulp create-artifacts-dir
-
-script: gulp test
-
-after_script:
-    - gulp build
+script: gulp
 
 #whitelist only the master branch
 branches:
