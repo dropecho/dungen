@@ -11,8 +11,13 @@ before_install:
 install: true
 
 before_script:
+    - gulp create-artifacts-dir
     - gulp test
-    - gulp create-bin
 
 hxml:
     - targets/js.hxml
+
+#whitelist only the master branch
+branches:
+    only:
+        - master

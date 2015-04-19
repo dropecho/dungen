@@ -17,13 +17,14 @@ process.on('exit', function(err) {
     });
 });
 
-gulp.task('create-bin', function() {
+gulp.task('create-artifacts-dir', function() {
     mkdirp('artifacts/js');
+    mkdirp('artifacts/test');
 });
 
 gulp.task('build-js', shell.task('haxe targets/js.hxml'));
 
-gulp.task('build', ['create-bin', 'build-js']);
+gulp.task('build', ['create-artifacts-dir', 'build-js']);
 
 gulp.task('test', function() {
     return gulp
