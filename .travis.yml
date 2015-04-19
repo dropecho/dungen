@@ -4,9 +4,15 @@ cache:
     directories:
         - node_modules
 
-before_script:
+before_install:
     - npm install
-    - mkdir artifacts
+    - yes | haxelib install targets/test.hxml
+
+install: true
+
+before_script:
+    - gulp test
+    - gulp create-bin
 
 hxml:
-    - targets/test.hxml
+    - targets/js.hxml
