@@ -23,7 +23,7 @@
 ##--next
 ##
 
-# JavaScript
+#JavaScript
 #-main TestMain
 #-lib munit
 #-lib hamcrest
