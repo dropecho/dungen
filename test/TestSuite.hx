@@ -4,6 +4,7 @@ import utils.ExtenderTest;
 import map.Map2dTest;
 import bsp.GeneratorTest;
 import bsp.NodeTest;
+import export.TiledExporterTest;
 
 /**
  * Auto generated Test Suite for MassiveUnit.
@@ -21,5 +22,6 @@ class TestSuite extends massive.munit.TestSuite
 		add(map.Map2dTest);
 		add(bsp.GeneratorTest);
 		add(bsp.NodeTest);
+		add(export.TiledExporterTest);
 	}
 }

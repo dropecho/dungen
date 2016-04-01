@@ -1,9 +1,9 @@
 package degen.map;
 
 class Map2d {
-	private var _width : Int = 0;
-	private var _height: Int = 0;
-	private var _mapData : Array<Int>;
+	public var _width : Int = 0;
+	public var _height: Int = 0;
+	public var _mapData : Array<Int>;
 
 	public function new(width : Int, height : Int, initTileData : Int = 0){
 		_width = width;
