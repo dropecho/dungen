@@ -1,7 +1,7 @@
 package bsp;
 
 import massive.munit.Assert;
-import com.dropecho.gen.bsp.Node;
+import degen.bsp.Node;
 
 class NodeTest {
     var node:Node;

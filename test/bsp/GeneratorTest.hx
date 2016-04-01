@@ -1,7 +1,7 @@
 package bsp;
 
 import massive.munit.Assert;
-import com.dropecho.gen.bsp.Generator;
+import degen.bsp.Generator;
 
 class GeneratorTest {
     var generator:Generator;

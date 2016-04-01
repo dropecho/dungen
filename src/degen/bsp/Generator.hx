@@ -1,6 +1,6 @@
-package com.dropecho.gen.bsp;
+package degen.bsp;
 
-import com.dropecho.gen.utils.Extender;
+import degen.utils.Extender;
 
 @:expose("degen.bspGenerator")
 class Generator {

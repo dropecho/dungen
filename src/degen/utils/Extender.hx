@@ -1,4 +1,4 @@
-package com.dropecho.gen.utils;
+package degen.utils;
 
 class Extender {
 	public static function extend(base:Dynamic, extension:Dynamic){
