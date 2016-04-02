@@ -35,24 +35,24 @@ class TiledExporterTest {
         //};
 
 		//var map = CaGen.generate(params);
-			var genOpts = {
-			width: 100,
-			height: 50,
-			minHeight: 10,
-			minWidth: 10,
-			depth: 10,
-			ratio: .65
-			};
+			//var genOpts = {
+			//width: 100,
+			//height: 50,
+			//minHeight: 10,
+			//minWidth: 10,
+			//depth: 10,
+			//ratio: .65
+			//};
 
-			var gen = new Generator(genOpts);
+			//var gen = new Generator(genOpts);
 
-		var map = RoomGenerator.buildRooms(gen.generate());
+		//var map = RoomGenerator.buildRooms(gen.generate());
 
 
 
-		var json = TiledExporter.export('map.json', map);
+		//var json = TiledExporter.export('map.json', map);
 
-		File.saveContent("bsp.json", json);	
+		//File.saveContent("bsp.json", json);	
 
         Assert.isTrue(true);
     }

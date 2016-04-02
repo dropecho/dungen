@@ -50,6 +50,9 @@ class Map2d {
             for(j in -dist...dist+1) {
 
                 if((i == 0 && j ==0) || x + i <= 0 || x+i >= _width-1 || y+j <= 0 || y+j >= _height){
+					if(i != 0 || j != 0){
+						count++;
+					}
                     continue;
                 }
 

@@ -31,25 +31,25 @@ class Map2dTest {
 			trace(RoomGenerator.buildRooms(gen.generate()));
 
 
-            //var params = {
-                //steps: [{
-                    //reps: 4,
-                    //r1_cutoff: 5,
-                    //r2_cutoff: 2
-                //},
-                //{
-                    //reps : 3,
-                    //r1_cutoff: 5,
-                    //r2_cutoff: 0
-                //}],
-                //height: 50,
-                //width: 100,
-                //tile_floor: 1,
-                //tile_wall: 0
+			//var params = {
+				//steps: [{
+					//reps: 4,
+					//r1_cutoff: 5,
+					//r2_cutoff: 2
+				//},
+				//{
+					//reps : 3,
+					//r1_cutoff: 5,
+					//r2_cutoff: 0
+				//}],
+				//height: 50,
+				//width: 100,
+				//tile_floor: 1,
+				//tile_wall: 0,
+				//start_fill_percent: 55
+			//};
 
-            //};
-
-            //trace(CaGen.generate(params));
+			//trace(CaGen.generate(params));
 
 
             Assert.isTrue(true);

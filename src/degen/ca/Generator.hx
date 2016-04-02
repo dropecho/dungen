@@ -13,13 +13,14 @@ typedef CA_PARAMS = {
 	height: Int,
 	width: Int,
 	tile_floor: Int,
-	tile_wall: Int
+	tile_wall: Int,
+	start_fill_percent: Int
 };
 
 class Generator {
 	public static function generate(params : CA_PARAMS) : Map2d {
 		var map = new Map2d(params.width, params.height, -1);
-		map.fillMapRandomly(params.tile_floor, params.tile_wall);
+		map.fillMapRandomly(params.tile_wall, params.tile_floor, params.start_fill_percent);
 		map.ensureEdgesAreWalls();
 
 		var steps:Array<Dynamic> = params.steps;
