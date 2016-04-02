@@ -2,8 +2,8 @@ package degen.map.generators;
 import degen.bsp.Node;
 
 class RoomGenerator {
-    public static function buildRooms(root : Node) : Map2d {
-        var map = new Map2d(root.width, root.height);
+    public static function buildRooms(root : Node, tile_floor:Int = 1, tile_wall:Int = 2) : Map2d {
+        var map = new Map2d(root.width, root.height, tile_wall);
 
         function makeRoom(node : Node){
             if(!node.isLeaf()){
@@ -17,7 +17,7 @@ class RoomGenerator {
 
             for(x in roomStartX...roomEndX){
                 for(y in roomStartY...roomEndY){
-                    map.set(x,y, 1);
+                    map.set(x,y, tile_floor);
                 }
             }
         }
@@ -39,12 +39,12 @@ class RoomGenerator {
 
             //draw a corridor from the center x to the center x
             for(x in startX...endX){
-                map.set(x, startY, 1);
+                map.set(x, startY, tile_floor);
             }
 
             //draw a corridor from the center y to the center y
             for(y in startY...endY){
-                map.set(startX, y, 1);
+                map.set(startX, y, tile_floor);
             }
         }
 

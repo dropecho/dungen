@@ -17,18 +17,18 @@ class Map2dTest {
 
     @Test
         public function bspMapTest() {
-			var genOpts = {
-				width: 100,
-				height: 50,
-				minHeight: 10,
-				minWidth: 10,
-				depth: 10,
-				ratio: .65
-			};
+			//var genOpts = {
+				//width: 100,
+				//height: 50,
+				//minHeight: 10,
+				//minWidth: 10,
+				//depth: 10,
+				//ratio: .65
+			//};
 
-			var gen = new Generator(genOpts);
+			//var gen = new Generator(genOpts);
 
-			trace(RoomGenerator.buildRooms(gen.generate()));
+			//trace(RoomGenerator.buildRooms(gen.generate()));
 
 
 			//var params = {

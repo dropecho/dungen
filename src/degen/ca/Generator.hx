@@ -21,7 +21,7 @@ class Generator {
 	public static function generate(params : CA_PARAMS) : Map2d {
 		var map = new Map2d(params.width, params.height, -1);
 		map.fillMapRandomly(params.tile_wall, params.tile_floor, params.start_fill_percent);
-		map.ensureEdgesAreWalls();
+		map.ensureEdgesAreWalls(params.tile_wall);
 
 		var steps:Array<Dynamic> = params.steps;
 
@@ -31,7 +31,7 @@ class Generator {
 			}
 		}
 
-		map.ensureEdgesAreWalls();
+		map.ensureEdgesAreWalls(params.tile_wall);
 		return map;
 	}
     
