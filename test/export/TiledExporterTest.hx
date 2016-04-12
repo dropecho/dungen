@@ -2,7 +2,7 @@ package export;
 
 import massive.munit.Assert;
 import degen.bsp.Generator;
-import degen.bsp.Node;
+import degen.bsp.BspData;
 import degen.map.generators.RoomGenerator;
 import degen.map.Map2d;
 import degen.ca.Generator as CaGen;
@@ -44,22 +44,22 @@ class TiledExporterTest {
 
     @Test
     public function bsp_map_test(){
-        var genOpts = {
-            width: 64,
-            height: 64,
-            minHeight: 10,
-            minWidth: 10,
-            depth: 10,
-            ratio: .65
-        };
+        //var genOpts = {
+            //width: 64,
+            //height: 64,
+            //minHeight: 10,
+            //minWidth: 10,
+            //depth: 10,
+            //ratio: .65
+        //};
 
-        var gen = new Generator(genOpts);
-        var map = RoomGenerator.buildRooms(gen.generate());
+        //var gen = new Generator(genOpts);
+        //var map = RoomGenerator.buildRooms(gen.generate());
 
-        var json = TiledExporter.export('map.json', map);
+        //var json = TiledExporter.export('map.json', map);
 
-        File.saveContent("example/bsp.json", json);
+        //File.saveContent("example/bsp.json", json);
 
-        Assert.isTrue(true);
+        //Assert.isTrue(true);
     }
 }

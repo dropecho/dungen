@@ -1,28 +1,28 @@
 package bsp;
 
 import massive.munit.Assert;
-import degen.bsp.Node;
+import degen.bsp.BspData;
 
 class NodeTest {
-    var node:Node;
+    var data:BspData;
 
 	@Before
     public function setup(){
-        node = new Node();
+        data = new BspData();
     }
 
 	@Test
     public function test_is_leaf_should_return_true_when_left_and_right_are_null(){
-        node.left = null;
-        node.right = null;
+        //node.left = null;
+        //node.right = null;
 
-        Assert.isTrue(node.isLeaf());
+        //Assert.isTrue(node.isLeaf());
     }
 
 	@Test
     public function test_is_root_should_return_true_when_parent_is_null(){
-        node.parent = null;
+        //node.parent = null;
 
-        Assert.isTrue(node.isRoot());
+        //Assert.isTrue(node.isRoot());
     }
 }

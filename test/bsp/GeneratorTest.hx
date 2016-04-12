@@ -2,6 +2,8 @@ package bsp;
 
 import massive.munit.Assert;
 import degen.bsp.Generator;
+import degen.bsp.BspData;
+import de.polygonal.ds.BinaryTreeNode;
 
 class GeneratorTest {
     var generator:Generator;
@@ -16,7 +18,7 @@ class GeneratorTest {
         generator.depth = 0;
         var root = generator.generate();
 
-        Assert.isTrue(root.isLeaf());
+        Assert.isTrue(!root.hasL() && !root.hasR());
     }
 
 	@Test
@@ -24,9 +26,9 @@ class GeneratorTest {
 		generator.depth = 1;
 		var root = generator.generate();
 
-		Assert.isFalse(root.isLeaf());
-		Assert.isTrue(root.right.isLeaf());
-		Assert.isTrue(root.left.isLeaf());
+		Assert.isFalse(!root.hasL() && !root.hasR());
+		Assert.isTrue(!root.r.hasL());
+		Assert.isTrue(!root.l.hasL());
 	}
 
 	@Test
@@ -36,8 +38,9 @@ class GeneratorTest {
 		generator.ratio = 1;
 		var root = generator.generate();
 
-		root.traverseInOrder(function(node){
-			Assert.isTrue(node.height >= 10);
+		root.inorder(function(node:BinaryTreeNode<BspData>, foo:Dynamic) : Bool{
+			Assert.isTrue(node.val.height >= 10);
+			return true;
 		});
 	}
 
@@ -48,8 +51,9 @@ class GeneratorTest {
 		generator.ratio = 1;
 		var root = generator.generate();
 
-		root.traverseInOrder(function(node){
-			Assert.isTrue(node.width >= 10);
+		root.inorder(function(node:BinaryTreeNode<BspData>, foo:Dynamic) : Bool{
+			Assert.isTrue(node.val.width >= 10);
+			return true;
 		});
 	}
 
@@ -58,8 +62,9 @@ class GeneratorTest {
 		generator.depth = 4;
 		var root = generator.generate();
 
-		root.traverseInOrder(function(node){
-			Assert.isTrue(node.width/node.height >= generator.ratio || node.height/node.width >= generator.ratio);
+		root.inorder(function(node:BinaryTreeNode<BspData>, foo:Dynamic) : Bool{
+			Assert.isTrue(node.val.width/node.val.height >= generator.ratio || node.val.height/node.val.width >= generator.ratio);
+			return true;
 		});
 	}
 
@@ -68,23 +73,25 @@ class GeneratorTest {
 		for(i in 0...100){
 			generator.depth = 4;
 			var root = generator.generate();
-			root.traverseInOrder(function(node){
-				if(!node.isLeaf()){
-					//vertical split
-					if(node.left.height == node.height){
-						var childWidths = node.left.width + node.right.width;
 
-						Assert.areEqual(node.width, childWidths);
-						Assert.areEqual(node.height, node.right.height);
-						Assert.areEqual(node.height, node.left.height);
+			root.inorder(function(node:BinaryTreeNode<BspData>, foo:Dynamic) : Bool{
+				if(node.hasL() && node.hasR()){
+					//vertical split
+					if(node.l.val.height == node.val.height){
+						var childWidths = node.l.val.width + node.r.val.width;
+
+						Assert.areEqual(node.val.width, childWidths);
+						Assert.areEqual(node.val.height, node.r.val.height);
+						Assert.areEqual(node.val.height, node.l.val.height);
 					}
 					else {
-						var childHeights = node.left.height + node.right.height;
-						Assert.areEqual(node.height, childHeights);
-						Assert.areEqual(node.width, node.left.width);
-						Assert.areEqual(node.width, node.right.width);
+						var childHeights = node.l.val.height + node.r.val.height;
+						Assert.areEqual(node.val.height, childHeights);
+						Assert.areEqual(node.val.width, node.l.val.width);
+						Assert.areEqual(node.val.width, node.r.val.width);
 					}
 				}
+				return true;
 			});
 		}
 	}
@@ -94,14 +101,17 @@ class GeneratorTest {
 		for(i in 0...100){
 			generator.depth = 4;
 			var root = generator.generate();
-			var rootArea = root.height * root.width;
+			var rootArea = root.val.height * root.val.width;
 			var leafArea = 0;
 
-			root.traverseInOrder(function(node){
-				if(node.isLeaf()){
-					leafArea += node.height * node.width;
+			var findLeafArea = function(node:BinaryTreeNode<BspData>, foo:Dynamic) : Bool{
+				if(!node.hasL() && !node.hasR()){
+					leafArea += node.val.height * node.val.width;
 				}
-			});
+				return true;
+			}
+
+			root.inorder(findLeafArea);
 
 			Assert.areEqual(rootArea, leafArea);
 		}
@@ -113,11 +123,13 @@ class GeneratorTest {
 			generator.depth = 4;
 			var root = generator.generate();
 
-			root.traverseInOrder(function(node){
-				if(!node.isLeaf()){
-					Assert.isTrue(node.left != null);
-					Assert.isTrue(node.right != null);
+			root.inorder(function(node:BinaryTreeNode<BspData>, foo:Dynamic) : Bool{
+				if(node.hasL() && node.hasR()){
+					Assert.isTrue(node.r != null);
+					Assert.isTrue(node.l != null);
 				}
+
+				return true;
 			});
 		}
 	}

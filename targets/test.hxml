@@ -35,6 +35,7 @@
 
 # Neko
 -main TestMain
+-lib polygonal-ds
 -lib munit
 -lib hamcrest
 -cp src
