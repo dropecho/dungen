@@ -8,7 +8,9 @@ import degen.map.Map2d;
 import degen.ca.Generator as CaGen;
 import degen.export.TiledExporter;
 
-import sys.io.File;
+#if !js
+	import sys.io.File;
+#end
 
 class TiledExporterTest {
     var map : Map2d;
@@ -37,7 +39,9 @@ class TiledExporterTest {
 		var map = CaGen.generate(params);
         var json = TiledExporter.export('map.json', map);
 
-        File.saveContent("example/ca.json", json);
+#if !js
+		File.saveContent("example/ca.json", json);
+#end
 
         Assert.isTrue(true);
     }
