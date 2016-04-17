@@ -1,27 +1,36 @@
 package degen.utils;
 
 class Extender {
-	public static function extend(base:Dynamic, extension:Dynamic){
+	public static function extend(base:Dynamic, ?extension:Dynamic):Dynamic{
 		if(base == null){
 			base = {};
 		}
-		for(ff in Reflect.fields(extension)){
 
-			if(!Reflect.hasField(base,ff)){
-				continue;
-			}
+		var extensions : Array<Dynamic>;
 
-			var exField = Reflect.field(extension, ff);
-			var baseField = Reflect.field(base,ff);
-
-			if(Reflect.isObject(baseField)){
-				if(Reflect.isObject(exField)){
-					extend(baseField, exField);
-				}
-				continue;
-			}
-
-			Reflect.setField(base, ff, exField);
+		if(Std.is(extension, Array)){
+			extensions = extension;
+		} else {
+			extensions = new Array<Dynamic>();
+			extensions.push(extension);
 		}
+
+		for(ex in extensions){
+			for(ff in Reflect.fields(ex)){
+				var exField = Reflect.field(ex, ff);
+				var baseField = Reflect.field(base,ff);
+
+				if(baseField != null && Reflect.isObject(baseField)){
+					if(Reflect.isObject(exField)){
+						extend(baseField, exField);
+					}
+					continue;
+				}
+
+				Reflect.setField(base, ff, exField);
+			}
+		}
+
+		return base;
 	}
 }

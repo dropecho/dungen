@@ -1,5 +1,6 @@
 package degen.ca;
 
+import degen.utils.Extender;
 import degen.map.Map2d;
 
 typedef CA_PARAM_STEP = {
@@ -18,7 +19,29 @@ typedef CA_PARAMS = {
 };
 
 class Generator {
-	public static function generate(params : CA_PARAMS) : Map2d {
+
+	private static var _params = {
+		steps: [{
+			reps: 4,
+			r1_cutoff: 5,
+			r2_cutoff: 2
+		},
+		{
+			reps : 3,
+			r1_cutoff: 5,
+			r2_cutoff: 0
+		}],
+		height: 64,
+		width: 64,
+		tile_floor: 1,
+		tile_wall: 0,
+		start_fill_percent: 55
+	};
+
+	public static function generate(?params : Dynamic) : Map2d {
+
+		params = Extender.extend({}, [_params, params]);
+
 		var map = new Map2d(params.width, params.height, -1);
 		map.fillMapRandomly(params.tile_wall, params.tile_floor, params.start_fill_percent);
 		map.ensureEdgesAreWalls(params.tile_wall);

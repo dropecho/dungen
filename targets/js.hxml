@@ -2,6 +2,4 @@
 -js artifacts/js/degen.js
 
 -lib polygonal-ds
-# this lines forces the inclusion of all files under the src dir
-# this is most useful in the case of libs with no "main"
 --macro include('', true, null, ['src'])

@@ -5,8 +5,8 @@ import de.polygonal.ds.BinaryTreeNode;
 
 @:expose("degen.bspGenerator")
 class Generator {
-    public var width:Int = 256;
-	public var height:Int = 256;
+    public var width:Int = 120;
+	public var height:Int = 60;
 	public var minHeight:Int = 10;
 	public var minWidth:Int = 10;
 	public var depth:Int = 10;
@@ -23,8 +23,8 @@ class Generator {
             var rootData = new BspData({height: height, width: width, x: x, y: y});
 			root = new BinaryTreeNode<BspData>(rootData);
 		}
-		buildTree(root);
 
+		buildTree(root);
 		return root;
 	}
 

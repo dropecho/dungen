@@ -82,6 +82,10 @@ class Map2d {
 		_mapData[XYtoIndex(x, y)] = data;
 	}
 
+	public function get(x : Int,y :Int) : Int {
+		return _mapData[XYtoIndex(x, y)];
+	}	
+
 	public function toString() : String {
 		var output = "\n MAP2d: \n\n";
 
