@@ -25,7 +25,8 @@ class Map2dTest {
 			minWidth: 15,
 			minHeight: 15
 		}).generate();
-		trace(MixedGenerator.buildRooms(map));
+
+		trace(MixedGenerator.buildRooms(map, null));
 		Assert.isTrue(true);
 	}
 }

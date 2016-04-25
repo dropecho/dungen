@@ -1,10 +1,7 @@
--main TestMain
-
+-cp src
+-cp test
 -lib polygonal-ds
 -lib munit
 -lib hamcrest
-
--cp src
--cp test
-
+-main TestMain
 -neko artifacts/test/neko_test.n
