@@ -1,5 +1,6 @@
 -cp src
--js artifacts/js/degen.js
 
 -lib polygonal-ds
+#-dce std
 --macro include('', true, null, ['src'])
+-js artifacts/js/degen.js

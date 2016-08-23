@@ -10,13 +10,13 @@ function createArtifactDirs() {
 
 function watch() {
     var watchDirs = ['src/**/*.hx', 'test/**/*.hx', 'targets/**'];
-    gulp.watch(watchDirs, ['test']);
+    gulp.watch(watchDirs, ['build-js','test']);
 }
 
 gulp.task('create-artifacts-dir', createArtifactDirs);
 gulp.task('build-js', shell.task('haxe targets/js.hxml'));
-gulp.task('test', shell.task('haxelib run munit test -result-exit-code'));
-gulp.task('test-coverage', shell.task('haxelib run munit test -coverage -result-exit-code'));
+gulp.task('test', shell.task('haxelib run munit test'));
+gulp.task('test-coverage', shell.task('haxelib run munit test -coverage'));
 
 gulp.task('watch', watch);
 

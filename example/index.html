@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <script src="../artifacts/js/degen.js"></script>
+    <title></title>
+</head>
+
+<body>
+  <div>
+    <select id="generatorType">
+      <option value="room">room</option>
+    </select>
+    <br/> 
+
+    <label for="width">width</label>
+    <input id="width" type="range" min="32" max="256"></input>
+    <span id="widthVal"></span>
+    <br/> 
+    <label for="height">height</label>
+    <input id="height" type="range" min="32" max="256"></input>
+    <span id="heightVal"></span>
+    <br/> 
+    <label for="minWidth">minWidth</label>
+    <input id="minWidth" type="range" min="4" max="32"></input>
+    <span id="minWidthVal"></span>
+    <br/> 
+    <label for="minHeight">minHeight</label>
+    <input id="minHeight" type="range" min="4" max="32"></input>
+    <span id="minHeightVal"></span>
+    <br/> 
+    <label for="depth">depth</label>
+    <input id="depth" type="range" min="1" max="12"></input>
+    <span id="depthVal"></span>
+    <br/> 
+    <label for="ratio">ratio</label>
+    <input id="ratio" type="range" min="0" max="1" step=".01"></input>
+    <span id="ratioVal"></span>
+    <br/> 
+  </div>
+
+  <div>
+    <canvas id="canvas" height="512" width="512"></canvas>
+  </div>
+</body>
+<script type="text/javascript">
+  var bsp = new degen.BSPGenerator();
+  var map = degen.RoomGenerator.buildRooms(bsp.generate());
+  var ctx = document.querySelector('canvas').getContext('2d');
+
+
+  function rebuildAndDrawMap(){
+    map = degen.CAGenerator.generate(bsp);
+    //map = degen.RoomGenerator.buildRooms(bsp.generate());
+    ctx.clearRect(0,0,512,512);
+
+    map._mapData.forEach(function(tile,i){
+      var pos = map.IndexToXY(i);
+      ctx.fillStyle = tile == 1 ? '#FFFFFF' : "#000000"; 
+      ctx.fillRect(pos.x*2,pos.y*2,2,2);
+    });
+  }
+
+
+  function setupSlider(id){
+    var slider = document.querySelector('#' + id);
+    var valId = '#' + id + 'Val';
+
+    bsp[id] = +slider.value;
+    document.querySelector(valId).innerHTML = +bsp[id]; 
+
+    slider.addEventListener('input',function(){
+      document.querySelector(valId).innerHTML = bsp[id] = +slider.value;
+      rebuildAndDrawMap();
+    });
+  }
+
+  var sliders = document.querySelectorAll('input');
+
+  sliders.forEach(function(sl){
+    setupSlider(sl.id);
+  });
+
+  rebuildAndDrawMap();
+</script>
+
+</html>

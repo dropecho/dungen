@@ -2,11 +2,11 @@
     "name": "degen",
     "url": "https://github.com/dropechostudios/degen",
     "license":"MIT",
-    "tags": [""]
+    "tags": [""],
     "description": "A procedural generation toolkit for games",
     "version": "0.1.0",
     "contributors": ["Ben Van Treese"],
     "dependencies": {
 		"polygonal-ds"
-	},
+	}
 }

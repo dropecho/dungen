@@ -52,10 +52,10 @@ class Map2d {
       return _mapData[XYtoIndex(tile.x, tile.y)] == neighborType || tile.onMap == false;
     }
 
-    return getNeighbors(x, y, dist).filter(isNeighborType).length;
+    return getNeighbors(x, y, true, dist).filter(isNeighborType).length;
   }
 
-  public function getNeighbors(x:Int, y:Int, dist:Int = 1, diagonal:Bool = true) : Array<Tile2d> {
+  public function getNeighbors(x:Int, y:Int, includeEdges = false, dist:Int = 1) : Array<Tile2d> {
     var neighbors = new Array<Tile2d>(),
         isSelf = false,
         isNotOnMap = false;
@@ -66,10 +66,9 @@ class Map2d {
         isNotOnMap = x + i < 0 || x+i > (_width-1) || y+j < 0 || y+j > (_height - 1);
 
         if(isSelf || isNotOnMap){
-          continue;
-        }
-
-        if(!diagonal && i == j){
+          if(isNotOnMap){
+            neighbors.push({x:x+i, y: y+j, onMap: false});
+          }
           continue;
         }
 
@@ -109,8 +108,8 @@ class Map2d {
 
     for(y in 0 ... _height){
       for(x in 0 ... _width){
-        //output += get(x,y); 
-        output += String.fromCharCode(_mapData[XYtoIndex(x,y)]);
+        output += get(x,y); 
+          //String.fromCharCode(_mapData[XYtoIndex(x,y)]);
       }
 
       output += "\n";

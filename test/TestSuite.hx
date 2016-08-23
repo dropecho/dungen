@@ -1,6 +1,7 @@
 import massive.munit.TestSuite;
 
 import utils.ExtenderTest;
+import map.MapHelperTest;
 import map.Map2dTest;
 import bsp.GeneratorTest;
 import bsp.NodeTest;
@@ -19,6 +20,7 @@ class TestSuite extends massive.munit.TestSuite
 		super();
 
 		add(utils.ExtenderTest);
+		add(map.MapHelperTest);
 		add(map.Map2dTest);
 		add(bsp.GeneratorTest);
 		add(bsp.NodeTest);
