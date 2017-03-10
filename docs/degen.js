@@ -1338,13 +1338,12 @@ degen_bsp_Generator.prototype = {
 		}
 		var splitAt = 0;
 		var splitHeight = Math.random() > 0.5;
-		if(val.width < this.minWidth * 2 && val.height < this.minHeight * 2) {
-			return;
-		}
 		if(val.width >= val.height * this.ratio) {
 			splitHeight = false;
 		} else if(val.height >= val.width * this.ratio) {
 			splitHeight = true;
+		} else {
+			return;
 		}
 		if(splitHeight) {
 			splitAt = Std.random(val.height - this.minHeight * 2 + 1) + this.minHeight;
@@ -2187,6 +2186,6 @@ var Enum = { };
 var __map_reserved = {}
 de_polygonal_ds_HashKey._counter = 0;
 degen_ca_Generator._params = { steps : [{ reps : 4, r1_cutoff : 5, r2_cutoff : 2},{ reps : 3, r1_cutoff : 5, r2_cutoff : 0}], height : 64, width : 64, tile_floor : 1, tile_wall : 0, start_fill_percent : 65};
-degen_map_generators_RoomGenerator._params = { tileFloor : 1, tileWall : 2, paddingRatio : 0.25};
+degen_map_generators_RoomGenerator._params = { tileFloor : 1, tileWall : 2, paddingRatio : 0.001};
 js_Boot.__toStr = ({ }).toString;
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
