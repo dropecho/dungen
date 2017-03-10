@@ -11,27 +11,28 @@ import degen.ca.Generator as CaGen;
 class Map2dTest {
   @Test
   public function bspMapTest() {
-    var map = CaGen.generate({
+    // var map = CaGen.generate({
+    //   width: 64,
+    //   height: 32,
+    //   start_fill_percent: 55,
+    //   tile_floor: 46,
+    //   tile_wall: 35
+    // });
+
+
+    var gen = new Generator();
+    var map = gen.generate();
+
+    var bsp = new Generator({
       width: 64,
       height: 32,
-      start_fill_percent: 55,
-      tile_floor: 46,
-      tile_wall: 35
-    });
+      minWidth: 8,
+      minHeight: 8,
+      depth: 6,
+      ratio: .95
+    }).generate();
 
-
-    //var gen = new Generator();
-    //var map = gen.generate();
-
-    //var map = RoomGenerator.buildRooms(new Generator({
-      //width: 64,
-      //height: 32,
-      //minWidth: 8,
-      //minHeight: 8,
-      //depth: 6,
-      //ratio: .85
-    //})
-        //.generate(), {tileFloor: 46, tileWall: 35} );
+    var map = RoomGenerator.buildRooms(bsp, {tileFloor: 46, tileWall: 35});
 
     trace(map);
     Assert.isTrue(true);

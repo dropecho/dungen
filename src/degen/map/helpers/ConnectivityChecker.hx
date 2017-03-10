@@ -2,6 +2,7 @@ package degen.map.helpers;
 
 class ConnectivityChecker {
   function check(map : Map2d, tile : Int = 0) : Bool {
+
     //get random non-filled tile
     var firstEmpty = MapHelper.getFirstEmptyTile(map, tile);
     if(firstEmpty == null){

@@ -38,7 +38,7 @@ class Generator {
     start_fill_percent: 65
   };
 
-  public static function generate(?params : Dynamic) : Map2d {
+  public static function generate(?map : Map2d, ?params : Dynamic) : Map2d {
 
     params = Extender.extend({}, [_params, params]);
 
@@ -57,7 +57,7 @@ class Generator {
     map.ensureEdgesAreWalls(params.tile_wall);
     return map;
   }
-    
+
   private static function buildFromCA(map : Map2d, params : CA_PARAMS, step : CA_PARAM_STEP) : Void {
     var temp = new Map<Int, Int>();
 

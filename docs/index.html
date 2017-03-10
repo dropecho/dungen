@@ -38,6 +38,10 @@
     <input id="ratio" type="range" min="0" max="1" step=".01"></input>
     <span id="ratioVal"></span>
     <br/> 
+    <label for="Padding">padding</label>
+    <input id="paddingRatio" type="range" min="0" max="1" step=".01"></input>
+    <span id="paddingRatioVal"></span>
+    <br/> 
   </div>
 
   <div>
@@ -48,11 +52,12 @@
   var bsp = new degen.BSPGenerator();
   var map = degen.RoomGenerator.buildRooms(bsp.generate());
   var ctx = document.querySelector('canvas').getContext('2d');
+  var roomGenParams = {};
 
 
   function rebuildAndDrawMap(){
-    map = degen.CAGenerator.generate(bsp);
-    //map = degen.RoomGenerator.buildRooms(bsp.generate());
+    //map = degen.CAGenerator.generate(bsp);
+    map = degen.RoomGenerator.buildRooms(bsp.generate(), roomGenParams);
     ctx.clearRect(0,0,512,512);
 
     map._mapData.forEach(function(tile,i){
@@ -63,24 +68,29 @@
   }
 
 
-  function setupSlider(id){
+  function setupSlider(id, obj){
     var slider = document.querySelector('#' + id);
     var valId = '#' + id + 'Val';
 
-    bsp[id] = +slider.value;
-    document.querySelector(valId).innerHTML = +bsp[id]; 
+    obj = obj || bsp;
+
+    obj[id] = +slider.value;
+    document.querySelector(valId).innerHTML = +obj[id]; 
 
     slider.addEventListener('input',function(){
-      document.querySelector(valId).innerHTML = bsp[id] = +slider.value;
+      document.querySelector(valId).innerHTML = obj[id] = +slider.value;
       rebuildAndDrawMap();
     });
   }
 
   var sliders = document.querySelectorAll('input');
+  var paddingslider = document.querySelector('#paddingRatio');
 
   sliders.forEach(function(sl){
     setupSlider(sl.id);
   });
+
+  setupSlider(paddingslider.id, roomGenParams);
 
   rebuildAndDrawMap();
 </script>

@@ -15,7 +15,7 @@ class RoomGenerator {
   private static var _params = {
     tileFloor: 1,
     tileWall: 2,
-    paddingRatio: 0.25
+    paddingRatio: 0.001
   }
 
   public static function buildRooms(root : BinaryTreeNode<BspData>, ?params:Dynamic) : Map2d {
