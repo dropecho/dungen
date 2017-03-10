@@ -1364,11 +1364,11 @@ degen_bsp_Generator.prototype = {
 };
 var degen_ca_Generator = $hx_exports["degen"]["CAGenerator"] = function() { };
 degen_ca_Generator.__name__ = true;
-degen_ca_Generator.generate = function(map,params) {
+degen_ca_Generator.generate = function(params) {
 	params = degen_utils_Extender.extend({ },[degen_ca_Generator._params,params]);
-	var map1 = new degen_map_Map2d(params.width,params.height,-1);
-	map1.fillMapRandomly(params.tile_wall,params.tile_floor,params.start_fill_percent);
-	map1.ensureEdgesAreWalls(params.tile_wall);
+	var map = new degen_map_Map2d(params.width,params.height,-1);
+	map.fillMapRandomly(params.tile_wall,params.tile_floor,params.start_fill_percent);
+	map.ensureEdgesAreWalls(params.tile_wall);
 	var steps = params.steps;
 	var _g = 0;
 	while(_g < steps.length) {
@@ -1378,11 +1378,11 @@ degen_ca_Generator.generate = function(map,params) {
 		var _g1 = step.reps;
 		while(_g2 < _g1) {
 			var rep = _g2++;
-			degen_ca_Generator.buildFromCA(map1,params,step);
+			degen_ca_Generator.buildFromCA(map,params,step);
 		}
 	}
-	map1.ensureEdgesAreWalls(params.tile_wall);
-	return map1;
+	map.ensureEdgesAreWalls(params.tile_wall);
+	return map;
 };
 degen_ca_Generator.buildFromCA = function(map,params,step) {
 	var temp = new haxe_ds_IntMap();
@@ -1737,7 +1737,7 @@ degen_map_generators_MixedGenerator.buildRooms = function(root,userData) {
 		}
 		var roomStartX1 = node1.val.x + (Math.random() * 2 | 0);
 		var roomStartY1 = node1.val.y + (Math.random() * 2 | 0);
-		var cave = degen_ca_Generator.generate(null,{ height : node1.val.height, width : node1.val.width});
+		var cave = degen_ca_Generator.generate({ height : node1.val.height, width : node1.val.width});
 		var _g11 = 0;
 		var _g4 = cave._width;
 		while(_g11 < _g4) {

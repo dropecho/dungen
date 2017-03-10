@@ -38,7 +38,7 @@ class Generator {
     start_fill_percent: 65
   };
 
-  public static function generate(?map : Map2d, ?params : Dynamic) : Map2d {
+  public static function generate(?params : Dynamic) : Map2d {
 
     params = Extender.extend({}, [_params, params]);
 

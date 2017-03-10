@@ -11,6 +11,7 @@
   <div>
     <select id="generatorType">
       <option value="room">room</option>
+      <option value="cave">cave</option>
     </select>
     <br/> 
 
@@ -22,26 +23,35 @@
     <input id="height" type="range" min="32" max="256"></input>
     <span id="heightVal"></span>
     <br/> 
-    <label for="minWidth">minWidth</label>
-    <input id="minWidth" type="range" min="4" max="32"></input>
-    <span id="minWidthVal"></span>
-    <br/> 
-    <label for="minHeight">minHeight</label>
-    <input id="minHeight" type="range" min="4" max="32"></input>
-    <span id="minHeightVal"></span>
-    <br/> 
-    <label for="depth">depth</label>
-    <input id="depth" type="range" min="1" max="12"></input>
-    <span id="depthVal"></span>
-    <br/> 
-    <label for="ratio">ratio</label>
-    <input id="ratio" type="range" min="0" max="1" step=".01"></input>
-    <span id="ratioVal"></span>
-    <br/> 
-    <label for="Padding">padding</label>
-    <input id="paddingRatio" type="range" min="0" max="1" step=".01" value="0.25"></input>
-    <span id="paddingRatioVal"></span>
-    <br/> 
+    <div id='bspOptions'>
+      <label for="minWidth">minWidth</label>
+      <input id="minWidth" type="range" min="4" max="32"></input>
+      <span id="minWidthVal"></span>
+      <br/> 
+      <label for="minHeight">minHeight</label>
+      <input id="minHeight" type="range" min="4" max="32"></input>
+      <span id="minHeightVal"></span>
+      <br/> 
+      <label for="depth">depth</label>
+      <input id="depth" type="range" min="1" max="12"></input>
+      <span id="depthVal"></span>
+      <br/> 
+      <label for="ratio">ratio</label>
+      <input id="ratio" type="range" min="0" max="1" step=".01"></input>
+      <span id="ratioVal"></span>
+      <br/> 
+      <label for="Padding">padding</label>
+      <input id="paddingRatio" type="range" min="0" max="1" step=".01" value="0.25"></input>
+      <span id="paddingRatioVal"></span>
+      <br/> 
+    </div>
+    <div id='caveOptions' style="visibility:hidden">
+      <label for="start_fill_percent">Start Fill Percent</label>
+      <input id="start_fill_percent" type="range" min="0" max="100" value="35"></input>
+      <span id="start_fill_percentVal"></span>
+      <br/> 
+    </div>
+
   </div>
 
   <div>
@@ -52,12 +62,21 @@
   var bsp = new degen.BSPGenerator();
   var map = degen.RoomGenerator.buildRooms(bsp.generate());
   var ctx = document.querySelector('canvas').getContext('2d');
+  var genType = 'room';
   var roomGenParams = {};
+  var caveGenParams = {
+    tile_floor: 1,
+    tile_wall: 0,
+    start_fill_percent: 35
+  };
 
 
   function rebuildAndDrawMap(){
-    //map = degen.CAGenerator.generate(bsp);
-    map = degen.RoomGenerator.buildRooms(bsp.generate(), roomGenParams);
+    if(genType === 'cave'){
+      map = degen.CAGenerator.generate(caveGenParams);
+    } else {
+      map = degen.RoomGenerator.buildRooms(bsp.generate(), roomGenParams);
+    }
     ctx.clearRect(0,0,512,512);
 
     map._mapData.forEach(function(tile,i){
@@ -72,8 +91,6 @@
     var slider = document.querySelector('#' + id);
     var valId = '#' + id + 'Val';
 
-    obj = obj || bsp;
-
     obj[id] = +slider.value;
     document.querySelector(valId).innerHTML = +obj[id]; 
 
@@ -87,10 +104,26 @@
   var paddingslider = document.querySelector('#paddingRatio');
 
   sliders.forEach(function(sl){
-    setupSlider(sl.id);
+    setupSlider(sl.id, bsp);
+    setupSlider(sl.id, caveGenParams);
   });
 
   setupSlider(paddingslider.id, roomGenParams);
+
+
+  var typeMenu = document.querySelector('#generatorType');
+  typeMenu.addEventListener('change', function(ev){
+    genType = ev.target.value;
+    if(genType === 'cave'){
+      document.querySelector('#bspOptions').style.visibility = 'hidden';
+      document.querySelector('#caveOptions').style.visibility = 'visible';
+    } else {
+      document.querySelector('#bspOptions').style.visibility = 'visible';
+      document.querySelector('#caveOptions').style.visibility = 'hidden';
+    }
+    rebuildAndDrawMap();
+  });
+
 
   rebuildAndDrawMap();
 </script>
