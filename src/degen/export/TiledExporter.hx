@@ -61,8 +61,10 @@ private class TiledTileSet {
     }
 }
 
+
+@:expose("degen.TiledExporter")
 class TiledExporter {
-    public static function export(filename : String, map: Map2d) : String {
+    public static function export(map: Map2d) : String {
         var tiled_map : TiledMap = new TiledMap(map);
         var json = Json.stringify(tiled_map, null, " ");
 

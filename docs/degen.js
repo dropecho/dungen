@@ -1467,9 +1467,9 @@ degen_export__$TiledExporter_TiledTileSet.__name__ = true;
 degen_export__$TiledExporter_TiledTileSet.prototype = {
 	__class__: degen_export__$TiledExporter_TiledTileSet
 };
-var degen_export_TiledExporter = function() { };
+var degen_export_TiledExporter = $hx_exports["degen"]["TiledExporter"] = function() { };
 degen_export_TiledExporter.__name__ = true;
-degen_export_TiledExporter["export"] = function(filename,map) {
+degen_export_TiledExporter["export"] = function(map) {
 	var tiled_map = new degen_export__$TiledExporter_TiledMap(map);
 	var json = JSON.stringify(tiled_map,null," ");
 	return json;

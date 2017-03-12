@@ -54,6 +54,9 @@
     </div>
 
     <button onclick="rebuildAndDrawMap()" value="Generate">Generate</button>
+    <button onclick="generateTiledJson()" value="Export as Tiled">Export as Tiled map</button>
+    <br/>
+    <textarea id="json" style=" height:500px; width:300px"></textarea>
 
   </div>
 
@@ -104,6 +107,11 @@
       ctx.fillStyle = tile == 1 ? '#aaffaa' : "#000000"; 
       ctx.fillRect(pos.x*mapScale,pos.y*mapScale,mapScale,mapScale);
     });
+  }
+
+  function generateTiledJson(){
+    var json = degen.TiledExporter.export(map);
+    document.querySelector('#json').value = json;
   }
 
 
