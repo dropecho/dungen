@@ -14,7 +14,7 @@ typedef RoomParams = {
 class RoomGenerator {
   private static var _params = {
     tileFloor: 1,
-    tileWall: 2,
+    tileWall: 0,
     paddingRatio: 0.001
   }
 

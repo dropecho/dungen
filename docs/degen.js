@@ -1365,7 +1365,6 @@ degen_bsp_Generator.prototype = {
 var degen_ca_Generator = $hx_exports["degen"]["CAGenerator"] = function() { };
 degen_ca_Generator.__name__ = true;
 degen_ca_Generator.generate = function(params) {
-	params = degen_utils_Extender.extend({ },[degen_ca_Generator._params,params]);
 	var map = new degen_map_Map2d(params.width,params.height,-1);
 	map.fillMapRandomly(params.tile_wall,params.tile_floor,params.start_fill_percent);
 	map.ensureEdgesAreWalls(params.tile_wall);
@@ -1398,9 +1397,9 @@ degen_ca_Generator.buildFromCA = function(map,params,step) {
 			var nCount2 = map.getNeighborCount(x,y,params.tile_wall,2);
 			var pos = map.XYtoIndex(x,y);
 			if(nCount >= step.r1_cutoff || nCount2 <= step.r2_cutoff) {
-				temp.h[pos] = params.tile_wall;
-			} else {
 				temp.h[pos] = params.tile_floor;
+			} else {
+				temp.h[pos] = params.tile_wall;
 			}
 		}
 	}
@@ -1703,6 +1702,48 @@ degen_map_MapHelper.getHallwayTiles = function(map,tile) {
 		}
 	}
 	return hallwayTiles;
+};
+var degen_map_generators_DrunkWalkGenerator = $hx_exports["degen"]["WalkGenerator"] = function() { };
+degen_map_generators_DrunkWalkGenerator.__name__ = true;
+degen_map_generators_DrunkWalkGenerator.generate = function(params) {
+	var height = params.height;
+	var width = params.width;
+	var tile_floor = params.tile_floor;
+	var tile_wall = params.tile_wall;
+	var start_fill_percent = params.start_fill_percent;
+	var countOfFilled = 0;
+	var totalCount = height * width;
+	var map = new degen_map_Map2d(width,height,tile_wall);
+	var walkerPos_y;
+	var walkerPos_x = width / 2 | 0;
+	walkerPos_y = height / 2 | 0;
+	map.set(walkerPos_x,walkerPos_y,0);
+	var counter = 0;
+	var direction = Std.random(4);
+	while(countOfFilled < totalCount * (start_fill_percent / 100)) {
+		direction = Std.random(4);
+		if(map.get(walkerPos_x,walkerPos_y) != tile_floor) {
+			map.set(walkerPos_x,walkerPos_y,tile_floor);
+			++countOfFilled;
+		}
+		walkerPos_y += direction == 0 ? -1 : 0;
+		walkerPos_y += direction == 2 ? 1 : 0;
+		walkerPos_x += direction == 1 ? -1 : 0;
+		walkerPos_x += direction == 3 ? 1 : 0;
+		if(walkerPos_x < 0 || walkerPos_x > width - 1) {
+			walkerPos_x = width / 2 | 0;
+			walkerPos_y = height / 2 | 0;
+		}
+		if(walkerPos_y < 0 || walkerPos_y > height - 1) {
+			walkerPos_x = width / 2 | 0;
+			walkerPos_y = height / 2 | 0;
+		}
+		if(counter >= 500000) {
+			break;
+		}
+		++counter;
+	}
+	return map;
 };
 var degen_map_generators_MixedGenerator = function() { };
 degen_map_generators_MixedGenerator.__name__ = true;
@@ -2186,6 +2227,6 @@ var Enum = { };
 var __map_reserved = {}
 de_polygonal_ds_HashKey._counter = 0;
 degen_ca_Generator._params = { steps : [{ reps : 4, r1_cutoff : 5, r2_cutoff : 2},{ reps : 3, r1_cutoff : 5, r2_cutoff : 0}], height : 64, width : 64, tile_floor : 1, tile_wall : 0, start_fill_percent : 65};
-degen_map_generators_RoomGenerator._params = { tileFloor : 1, tileWall : 2, paddingRatio : 0.001};
+degen_map_generators_RoomGenerator._params = { tileFloor : 1, tileWall : 0, paddingRatio : 0.001};
 js_Boot.__toStr = ({ }).toString;
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

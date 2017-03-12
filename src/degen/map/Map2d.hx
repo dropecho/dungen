@@ -46,7 +46,7 @@ class Map2d {
       _mapData[XYtoIndex(_width - 1, y)] = tileType;
     }
   }
-  
+
   public function getNeighborCount(x:Int, y:Int, neighborType:Int, dist:Int = 1) : Int {
     function isNeighborType(tile) {
       return _mapData[XYtoIndex(tile.x, tile.y)] == neighborType || tile.onMap == false;
@@ -87,22 +87,22 @@ class Map2d {
 
   public function IndexToXY(index : Int) : Tile2d {
     var x = Std.int(index % _width),
-        y = Std.int(index / _width); 
+        y = Std.int(index / _width);
 
     return {
-      x: x, 
-      y: y, 
+      x: x,
+      y: y,
       onMap: x >= 0 && y >= 0 && x < _width && y < _height
     }
   }
 
-  public function set(x : Int,y :Int,data : Int) : Void {
+  public function set(x : Int, y :Int, data : Int) : Void {
     _mapData[XYtoIndex(x, y)] = data;
   }
 
   public function get(x : Int,y :Int) : Int {
     return _mapData[XYtoIndex(x, y)];
-  } 
+  }
 
   public function toString() : String {
     var output = "\n MAP2d: \n\n";

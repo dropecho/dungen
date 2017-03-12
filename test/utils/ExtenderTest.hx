@@ -75,6 +75,7 @@ var ex:Dynamic;
 
     Assert.areEqual(ex.x, empty.x);
     Assert.areEqual(ex.y, empty.y);
+    Assert.areEqual(ex.y.z, empty.y.z);
     Assert.areEqual(ex.a, empty.a);
     Assert.areEqual(ex.add, empty.add);
   }

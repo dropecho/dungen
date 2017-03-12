@@ -40,7 +40,7 @@ class Generator {
 
   public static function generate(?params : Dynamic) : Map2d {
 
-    params = Extender.extend({}, [_params, params]);
+    // params = Extender.extend({}, [_params, params]);
 
     var map = new Map2d(params.width, params.height, -1);
     map.fillMapRandomly(params.tile_wall, params.tile_floor, params.start_fill_percent);
@@ -68,9 +68,11 @@ class Generator {
         var pos = map.XYtoIndex(x,y);
 
         if(nCount >= step.r1_cutoff || nCount2 <= step.r2_cutoff){
-            temp.set(pos, params.tile_wall);
-        } else {
+            // temp.set(pos, params.tile_wall);
             temp.set(pos, params.tile_floor);
+        } else {
+            temp.set(pos, params.tile_wall);
+            // temp.set(pos, params.tile_floor);
         }
       }
     }
