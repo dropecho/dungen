@@ -4,60 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <script src="degen.js"></script>
+  <script src="dat.gui.min.js"></script>
     <title></title>
 </head>
 
 <body>
   <div>
-    <select id="generatorType">
-      <option value="room">room</option>
-      <option value="cave">cave</option>
-      <option value="walk">walk</option>
-    </select>
-    <br/> 
-
-    <label for="width">width</label>
-    <input id="width" type="range" min="32" max="96"></input>
-    <span id="widthVal"></span>
-    <br/> 
-    <label for="height">height</label>
-    <input id="height" type="range" min="32" max="96"></input>
-    <span id="heightVal"></span>
-    <br/> 
-    <div id='bspOptions'>
-      <label for="minWidth">minWidth</label>
-      <input id="minWidth" type="range" min="4" max="32"></input>
-      <span id="minWidthVal"></span>
-      <br/> 
-      <label for="minHeight">minHeight</label>
-      <input id="minHeight" type="range" min="4" max="32"></input>
-      <span id="minHeightVal"></span>
-      <br/> 
-      <label for="depth">depth</label>
-      <input id="depth" type="range" min="1" max="12"></input>
-      <span id="depthVal"></span>
-      <br/> 
-      <label for="ratio">ratio</label>
-      <input id="ratio" type="range" min="0" max="1" step=".01"></input>
-      <span id="ratioVal"></span>
-      <br/> 
-      <label for="Padding">padding</label>
-      <input id="paddingRatio" type="range" min="0" max="1" step=".01" value="0.25"></input>
-      <span id="paddingRatioVal"></span>
-      <br/> 
-    </div>
-    <div id='caveOptions' style="visibility:hidden">
-      <label for="start_fill_percent">Start Fill Percent</label>
-      <input id="start_fill_percent" type="range" min="0" max="100" value="40"></input>
-      <span id="start_fill_percentVal"></span>
-      <br/> 
-    </div>
-
-    <button onclick="rebuildAndDrawMap()" value="Generate">Generate</button>
-    <button onclick="generateTiledJson()" value="Export as Tiled">Export as Tiled map</button>
-    <br/>
     <textarea id="json" style=" height:500px; width:300px"></textarea>
-
   </div>
 
   <div style="position:absolute; top: 0px; left: 400px;">
@@ -65,11 +18,11 @@
   </div>
 </body>
 <script type="text/javascript">
+  var map;
   var bsp = new degen.BSPGenerator();
-  var map = degen.RoomGenerator.buildRooms(bsp.generate());
   var ctx = document.querySelector('canvas').getContext('2d');
-  var genType = 'room';
-  var roomGenParams = {};
+  var roomGenParams = {
+  };
   var caveGenParams = {
     steps: [{
       reps: 6,
@@ -91,67 +44,84 @@
 
   var mapScale = 10;
 
-  function rebuildAndDrawMap(){
-    switch(genType){
-      case 'cave': map = degen.CAGenerator.generate(caveGenParams);
-        break;
-      case 'walk': map = degen.WalkGenerator.generate(caveGenParams);
-        break;
-      case 'room': map = degen.RoomGenerator.buildRooms(bsp.generate(), roomGenParams);
-        break;
+  var opts = {
+    type: 'room',
+    generate: function (){
+      switch(opts.type){
+        case 'cave': 
+          map = degen.CAGenerator.generate(caveGenParams);
+          break;
+        case 'walk': 
+          map = degen.WalkGenerator.generate(caveGenParams);
+          break;
+        case 'room': 
+          map = degen.RoomGenerator.buildRooms(bsp.generate(), roomGenParams);
+          break;
+      }
+      ctx.clearRect(0,0,1024,1024);
+
+      map._mapData.forEach(function(tile,i){
+        var pos = map.IndexToXY(i);
+        ctx.fillStyle = tile == 1 ? '#aaffaa' : "#aaa"; 
+        if(tile == 0){
+          var n1 = map.getNeighborCount(pos.x, pos.y, 0, 1);
+          var n3 = map.getNeighborCount(pos.x, pos.y, 0, 3);
+          color = 216 - (n3 * 4);
+          ctx.fillStyle = 'rgb(' + color +',' + color +',' + color +')';
+        } else {
+          var nWalls = map.getNeighborCount(pos.x, pos.y, 0, 1);
+          var nFloor = map.getNeighborCount(pos.x, pos.y, 1, 1);
+          var nWalls2 = map.getNeighborCount(pos.x, pos.y, 0, 2);
+          var nFloor2 = map.getNeighborCount(pos.x, pos.y, 1, 2);
+
+          //var color = 192 - (nWalls - nFloor * 8); 
+          //color += nFloor * 8;
+
+          //ctx.fillStyle = 'rgb(' + color + 2 +',' + color +',' + color +')';
+        }
+        ctx.fillRect(pos.x*mapScale,pos.y*mapScale,mapScale,mapScale);
+      });
+    },
+    generateJson: function(){
+      var json = degen.TiledExporter.export(map);
+      document.querySelector('#json').value = json;
     }
-    ctx.clearRect(0,0,1024,1024);
+  };
 
-    map._mapData.forEach(function(tile,i){
-      var pos = map.IndexToXY(i);
-      ctx.fillStyle = tile == 1 ? '#aaffaa' : "#000000"; 
-      ctx.fillRect(pos.x*mapScale,pos.y*mapScale,mapScale,mapScale);
-    });
-  }
+  var gui = new dat.GUI();
+  gui.add(opts, 'type', ['room', 'cave', 'walk']);
 
-  function generateTiledJson(){
-    var json = degen.TiledExporter.export(map);
-    document.querySelector('#json').value = json;
-  }
+  (function addRoomGui(){
+    var roomGui = gui.addFolder('room') 
+    roomGui.add(bsp, 'width', 16, 128).step(1);
+    roomGui.add(bsp, 'height', 16, 128).step(1);
+    roomGui.add(bsp, 'minWidth', 2, 32).step(1);
+    roomGui.add(bsp, 'minHeight', 2, 32).step(1);
+    roomGui.add(bsp, 'depth', 1, 10).step(1);
+    roomGui.add(bsp, 'ratio', 0, 1).step(0.1);
+    //roomGui.add(roomGenParams, 'padding', 0, 16).step(1);
+  })();
 
+  (function addCaveGui(){
+    var caveGui = gui.addFolder('cave') 
+    caveGui.add(caveGenParams, 'width', 16, 128);
+    caveGui.add(caveGenParams, 'height', 16, 128);
 
-  function setupSlider(id, obj){
-    var slider = document.querySelector('#' + id);
-    var valId = '#' + id + 'Val';
+    var step1 = caveGui.addFolder('step1') 
+    step1.add(caveGenParams.steps[0], 'reps', 1, 10).step(1);
+    step1.add(caveGenParams.steps[0], 'r1_cutoff', 0, 10).step(1);
+    step1.add(caveGenParams.steps[0], 'r2_cutoff', 0, 10).step(1);
 
-    obj[id] = +slider.value;
-    document.querySelector(valId).innerHTML = +obj[id]; 
+    var step2 = caveGui.addFolder('step2') 
+    step2.add(caveGenParams.steps[0], 'reps', 1, 10).step(1);
+    step2.add(caveGenParams.steps[0], 'r1_cutoff', 0, 10).step(1);
+    step2.add(caveGenParams.steps[0], 'r2_cutoff', 0, 10).step(1);
+  })();
 
-    slider.addEventListener('input',function(){
-      document.querySelector(valId).innerHTML = obj[id] = +slider.value;
-    });
-  }
-
-  var sliders = document.querySelectorAll('input');
-  var paddingslider = document.querySelector('#paddingRatio');
-
-  sliders.forEach(function(sl){
-    setupSlider(sl.id, bsp);
-    setupSlider(sl.id, caveGenParams);
-  });
-
-  setupSlider(paddingslider.id, roomGenParams);
+  gui.add(opts, 'generate');
+  gui.add(opts, 'generateJson');
 
 
-  var typeMenu = document.querySelector('#generatorType');
-  typeMenu.addEventListener('change', function(ev){
-    genType = ev.target.value;
-    if(genType === 'cave' || genType == 'walk'){
-      document.querySelector('#bspOptions').style.visibility = 'hidden';
-      document.querySelector('#caveOptions').style.visibility = 'visible';
-    } else {
-      document.querySelector('#bspOptions').style.visibility = 'visible';
-      document.querySelector('#caveOptions').style.visibility = 'hidden';
-    }
-  });
-
-
-  rebuildAndDrawMap();
 </script>
 
 </html>
