@@ -1,36 +1,24 @@
 {
-    "name": "degen",
-    "description": "A procedural generation toolkit for games",
-    "version": "0.1.0",
-    "homepage": "https://github.com/dropechostudios/degen",
-    "author": {
-        "name": "Ben Van Treese",
-        "email": "vantreeseba@gmail.com"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/dropechostudios/degen.git"
-    },
-    "bugs": {
-        "url": "https://github.com/dropechostudios/degen/issues"
-    },
-    "licenses": [{
-        "type" : "MIT",
-        "url" : "https://github.com///blob/master/LICENSE"
-    }],
-    "main": "artifacts/degen.js",
-    "scripts": {
-        "build": "gulp build",
-        "test": "gulp test"
-    },
-    "dependencies": {
-    },
-    "devDependencies": {
-        "gulp":"*",
-        "gulp-shell":"*",
-        "mkdirp":"*"
-    },
-    "keywords": [
-        "slushgenerator"
-    ]
+  "name": "@dropecho/dungen",
+  "version": "0.1.8",
+  "description": "A dungeon generator.",
+  "author": "vantreeseba <vantreeseba@gmail.com>",
+  "repository": "github:dropecho/dungen",
+  "main": "dist/js/index.js",
+  "files": [
+    "dist/js/index.js"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "haxelib run munit t",
+    "build": "haxe build.hxml",
+    "build-changelog": "conventional-changelog -i CHANGELOG.md -s -r 0",
+    "bump": "npm version --no-git-tag-version",
+    "haxe:submit": "haxelib run submit",
+    "version": "npm run build-changelog",
+    "postversion": "git add . && git commit -m 'version' && npm run haxe:submit && npm publish"
+  }
 }

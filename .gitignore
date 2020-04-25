@@ -3,3 +3,4 @@ artifacts
 *.swp
 .temp
 node_modules
+dist

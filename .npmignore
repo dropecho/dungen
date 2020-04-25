@@ -1,5 +1,0 @@
-*
-!/artifacts/js/*
-
-# don't ignore .npmignore files
-!.npmignore

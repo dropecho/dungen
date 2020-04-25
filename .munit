@@ -2,5 +2,5 @@ version=2.1.0
 src=test
 bin=artifacts/test
 report=artifacts/report
-hxml=targets/test.hxml
+hxml=test.hxml
 classPaths=src

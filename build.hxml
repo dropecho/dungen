@@ -3,4 +3,4 @@
 -lib polygonal-ds
 #-dce std
 --macro include('', true, null, ['src'])
--js artifacts/js/degen.js
+-js dist/js/degen.js
