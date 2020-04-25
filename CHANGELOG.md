@@ -1,7 +1,14 @@
+## <small>0.2.1 (2020-04-25)</small>
+
+
+
+
 ## 0.2.0 (2020-04-25)
 
+* Add classpath to haxelib.json ([a98c2d4](https://github.com/dropecho/dungen/commit/a98c2d4))
 * Add dir creation ([1246ef0](https://github.com/dropecho/dungen/commit/1246ef0))
 * Add examples, add more params for gen ([e23eca3](https://github.com/dropecho/dungen/commit/e23eca3))
+* Add game tag to haxelib json ([66a667c](https://github.com/dropecho/dungen/commit/66a667c))
 * Add javascript testing ([5aa2a2a](https://github.com/dropecho/dungen/commit/5aa2a2a))
 * Add polygonal.ds dep, and remove self-built binary node ([edc9088](https://github.com/dropecho/dungen/commit/edc9088))
 * Add rooms params to generator ([f373948](https://github.com/dropecho/dungen/commit/f373948))
@@ -34,6 +41,7 @@
 * Making CA gen take into account edges ([a13760e](https://github.com/dropecho/dungen/commit/a13760e))
 * pulling in fixes for travis, and setting up gulp and switching to munit ([0c454e2](https://github.com/dropecho/dungen/commit/0c454e2))
 * Readd haxe file to travis.yml ([d1d4d9f](https://github.com/dropecho/dungen/commit/d1d4d9f))
+* Release 0.2.0 ([ed19d19](https://github.com/dropecho/dungen/commit/ed19d19))
 * Removing install of unneeded lib in travis build ([a60c56f](https://github.com/dropecho/dungen/commit/a60c56f))
 * removing uneeded dep from haxelib ([56a2158](https://github.com/dropecho/dungen/commit/56a2158))
 * Reslush project ([3437cbf](https://github.com/dropecho/dungen/commit/3437cbf))
@@ -43,6 +51,7 @@
 * trigging first ci build ([88bcafa](https://github.com/dropecho/dungen/commit/88bcafa))
 * Trying again at fixing travis build ([5abda98](https://github.com/dropecho/dungen/commit/5abda98))
 * trying haxe config on travis ([2d32a5f](https://github.com/dropecho/dungen/commit/2d32a5f))
+* version ([a5439dc](https://github.com/dropecho/dungen/commit/a5439dc))
 * working on dev branch of polygonal.ds ([e9edc78](https://github.com/dropecho/dungen/commit/e9edc78))
 * Working on drunk walk method ([e33fb94](https://github.com/dropecho/dungen/commit/e33fb94))
 * Working on fixing ([1473cb0](https://github.com/dropecho/dungen/commit/1473cb0))
