@@ -4,7 +4,7 @@ package dropecho.dungen.map.generators;
 import dropecho.dungen.ca.Generator as CAGen;
 import dropecho.dungen.utils.Extender;
 
-@:expose("dropecho.dungen.WalkGenerator")
+@:expose("dungen.WalkGenerator")
 class DrunkWalkGenerator {
   public static function generate(?params:Dynamic) : Map2d {
     var height:Int = params.height;

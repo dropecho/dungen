@@ -4,9 +4,9 @@
   "description": "A dungeon generator.",
   "author": "vantreeseba <vantreeseba@gmail.com>",
   "repository": "github:dropecho/dungen",
-  "main": "dist/js/index.js",
+  "main": "dist/js/dungen.js",
   "files": [
-    "dist/js/index.js"
+    "dist/js/dungen.js"
   ],
   "publishConfig": {
     "access": "public"

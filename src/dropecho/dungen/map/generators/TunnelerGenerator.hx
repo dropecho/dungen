@@ -4,7 +4,7 @@ import dropecho.dungen.ca.Generator as CAGen;
 import dropecho.dungen.utils.Extender;
 import dropecho.dungen.map.Map2d;
 
-@:expose("dropecho.dungen.TunnelerGenerator")
+@:expose("dungen.TunnelerGenerator")
 class TunnelerGenerator {
 	public static function generate(?params:Dynamic) : Map2d {
 		var height:Int = params.height;

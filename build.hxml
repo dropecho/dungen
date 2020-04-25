@@ -4,4 +4,4 @@
 -lib dropecho.ds 
 #-dce std
 --macro include('', true, null, ['src'])
--js dist/js/degen.js
+-js dist/js/dungen.js

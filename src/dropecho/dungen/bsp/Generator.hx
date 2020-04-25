@@ -1,8 +1,10 @@
 package dropecho.dungen.bsp;
 
 import dropecho.dungen.utils.Extender;
+import dropecho.ds.BSPNode;
+import dropecho.ds.BSPTree;
 
-@:expose("degen.BSPGenerator")
+@:expose("dungen.BSPGenerator")
 class Generator {
 	public var width:Int = 120;
 	public var height:Int = 60;
@@ -17,23 +19,22 @@ class Generator {
 		Extender.extend(this, ops);
 	}
 
-	public function generate(root:BinaryTreeNode<BspData> = null):BinaryTreeNode<BspData> {
-		if (root == null) {
-			var rootData = new BspData({
-				height: height,
-				width: width,
-				x: x,
-				y: y
-			});
-			root = new BinaryTreeNode<BspData>(rootData);
-		}
+	public function generate():BSPTree {
+		var rootData = {
+			height: height,
+			width: width,
+			x: x,
+			y: y
+		};
 
-		buildTree(root);
+		var tree = new BSPTree(rootData);
 
-		return root;
+		buildTree(tree.getRoot());
+
+		return tree;
 	}
 
-	private function buildTree(node:BinaryTreeNode<BspData>, ?level:Int = 0):Void {
+	private function buildTree(node:BSPNode, ?level:Int = 0):Void {
 		if (node == null || level >= depth) {
 			return;
 		}
@@ -43,8 +44,8 @@ class Generator {
 		buildTree(node.right, level + 1);
 	}
 
-	private function makeSplit(node:BinaryTreeNode<BspData>):Void {
-		var val = node.val;
+	private function makeSplit(node:BSPNode):Void {
+		var val = node.value;
 		var lData:BspData;
 		var rData:BspData;
 
@@ -103,8 +104,8 @@ class Generator {
 			});
 		}
 
-		node.left = new BinaryTreeNode<BspData>(lData);
-		node.right = new BinaryTreeNode<BspData>(rData);
+		node.setLeft(new BSPNode(lData));
+		node.setRight(new BSPNode(rData));
 
 		return;
 	}

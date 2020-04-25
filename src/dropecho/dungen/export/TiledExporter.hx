@@ -62,7 +62,7 @@ private class TiledTileSet {
 }
 
 
-@:expose("degen.TiledExporter")
+@:expose("dungen.TiledExporter")
 class TiledExporter {
     public static function export(map: Map2d) : String {
         var tiled_map : TiledMap = new TiledMap(map);
