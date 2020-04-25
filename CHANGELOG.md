@@ -1,3 +1,9 @@
+## <small>0.2.2 (2020-04-25)</small>
+
+* version ([b4d06e9](https://github.com/dropecho/dungen/commit/b4d06e9))
+
+
+
 ## <small>0.2.1 (2020-04-25)</small>
 
 * Release 0.2.1 ([28e0060](https://github.com/dropecho/dungen/commit/28e0060))
