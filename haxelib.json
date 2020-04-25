@@ -10,8 +10,8 @@
 	"contributors": [
 		"vantreeseba"
 	],
-	"version": "0.2.1",
-	"releasenote": "Fix URL.",
+	"version": "0.2.2",
+	"releasenote": "Fix readme",
 	"tags": [
 		"game",
 		"procedural",
