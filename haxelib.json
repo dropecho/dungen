@@ -2,7 +2,7 @@
   "name": "dropecho.dungen",
   "url": "https://github.com/dropecho/degen",
   "license": "MIT",
-  "tags": [],
+  "tags": ["game"],
   "description": "A procedural generation toolkit for games",
   "version": "0.1.0",
   "contributors": [
