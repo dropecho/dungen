@@ -7,28 +7,28 @@ import dropecho.dungen.map.generators.RoomGenerator;
 import dropecho.dungen.map.Map2d;
 import dropecho.dungen.ca.Generator as CaGen;
 import dropecho.dungen.export.TiledExporter;
-
 #if !js
 import sys.io.File;
 #end
 
 class TiledExporterTest {
-	public var map : Map2d;
+	public var map:Map2d;
 
 	@Test
 	public function ca_map_test() {
 		var params = {
-			steps:
-			[{
-				reps : 4,
-				r1_cutoff : 5,
-				r2_cutoff : 2
-			},
-			{
-				reps : 3,
-				r1_cutoff: 5,
-				r2_cutoff: 0
-			}],
+			steps: [
+				{
+					reps: 4,
+					r1_cutoff: 5,
+					r2_cutoff: 2
+				},
+				{
+					reps: 3,
+					r1_cutoff: 5,
+					r2_cutoff: 0
+				}
+			],
 			height: 64,
 			width: 64,
 			tile_floor: 2,
@@ -39,9 +39,9 @@ class TiledExporterTest {
 		var map = CaGen.generate(params);
 		var json = TiledExporter.export(map);
 
-#if !js
-		File.saveContent("example/ca.json", json);
-#end
+		#if !js
+		File.saveContent("ca.json", json);
+		#end
 
 		Assert.isTrue(true);
 	}
@@ -54,8 +54,7 @@ class TiledExporterTest {
 			minHeight: 10,
 			minWidth: 10,
 			depth: 10,
-			ratio:
-			.65
+			ratio: .65
 		};
 
 		var gen = new Generator(genOpts);
@@ -63,7 +62,9 @@ class TiledExporterTest {
 
 		var json = TiledExporter.export(map);
 
-		File.saveContent("example/bsp.json", json);
+		#if !js
+		File.saveContent("bsp.json", json);
+		#end
 
 		Assert.isTrue(true);
 	}
