@@ -1,7 +1,7 @@
 package bsp;
 
 import massive.munit.Assert;
-import degen.bsp.BspData;
+import dropecho.dungen.bsp.BspData;
 
 class NodeTest {
   //var data:BspData;

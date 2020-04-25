@@ -1,7 +1,7 @@
 package utils;
 
 import massive.munit.Assert;
-import degen.utils.Extender;
+import dropecho.dungen.utils.Extender;
 
 class ExtenderTest {
 var base:Dynamic;

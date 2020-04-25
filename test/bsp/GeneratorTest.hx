@@ -1,8 +1,8 @@
 package bsp;
 
 import massive.munit.Assert;
-import degen.bsp.Generator;
-import degen.bsp.BspData;
+import dropecho.dungen.bsp.Generator;
+import dropecho.dungen.bsp.BspData;
 import de.polygonal.ds.BinaryTreeNode;
 
 class GeneratorTest {

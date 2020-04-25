@@ -1,9 +1,9 @@
 package map.helpers;
 
 import massive.munit.Assert;
-import degen.map.Map2d;
-import degen.bsp.BspData;
-import degen.map.helpers.ConnectivityChecker;
+import dropecho.dungen.map.Map2d;
+import dropecho.dungen.bsp.BspData;
+import dropecho.dungen.map.helpers.ConnectivityChecker;
 
 class ConnectivityCheckerTest {
   @Test

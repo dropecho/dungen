@@ -1,12 +1,12 @@
 package export;
 
 import massive.munit.Assert;
-import degen.bsp.Generator;
-import degen.bsp.BspData;
-import degen.map.generators.RoomGenerator;
-import degen.map.Map2d;
-import degen.ca.Generator as CaGen;
-import degen.export.TiledExporter;
+import dropecho.dungen.bsp.Generator;
+import dropecho.dungen.bsp.BspData;
+import dropecho.dungen.map.generators.RoomGenerator;
+import dropecho.dungen.map.Map2d;
+import dropecho.dungen.ca.Generator as CaGen;
+import dropecho.dungen.export.TiledExporter;
 
 #if !js
 import sys.io.File;

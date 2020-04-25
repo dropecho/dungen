@@ -1,7 +1,7 @@
-package degen.map.generators;
+package dropecho.dungen.map.generators;
 
-import degen.utils.Extender;
-import degen.bsp.BspData;
+import dropecho.dungen.utils.Extender;
+import dropecho.dungen.bsp.BspData;
 import de.polygonal.ds.BinaryTreeNode;
 
 typedef RoomParams = {
@@ -10,7 +10,7 @@ typedef RoomParams = {
   paddingRatio: Float
 };
 
-@:expose("degen.RoomGenerator")
+@:expose("dropecho.dungen.RoomGenerator")
 class RoomGenerator {
   private static var _params = {
     tileFloor: 1,

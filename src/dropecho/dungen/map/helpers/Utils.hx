@@ -1,4 +1,5 @@
-package degen.map.helpers;
+package dropecho.dungen.map.helpers;
+
 typedef Rect = {
 	var width: Int;
 	var height: Int;

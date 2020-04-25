@@ -1,4 +1,4 @@
-package degen.utils;
+package dropecho.dungen.utils;
 
 class Extender {
 	public static function extend(base:Dynamic, ?extension:Dynamic):Dynamic{

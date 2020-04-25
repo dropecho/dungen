@@ -9,6 +9,7 @@
     "vantreeseba"
   ],
   "dependencies": {
-    "libnoise": ""
+    "libnoise": "",
+    "dropecho.ds": ""
   }
 }

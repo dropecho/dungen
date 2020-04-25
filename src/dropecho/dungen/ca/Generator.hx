@@ -1,7 +1,7 @@
-package degen.ca;
+package dropecho.dungen.ca;
 
-import degen.utils.Extender;
-import degen.map.Map2d;
+import dropecho.dungen.utils.Extender;
+import dropecho.dungen.map.Map2d;
 
 typedef CA_PARAM_STEP = {
   reps: Int,

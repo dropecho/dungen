@@ -1,12 +1,12 @@
 package map;
 
 import massive.munit.Assert;
-import degen.map.Map2d;
-import degen.bsp.Generator;
-import degen.bsp.BspData;
-import degen.map.generators.RoomGenerator;
-import degen.map.generators.MixedGenerator;
-import degen.ca.Generator as CaGen;
+import dropecho.dungen.map.Map2d;
+import dropecho.dungen.bsp.Generator;
+import dropecho.dungen.bsp.BspData;
+import dropecho.dungen.map.generators.RoomGenerator;
+import dropecho.dungen.map.generators.MixedGenerator;
+import dropecho.dungen.ca.Generator as CaGen;
 
 class Map2dTest {
 	@Test

@@ -1,10 +1,10 @@
 
-package degen.map.generators;
+package dropecho.dungen.map.generators;
 
-import degen.ca.Generator as CAGen;
-import degen.utils.Extender;
+import dropecho.dungen.ca.Generator as CAGen;
+import dropecho.dungen.utils.Extender;
 
-@:expose("degen.WalkGenerator")
+@:expose("dropecho.dungen.WalkGenerator")
 class DrunkWalkGenerator {
   public static function generate(?params:Dynamic) : Map2d {
     var height:Int = params.height;

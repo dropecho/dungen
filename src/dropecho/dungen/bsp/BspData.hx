@@ -1,8 +1,6 @@
-package degen.bsp;
+package dropecho.dungen.bsp;
 
-import degen.utils.Extender;
-
-@:expose("degen.bspNode")
+@:expose("dropecho.dungen.bspNode")
 class BspData {
     public var width:Int = 0;
     public var height:Int = 0;

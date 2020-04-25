@@ -1,8 +1,8 @@
-package degen.map.generators;
+package dropecho.dungen.map.generators;
 
-import degen.ca.Generator as CAGen;
-import degen.utils.Extender;
-import degen.map.helpers.Utils;
+import dropecho.dungen.ca.Generator as CAGen;
+import dropecho.dungen.utils.Extender;
+import dropecho.dungen.map.helpers.Utils;
 
 //All rooms are rectangles for now.
 typedef Room = {
@@ -12,7 +12,7 @@ typedef Room = {
 };
 
 
-@:expose("degen.FloorPlanGenerator")
+@:expose("dropecho.dungen.FloorPlanGenerator")
 class FloorPlanGenerator {
 	public static function generate(?params:Dynamic) : Map2d {
 		var width:Int = params.width;

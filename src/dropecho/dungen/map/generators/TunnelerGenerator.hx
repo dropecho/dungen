@@ -1,10 +1,10 @@
-package degen.map.generators;
+package dropecho.dungen.map.generators;
 
-import degen.ca.Generator as CAGen;
-import degen.utils.Extender;
-import degen.map.Map2d;
+import dropecho.dungen.ca.Generator as CAGen;
+import dropecho.dungen.utils.Extender;
+import dropecho.dungen.map.Map2d;
 
-@:expose("degen.TunnelerGenerator")
+@:expose("dropecho.dungen.TunnelerGenerator")
 class TunnelerGenerator {
 	public static function generate(?params:Dynamic) : Map2d {
 		var height:Int = params.height;

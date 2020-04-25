@@ -1,9 +1,9 @@
-package degen.map.generators;
+package dropecho.dungen.map.generators;
 
-import degen.bsp.BspData;
+import dropecho.dungen.bsp.BspData;
 import de.polygonal.ds.BinaryTreeNode;
-import degen.ca.Generator as CAGen;
-import degen.utils.Extender;
+import dropecho.dungen.ca.Generator as CAGen;
+import dropecho.dungen.utils.Extender;
 
 class MixedGenerator {
     public static function buildRooms(root : BinaryTreeNode<BspData>, userData:Dynamic) :Map2d { //tile_floor:Int = 1, tile_wall:Int = 0) : Map2d {

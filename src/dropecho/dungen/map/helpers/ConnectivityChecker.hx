@@ -1,4 +1,4 @@
-package degen.map.helpers;
+package dropecho.dungen.map.helpers;
 
 class ConnectivityChecker {
   function check(map : Map2d, tile : Int = 0) : Bool {
