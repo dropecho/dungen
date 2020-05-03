@@ -10,8 +10,8 @@
 	"contributors": [
 		"vantreeseba"
 	],
-	"version": "0.2.2",
-	"releasenote": "Fix readme",
+	"version": "0.3.0",
+	"releasenote": "FIX: fix some issues with extender",
 	"tags": [
 		"game",
 		"procedural",
