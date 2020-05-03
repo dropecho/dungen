@@ -1,5 +1,13 @@
+## 0.3.0 (2020-05-03)
+
+* FIX: fix some issues with extender ([f92a418](https://github.com/dropecho/dungen/commit/f92a418))
+
+
+
 ## <small>0.2.2 (2020-04-25)</small>
 
+* Release 0.2.2 ([36581d2](https://github.com/dropecho/dungen/commit/36581d2))
+* version ([af4a08a](https://github.com/dropecho/dungen/commit/af4a08a))
 * version ([b4d06e9](https://github.com/dropecho/dungen/commit/b4d06e9))
 
 
