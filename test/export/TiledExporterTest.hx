@@ -36,14 +36,14 @@ class TiledExporterTest {
 			start_fill_percent: 45
 		};
 
-		var map = CaGen.generate(params);
-		var json = TiledExporter.export(map);
+    var map = CaGen.generate(params);
+    var json = TiledExporter.export(map);
 
-		#if !js
-		File.saveContent("ca.json", json);
-		#end
+    #if !js
+    File.saveContent("ca.json", json);
+    #end
 
-		Assert.isTrue(true);
+    Assert.isTrue(true);
 	}
 
 	@Test
@@ -58,7 +58,8 @@ class TiledExporterTest {
 		};
 
 		var gen = new Generator(genOpts);
-		var map = RoomGenerator.buildRooms(gen.generate());
+    var tree = gen.generate();
+		var map = RoomGenerator.buildRooms(tree);
 
 		var json = TiledExporter.export(map);
 

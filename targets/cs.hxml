@@ -1,0 +1,6 @@
+-cp src
+
+-D no-root
+-lib dropecho.ds 
+--macro include('', true, null, ['src'])
+-cs dist/cs/dungen

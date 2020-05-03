@@ -1,5 +1,6 @@
 package dropecho.dungen.ca;
 
+import dropecho.dungen.utils.Extender;
 import dropecho.dungen.map.Map2d;
 
 typedef CA_PARAM_STEP = {
@@ -9,7 +10,7 @@ typedef CA_PARAM_STEP = {
 };
 
 typedef CA_PARAMS = {
-	steps:Array<CA_PARAM_STEP>,
+  steps:Array<CA_PARAM_STEP>,
 	height:Int,
 	width:Int,
 	tile_floor:Int,
@@ -19,7 +20,7 @@ typedef CA_PARAMS = {
 
 @:expose("dungen.CAGenerator")
 class Generator {
-	private static var _params = {
+	public static var _params = {
 		steps: [
 			{
 				reps: 4,
@@ -39,7 +40,9 @@ class Generator {
 		start_fill_percent: 65
 	};
 
-	public static function generate(?params:Dynamic):Map2d {
+	public static function generate(?params:Dynamic = null):Map2d {
+    params = Extender.extend({}, [_params, params]);
+
 		var map = new Map2d(params.width, params.height, -1);
 		map.fillMapRandomly(params.tile_wall, params.tile_floor, params.start_fill_percent);
 		map.ensureEdgesAreWalls(params.tile_wall);
@@ -47,7 +50,7 @@ class Generator {
 		var steps:Array<Dynamic> = params.steps;
 
 		for (step in steps) {
-			for (rep in 0...step.reps) {
+			for (_ in 0...step.reps) {
 				buildFromCA(map, params, step);
 			}
 		}

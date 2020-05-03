@@ -3,5 +3,10 @@
 -lib dropecho.ds 
 -lib munit
 -lib hamcrest
+
+
 -main TestMain
+
+#-cs artifacts/cs_test/
+
 -neko artifacts/test/neko_test.n

@@ -20,7 +20,7 @@ class RoomGenerator {
 		paddingRatio: 0.001
 	}
 
-	public static function buildRooms(tree:BSPTree, ?params:Dynamic):Map2d {
+	public static function buildRooms(tree:BSPTree, ?params:Dynamic = null):Map2d {
 		params = Extender.extend({}, [_params, params]);
 
 		var rootvalue = tree.getRoot().value;

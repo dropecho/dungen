@@ -15,7 +15,7 @@ class Generator {
 	public var x:Int = 0;
 	public var y:Int = 0;
 
-	public function new(?ops:Dynamic) {
+	public function new(?ops:Dynamic = null) {
 		Extender.extend(this, ops);
 	}
 
@@ -73,14 +73,12 @@ class Generator {
 			lData = new BspData({
 				height: splitAt,
 				width: val.width,
-				parent: val,
 				x: val.x,
 				y: val.y
 			});
 			rData = new BspData({
 				height: rHeight,
 				width: val.width,
-				parent: val,
 				x: val.x,
 				y: val.y + splitAt
 			});
@@ -91,14 +89,12 @@ class Generator {
 			lData = new BspData({
 				height: val.height,
 				width: splitAt,
-				parent: val,
 				x: val.x,
 				y: val.y
 			});
 			rData = new BspData({
 				height: val.height,
 				width: rWidth,
-				parent: val,
 				x: val.x + splitAt,
 				y: val.y
 			});
