@@ -1,5 +1,13 @@
+## 0.4.0 (2020-05-05)
+
+* Lots of cleanup, setup interop lib ([7567e50](https://github.com/dropecho/dungen/commit/7567e50))
+
+
+
 ## 0.3.0 (2020-05-03)
 
+* Release 0.3.0 ([1d01a8c](https://github.com/dropecho/dungen/commit/1d01a8c))
+* version ([a3a1659](https://github.com/dropecho/dungen/commit/a3a1659))
 * FIX: fix some issues with extender ([f92a418](https://github.com/dropecho/dungen/commit/f92a418))
 
 
