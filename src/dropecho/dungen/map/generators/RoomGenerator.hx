@@ -1,27 +1,22 @@
 package dropecho.dungen.map.generators;
 
-import dropecho.dungen.utils.Extender;
-import dropecho.dungen.bsp.BspData;
+import dropecho.interop.Extender;
 import dropecho.ds.BSPTree;
 import dropecho.ds.BSPNode;
 import dropecho.ds.algos.PostOrderTraversal;
 
-typedef RoomParams = {
-	tileFloor:Int,
-	tileWall:Int,
-	paddingRatio:Float
-};
+class RoomParams {
+	public var tileFloor:Int = 1;
+	public var tileWall:Int = 0;
+	public var paddingRatio:Float = 0.001;
+
+	public function new() {};
+}
 
 @:expose("dungen.RoomGenerator")
 class RoomGenerator {
-	private static var _params = {
-		tileFloor: 1,
-		tileWall: 0,
-		paddingRatio: 0.001
-	}
-
-	public static function buildRooms(tree:BSPTree, ?params:Dynamic = null):Map2d {
-		params = Extender.extend({}, [_params, params]);
+	public static function buildRooms(tree:BSPTree, ?opts:Dynamic = null):Map2d {
+		var params = Extender.defaults(new RoomParams(), opts);
 
 		var rootvalue = tree.getRoot().value;
 		var map = new Map2d(rootvalue.width, rootvalue.height, params.tileWall);

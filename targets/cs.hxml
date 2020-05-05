@@ -2,5 +2,6 @@
 
 -D no-root
 -lib dropecho.ds 
+-lib dropecho.interop 
 --macro include('', true, null, ['src'])
--cs dist/cs/dungen
+-cs dist/cs/dropecho.dungen

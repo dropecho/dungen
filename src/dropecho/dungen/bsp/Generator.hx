@@ -1,11 +1,11 @@
 package dropecho.dungen.bsp;
 
-import dropecho.dungen.utils.Extender;
 import dropecho.ds.BSPNode;
 import dropecho.ds.BSPTree;
+import dropecho.interop.Extender;
 
-@:expose("dungen.BSPGenerator")
-class Generator {
+@:expose("dungen.BSPGeneratorConfig")
+class BSPGeneratorConfig {
 	public var width:Int = 120;
 	public var height:Int = 60;
 	public var minHeight:Int = 10;
@@ -14,9 +14,12 @@ class Generator {
 	public var ratio:Float = .45;
 	public var x:Int = 0;
 	public var y:Int = 0;
+}
 
+@:expose("dungen.BSPGenerator")
+class Generator extends BSPGeneratorConfig {
 	public function new(?ops:Dynamic = null) {
-		Extender.extend(this, ops);
+		Extender.extendThis(this, ops);
 	}
 
 	public function generate():BSPTree {

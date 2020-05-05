@@ -1,6 +1,6 @@
 package dropecho.dungen.bsp;
 
-import dropecho.dungen.utils.Extender;
+import dropecho.interop.Extender;
 
 @:expose("dungen.BSPData")
 class BspData {
@@ -10,6 +10,6 @@ class BspData {
 	public var y:Int = 0;
 
 	public function new(?ops:Dynamic = null) {
-		Extender.extend(this, ops);
+		Extender.extendThis(this, ops);
 	}
 }

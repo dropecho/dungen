@@ -2,7 +2,7 @@
 package dropecho.dungen.map.generators;
 
 import dropecho.dungen.ca.Generator as CAGen;
-import dropecho.dungen.utils.Extender;
+import dropecho.interop.Extender;
 
 @:expose("dungen.WalkGenerator")
 class DrunkWalkGenerator {

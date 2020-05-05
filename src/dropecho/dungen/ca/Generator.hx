@@ -1,55 +1,52 @@
 package dropecho.dungen.ca;
 
-import dropecho.dungen.utils.Extender;
+import dropecho.interop.Extender;
 import dropecho.dungen.map.Map2d;
 
-typedef CA_PARAM_STEP = {
-	reps:Int,
-	r1_cutoff:Int,
-	r2_cutoff:Int
-};
+@:expose("dungen.CA_PARAM_STEP")
+class CA_PARAM_STEP {
+	public var reps:Int = 4;
+	public var r1_cutoff:Int = 5;
+	public var r2_cutoff:Int = 2;
 
-typedef CA_PARAMS = {
-  steps:Array<CA_PARAM_STEP>,
-	height:Int,
-	width:Int,
-	tile_floor:Int,
-	tile_wall:Int,
-	start_fill_percent:Int
-};
+	public function new() {}
+}
+
+@:expose("dungen.CA_PARAMS")
+class CA_PARAMS {
+	public var steps:Array<CA_PARAM_STEP> = new Array<CA_PARAM_STEP>();
+	public var height:Int = 64;
+	public var width:Int = 64;
+	public var tile_floor:Int = 1;
+	public var tile_wall:Int = 0;
+	public var start_fill_percent:Int = 65;
+
+	public function new() {
+		var step1 = new CA_PARAM_STEP();
+		step1.reps = 4;
+		step1.r1_cutoff = 5;
+		step1.r2_cutoff = 2;
+
+		var step2 = new CA_PARAM_STEP();
+		step2.reps = 3;
+		step2.r1_cutoff = 5;
+		step2.r2_cutoff = 0;
+
+		steps.push(step1);
+		steps.push(step2);
+	}
+}
 
 @:expose("dungen.CAGenerator")
 class Generator {
-	public static var _params = {
-		steps: [
-			{
-				reps: 4,
-				r1_cutoff: 5,
-				r2_cutoff: 2
-			},
-			{
-				reps: 3,
-				r1_cutoff: 5,
-				r2_cutoff: 0
-			}
-		],
-		height: 64,
-		width: 64,
-		tile_floor: 1,
-		tile_wall: 0,
-		start_fill_percent: 65
-	};
-
-	public static function generate(?params:Dynamic = null):Map2d {
-    params = Extender.extend({}, [_params, params]);
+	public static function generate(?opts:Dynamic = null):Map2d {
+		var params = Extender.defaults(new CA_PARAMS(), opts);
 
 		var map = new Map2d(params.width, params.height, -1);
 		map.fillMapRandomly(params.tile_wall, params.tile_floor, params.start_fill_percent);
 		map.ensureEdgesAreWalls(params.tile_wall);
 
-		var steps:Array<Dynamic> = params.steps;
-
-		for (step in steps) {
+		for (step in params.steps) {
 			for (_ in 0...step.reps) {
 				buildFromCA(map, params, step);
 			}

@@ -40,7 +40,7 @@ class TiledExporterTest {
     var json = TiledExporter.export(map);
 
     #if !js
-    File.saveContent("ca.json", json);
+    File.saveContent("artifacts/ca.json", json);
     #end
 
     Assert.isTrue(true);
@@ -64,7 +64,7 @@ class TiledExporterTest {
 		var json = TiledExporter.export(map);
 
 		#if !js
-		File.saveContent("bsp.json", json);
+		File.saveContent("artifacts/bsp.json", json);
 		#end
 
 		Assert.isTrue(true);

@@ -1,7 +1,7 @@
 package dropecho.dungen.map.generators;
 
 import dropecho.dungen.ca.Generator as CAGen;
-import dropecho.dungen.utils.Extender;
+import dropecho.interop.Extender;
 import dropecho.dungen.map.Map2d;
 
 @:expose("dungen.TunnelerGenerator")

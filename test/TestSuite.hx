@@ -1,6 +1,5 @@
 import massive.munit.TestSuite;
 
-import utils.ExtenderTest;
 import map.MapHelperTest;
 import map.Map2dTest;
 import map.helpers.ConnectivityCheckerTest;
@@ -18,7 +17,6 @@ class TestSuite extends massive.munit.TestSuite
 	{
 		super();
 
-		add(utils.ExtenderTest);
 		add(map.MapHelperTest);
 		add(map.Map2dTest);
 		add(map.helpers.ConnectivityCheckerTest);

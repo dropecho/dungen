@@ -1,8 +1,7 @@
 package dropecho.dungen.map.generators;
 
-import dropecho.dungen.bsp.BspData;
 import dropecho.dungen.ca.Generator as CAGen;
-import dropecho.dungen.utils.Extender;
+// import dropecho.interop.Extender;
 import dropecho.ds.BSPNode;
 import dropecho.ds.BSPTree;
 import dropecho.ds.algos.InOrderTraversal;
@@ -11,7 +10,8 @@ import dropecho.ds.algos.PostOrderTraversal;
 class MixedGenerator {
 	public static function buildRooms(tree:BSPTree, userData:Dynamic):Map2d { // tile_floor:Int = 1, tile_wall:Int = 0) : Map2d {
 
-		userData = Extender.extend({tile_wall: 0, tile_floor: 1}, userData);
+		userData = {tile_wall: 0, tile_floor: 1};
+		// userData = Extender.defaults({tile_wall: 0, tile_floor: 1}, userData);
 
 		var rootvalue = tree.root.value;
 		var map = new Map2d(rootvalue.width, rootvalue.height, userData.tile_wall);
