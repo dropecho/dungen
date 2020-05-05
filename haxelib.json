@@ -1,22 +1,22 @@
 {
-  "name": "dropecho.dungen",
-  "description": "A procedural generation toolkit for games",
-  "classPath": "src",
-  "dependencies": {
-    "libnoise": "",
-    "dropecho.ds": "",
-    "dropecho.interop": ""
-  },
-  "url": "https://github.com/dropecho/dungen",
-  "contributors": [
-    "vantreeseba"
-  ],
-  "version": "0.3.0",
-  "releasenote": "FIX: fix some issues with extender",
-  "tags": [
-    "game",
-    "procedural",
-    "dungeon"
-  ],
-  "license": "MIT"
+	"name": "dropecho.dungen",
+	"description": "A procedural generation toolkit for games",
+	"classPath": "src",
+	"dependencies": {
+		"dropecho.interop": "",
+		"libnoise": "",
+		"dropecho.ds": ""
+	},
+	"url": "https://github.com/dropecho/dungen",
+	"contributors": [
+		"vantreeseba"
+	],
+	"version": "0.4.0",
+	"releasenote": "Lots of cleanup, setup interop lib",
+	"tags": [
+		"game",
+		"procedural",
+		"dungeon"
+	],
+	"license": "MIT"
 }
