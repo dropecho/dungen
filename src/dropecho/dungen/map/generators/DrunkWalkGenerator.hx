@@ -1,12 +1,14 @@
 
 package dropecho.dungen.map.generators;
 
+import seedyrng.Random;
 import dropecho.dungen.ca.Generator as CAGen;
 import dropecho.interop.Extender;
 
 @:expose("dungen.WalkGenerator")
 class DrunkWalkGenerator {
   public static function generate(?params:Dynamic) : Map2d {
+    var random:Random = new Random();
     var height:Int = params.height;
     var width:Int = params.width;
 
@@ -22,10 +24,10 @@ class DrunkWalkGenerator {
 
     map.set(walkerPos.x, walkerPos.y, 0);
     var counter = 0;
-    var direction = Std.random(4);
+    var direction = random.randomInt(0,3);
 
     while(countOfFilled < totalCount * (start_fill_percent/100)){
-      direction = Std.random(4);
+      direction = random.randomInt(0,3);
       if(map.get(walkerPos.x, walkerPos.y) != tile_floor){
         map.set(walkerPos.x, walkerPos.y, tile_floor);
         countOfFilled++;

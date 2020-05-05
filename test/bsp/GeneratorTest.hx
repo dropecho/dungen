@@ -9,6 +9,7 @@ import dropecho.ds.algos.InOrderTraversal;
 class GeneratorTest {
 	var generator:Generator;
 	var visitor:InOrderTraversal;
+	var testCount:Int = 1;
 
 	@Before
 	public function setup() {
@@ -75,7 +76,7 @@ class GeneratorTest {
 
 	@Test
 	public function given_a_tree_every_set_of_child_nodes_should_add_up_to_the_height_and_width_of_their_parents() {
-		for (i in 0...100) {
+		for (i in 0...testCount) {
 			generator.depth = 4;
 			var tree = generator.generate();
 
@@ -102,7 +103,7 @@ class GeneratorTest {
 
 	@Test
 	public function given_a_tree_every_leafs_area_should_add_up_to_root_area() {
-		for (i in 0...100) {
+		for (i in 0...testCount) {
 			generator.depth = 4;
 			var tree = generator.generate();
 			var rootArea = tree.root.value.height * tree.root.value.width;
@@ -121,7 +122,7 @@ class GeneratorTest {
 
 	@Test
 	public function given_a_tree_every_non_leaf_should_have_2_children() {
-		for (i in 0...100) {
+		for (i in 0...testCount) {
 			generator.depth = 4;
 			var tree = generator.generate();
 

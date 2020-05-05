@@ -1,12 +1,13 @@
 package dropecho.dungen.map.generators;
 
+import seedyrng.Random;
 import dropecho.dungen.ca.Generator as CAGen;
 import dropecho.interop.Extender;
 import dropecho.dungen.map.Map2d;
 
 @:expose("dungen.TunnelerGenerator")
 class TunnelerGenerator {
-	public static function generate(?params:Dynamic) : Map2d {
+	public static function generate(?params:Dynamic):Map2d {
 		var height:Int = params.height;
 		var width:Int = params.width;
 
@@ -18,20 +19,20 @@ class TunnelerGenerator {
 
 		var map = new Map2d(width, height, tile_wall);
 
-		var walkerPos = {x: Std.int(width / 2), y: Std.int(height/2) };
+		var walkerPos = {x: Std.int(width / 2), y: Std.int(height / 2)};
 
 		map.set(walkerPos.x, walkerPos.y, 0);
 		return map;
 	}
 
 	private static function getEntrancePosition(map:Map2d):Tile2d {
-		var top = Std.random(2) == 1;
-		var right = Std.random(2) == 1;
-
+		var random:Random = new Random();
+		var top = random.randomInt(0, 1) == 1;
+		var right = random.randomInt(0, 1) == 1;
 		// var start = {x:Std.int(map._width/2), y:0};
 
 		// return start;
-    return null;
+		return null;
 	}
 }
 
@@ -42,13 +43,7 @@ private class Tunneler {
 	var direction:Int;
 	var lifeSpan:Int;
 
-	public function new(
-	    map:Map2d,
-	    position:Tile2d,
-	    width:Int = 1,
-	    direction:Int = 2,
-	    lifeSpan:Int = 5
-	) {
+	public function new(map:Map2d, position:Tile2d, width:Int = 1, direction:Int = 2, lifeSpan:Int = 5) {
 		this.map = map;
 		this.position = position;
 		this.width = width;
@@ -59,8 +54,8 @@ private class Tunneler {
 	public function run() {
 		var ticks = 0;
 
-		while(ticks < lifeSpan) {
-			//do tunnel
+		while (ticks < lifeSpan) {
+			// do tunnel
 		}
 	}
 }

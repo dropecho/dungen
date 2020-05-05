@@ -1,34 +1,34 @@
 package dropecho.dungen.map.generators;
 
+import seedyrng.Random;
 import dropecho.dungen.ca.Generator as CAGen;
-// import dropecho.interop.Extender;
+import dropecho.interop.Extender;
 import dropecho.ds.BSPNode;
 import dropecho.ds.BSPTree;
 import dropecho.ds.algos.InOrderTraversal;
 import dropecho.ds.algos.PostOrderTraversal;
 
 class MixedGenerator {
-	public static function buildRooms(tree:BSPTree, userData:Dynamic):Map2d { // tile_floor:Int = 1, tile_wall:Int = 0) : Map2d {
-
-		userData = {tile_wall: 0, tile_floor: 1};
-		// userData = Extender.defaults({tile_wall: 0, tile_floor: 1}, userData);
+	public static function buildRooms(tree:BSPTree, opts:Dynamic):Map2d { // tile_floor:Int = 1, tile_wall:Int = 0) : Map2d {
+		var random = new Random();
+		var params = Extender.defaults({tile_wall: 0, tile_floor: 1, cave_percent: 20}, opts);
 
 		var rootvalue = tree.root.value;
-		var map = new Map2d(rootvalue.width, rootvalue.height, userData.tile_wall);
+		var map = new Map2d(rootvalue.width, rootvalue.height, params.tile_wall);
 
 		function makeRooms(node:BSPNode):Bool {
 			if (node.hasLeft() || node.hasRight()) {
 				return true;
 			}
 
-			var roomStartX:Int = node.value.x + Std.int(Math.random() * 2) + 1;
-			var roomStartY:Int = node.value.y + Std.int(Math.random() * 2) + 1;
-			var roomEndX:Int = (node.value.x + node.value.width) - Std.int(Math.random() * 2) - 1;
-			var roomEndY:Int = (node.value.y + node.value.height) - Std.int(Math.random() * 2) - 1;
+			var roomStartX:Int = node.value.x + 1;
+			var roomStartY:Int = node.value.y + 1;
+			var roomEndX:Int = (node.value.x + node.value.width) - 1;
+			var roomEndY:Int = (node.value.y + node.value.height) - 1;
 
 			for (x in roomStartX...roomEndX) {
 				for (y in roomStartY...roomEndY) {
-					map.set(x, y, userData.tile_floor);
+					map.set(x, y, params.tile_floor);
 				}
 			}
 
@@ -41,8 +41,8 @@ class MixedGenerator {
 				return true;
 			}
 
-			var roomStartX:Int = node.value.x + Std.int(Math.random() * 2);
-			var roomStartY:Int = node.value.y + Std.int(Math.random() * 2);
+			var roomStartX:Int = node.value.x + 1;
+			var roomStartY:Int = node.value.y + 1;
 
 			var cave = CAGen.generate({height: node.value.height, width: node.value.width});
 
@@ -72,18 +72,18 @@ class MixedGenerator {
 
 			// draw a corridor from the center x to the center x
 			for (x in startX...endX) {
-				map.set(x, startY, userData.tile_floor);
+				map.set(x, startY, params.tile_floor);
 			}
 
 			// draw a corridor from the center y to the center y
 			for (y in startY...endY) {
-				map.set(startX, y, userData.tile_floor);
+				map.set(startX, y, params.tile_floor);
 			}
 			return true;
 		}
 
 		function chooseRoomOrCave(node:BSPNode):Bool {
-			if (Std.random(10) > 2) {
+			if ((random.random() * 100) > params.cave_percent) {
 				return makeRooms(node);
 			} else {
 				return makeCaveFromCA(node);
@@ -96,13 +96,13 @@ class MixedGenerator {
 			}
 
 			for (x in 0...node.value.width) {
-				map.set(x, 0, userData.tile_wall);
-				map.set(x, node.value.height, userData.tile_wall);
+				map.set(x, 0, params.tile_wall);
+				map.set(x, node.value.height, params.tile_wall);
 			}
 
 			for (y in 0...node.value.height) {
-				map.set(0, y, userData.tile_wall);
-				map.set(node.value.width, y, userData.tile_wall);
+				map.set(0, y, params.tile_wall);
+				map.set(node.value.width, y, params.tile_wall);
 			}
 
 			return false;
@@ -117,10 +117,6 @@ class MixedGenerator {
 		invisitor.run(tree.root, closeEdges);
 		povisitor.run(tree.root, makeCorridors);
 
-		// root.postorder(chooseRoomOrCave, false, userData);
-		// root.inorder(closeEdges, false, userData);
-		// root.postorder(makeCorridors, false, userData);
-		//
 		return map;
 	}
 }

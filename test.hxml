@@ -1,9 +1,13 @@
 -cp src
 -cp test
+# actual libs
+-lib seedyrng
 -lib dropecho.ds 
+-lib dropecho.interop 
+
+#test libs
 -lib munit
 -lib hamcrest
--lib dropecho.interop 
 
 
 -main TestMain

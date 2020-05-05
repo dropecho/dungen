@@ -1,5 +1,6 @@
 package dropecho.dungen.bsp;
 
+import seedyrng.Random;
 import dropecho.ds.BSPNode;
 import dropecho.ds.BSPTree;
 import dropecho.interop.Extender;
@@ -18,6 +19,8 @@ class BSPGeneratorConfig {
 
 @:expose("dungen.BSPGenerator")
 class Generator extends BSPGeneratorConfig {
+	public var random:Random = new Random();
+
 	public function new(?ops:Dynamic = null) {
 		Extender.extendThis(this, ops);
 	}
@@ -58,7 +61,7 @@ class Generator extends BSPGeneratorConfig {
 		}
 
 		var splitAt = 0;
-		var splitHeight:Bool = Math.random() > 0.5;
+		var splitHeight:Bool = random.random() > 0.5;
 
 		// Change split direction if one dir is smaller than the ratio allows
 		if (val.width >= val.height * ratio) {
@@ -70,7 +73,7 @@ class Generator extends BSPGeneratorConfig {
 		}
 
 		if (splitHeight) {
-			splitAt = Std.random(val.height - (minHeight * 2) + 1) + minHeight;
+			splitAt = random.randomInt(0, val.height - (minHeight * 2)) + minHeight;
 			var rHeight = val.height - splitAt;
 
 			lData = new BspData({
@@ -86,7 +89,7 @@ class Generator extends BSPGeneratorConfig {
 				y: val.y + splitAt
 			});
 		} else {
-			splitAt = Std.random(val.width - (minWidth * 2) + 1) + minWidth;
+			splitAt = random.randomInt(0, val.width - (minWidth * 2)) + minWidth;
 			var rWidth = val.width - splitAt;
 
 			lData = new BspData({

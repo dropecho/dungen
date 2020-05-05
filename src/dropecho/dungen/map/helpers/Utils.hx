@@ -41,17 +41,4 @@ class Utils {
 
 		return false;
 	}
-
-	public static function shuffleArray<T>(a:Array<T>):Array<T> {
-		var rand:T;
-		var shuffled = new Array<T>();
-		var copy = a.slice(0);
-
-		while (copy.length > 0) {
-			rand = copy.splice(Std.random(copy.length), 1)[0];
-			shuffled.push(rand);
-		}
-
-		return shuffled;
-	}
 }

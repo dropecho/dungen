@@ -1,7 +1,6 @@
 package dropecho.dungen.map.generators;
 
-import dropecho.dungen.ca.Generator as CAGen;
-import dropecho.interop.Extender;
+import seedyrng.Random;
 import dropecho.dungen.map.helpers.Utils;
 
 // All rooms are rectangles for now.
@@ -68,11 +67,13 @@ class FloorPlanGenerator {
 		// rooms until floor plan fits in map/lot size.
 	}
 
-	private static function arrangeRooms(map:Map2d, rooms) {
+	private static function arrangeRooms(map:Map2d, rooms:Array<Room>) {
+		var random = new Random();
 		var mapMidX = map._width / 2;
 		var mapMidY = map._height / 2;
 
-		var randomRooms = Utils.shuffleArray(rooms);
+		var randomRooms = rooms.copy();
+		random.shuffle(randomRooms);
 
 		// place other rooms "outside" map, and move towards centroid.
 		for (r in randomRooms) {

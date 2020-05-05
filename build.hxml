@@ -1,5 +1,6 @@
 -cp src
 
+-lib seedyrng
 -lib dropecho.ds 
 -lib dropecho.interop 
 #-dce std

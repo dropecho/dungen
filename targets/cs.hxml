@@ -1,6 +1,7 @@
 -cp src
 
 -D no-root
+-lib seedyrng
 -lib dropecho.ds 
 -lib dropecho.interop 
 --macro include('', true, null, ['src'])

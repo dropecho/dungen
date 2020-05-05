@@ -29,21 +29,21 @@ class TiledExporterTest {
 					r2_cutoff: 0
 				}
 			],
-			height: 64,
-			width: 64,
+			height: 32,
+			width: 32,
 			tile_floor: 2,
 			tile_wall: 1,
 			start_fill_percent: 45
 		};
 
-    var map = CaGen.generate(params);
+		var map = CaGen.generate(params);
     var json = TiledExporter.export(map);
 
-    #if !js
+		#if !js
     File.saveContent("artifacts/ca.json", json);
-    #end
+		#end
 
-    Assert.isTrue(true);
+		Assert.isTrue(true);
 	}
 
 	@Test
@@ -58,13 +58,13 @@ class TiledExporterTest {
 		};
 
 		var gen = new Generator(genOpts);
-    var tree = gen.generate();
+		var tree = gen.generate();
 		var map = RoomGenerator.buildRooms(tree);
 
-		var json = TiledExporter.export(map);
+    var json = TiledExporter.export(map);
 
 		#if !js
-		File.saveContent("artifacts/bsp.json", json);
+    File.saveContent("artifacts/bsp.json", json);
 		#end
 
 		Assert.isTrue(true);

@@ -8,7 +8,6 @@ import dropecho.ds.algos.PostOrderTraversal;
 class RoomParams {
 	public var tileFloor:Int = 1;
 	public var tileWall:Int = 0;
-	public var paddingRatio:Float = 0.001;
 
 	public function new() {};
 }
@@ -26,13 +25,10 @@ class RoomGenerator {
 				return true;
 			}
 
-			var xPadding = Std.int(Math.random() * (node.value.width * params.paddingRatio));
-			var yPadding = Std.int(Math.random() * (node.value.height * params.paddingRatio));
-
-			var roomStartX:Int = node.value.x + Std.int(xPadding) + 1;
-			var roomStartY:Int = node.value.y + Std.int(xPadding) + 1;
-			var roomEndX:Int = (node.value.x + node.value.width) - yPadding - 1;
-			var roomEndY:Int = (node.value.y + node.value.height) - yPadding - 1;
+			var roomStartX:Int = node.value.x + 1;
+			var roomStartY:Int = node.value.y + 1;
+			var roomEndX:Int = (node.value.x + node.value.width) - 1;
+			var roomEndY:Int = (node.value.y + node.value.height) - 1;
 
 			for (x in roomStartX...roomEndX) {
 				for (y in roomStartY...roomEndY) {
