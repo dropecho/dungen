@@ -15,6 +15,7 @@ class BSPGeneratorConfig {
 	public var ratio:Float = .45;
 	public var x:Int = 0;
 	public var y:Int = 0;
+	public var seed:String = "0";
 }
 
 @:expose("dungen.BSPGenerator")
@@ -23,6 +24,7 @@ class Generator extends BSPGeneratorConfig {
 
 	public function new(?ops:Dynamic = null) {
 		Extender.extendThis(this, ops);
+		random.setStringSeed(this.seed);
 	}
 
 	public function generate():BSPTree {

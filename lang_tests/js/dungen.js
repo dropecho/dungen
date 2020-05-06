@@ -2,6 +2,7 @@
 (function ($hx_exports, $global) { "use strict";
 $hx_exports["dungen"] = $hx_exports["dungen"] || {};
 $hx_exports["algos"] = $hx_exports["algos"] || {};
+var $estr = function() { return js_Boot.__string_rec(this,''); },$hxEnums = $hxEnums || {},$_;
 function $extend(from, fields) {
 	var proto = Object.create(from);
 	for (var name in fields) proto[name] = fields[name];
@@ -131,6 +132,16 @@ Type.getInstanceFields = function(c) {
 	HxOverrides.remove(a,"__class__");
 	HxOverrides.remove(a,"__properties__");
 	return a;
+};
+var _$UInt_UInt_$Impl_$ = {};
+_$UInt_UInt_$Impl_$.__name__ = "_UInt.UInt_Impl_";
+_$UInt_UInt_$Impl_$.toFloat = function(this1) {
+	var int = this1;
+	if(int < 0) {
+		return 4294967296.0 + int;
+	} else {
+		return int + 0.0;
+	}
 };
 var dropecho_ds_GraphNode = $hx_exports["GraphNode"] = function(value,id) {
 	this.id = id != null ? id : Std.string(Std.random(10000000));
@@ -414,7 +425,7 @@ var dropecho_dungen_bsp_BspData = $hx_exports["dungen"]["BSPData"] = function(op
 	this.x = 0;
 	this.height = 0;
 	this.width = 0;
-	dropecho_utils_Extender.extendThis(this,ops);
+	dropecho_interop_Extender.extendThis(this,ops);
 };
 dropecho_dungen_bsp_BspData.__name__ = "dropecho.dungen.bsp.BspData";
 dropecho_dungen_bsp_BspData.prototype = {
@@ -425,6 +436,7 @@ dropecho_dungen_bsp_BspData.prototype = {
 	,__class__: dropecho_dungen_bsp_BspData
 };
 var dropecho_dungen_bsp_BSPGeneratorConfig = $hx_exports["dungen"]["BSPGeneratorConfig"] = function() {
+	this.seed = "0";
 	this.y = 0;
 	this.x = 0;
 	this.ratio = .45;
@@ -444,16 +456,20 @@ dropecho_dungen_bsp_BSPGeneratorConfig.prototype = {
 	,ratio: null
 	,x: null
 	,y: null
+	,seed: null
 	,__class__: dropecho_dungen_bsp_BSPGeneratorConfig
 };
 var dropecho_dungen_bsp_Generator = $hx_exports["dungen"]["BSPGenerator"] = function(ops) {
+	this.random = new seedyrng_Random();
 	dropecho_dungen_bsp_BSPGeneratorConfig.call(this);
-	dropecho_utils_Extender.extendThis(this,ops);
+	dropecho_interop_Extender.extendThis(this,ops);
+	this.random.setStringSeed(this.seed);
 };
 dropecho_dungen_bsp_Generator.__name__ = "dropecho.dungen.bsp.Generator";
 dropecho_dungen_bsp_Generator.__super__ = dropecho_dungen_bsp_BSPGeneratorConfig;
 dropecho_dungen_bsp_Generator.prototype = $extend(dropecho_dungen_bsp_BSPGeneratorConfig.prototype,{
-	generate: function() {
+	random: null
+	,generate: function() {
 		var rootData = { height : this.height, width : this.width, x : this.x, y : this.y};
 		var tree = new dropecho_ds_BSPTree(rootData);
 		this.buildTree(tree.getRoot());
@@ -478,7 +494,7 @@ dropecho_dungen_bsp_Generator.prototype = $extend(dropecho_dungen_bsp_BSPGenerat
 			return;
 		}
 		var splitAt = 0;
-		var splitHeight = Math.random() > 0.5;
+		var splitHeight = this.random.random() > 0.5;
 		if(val.width >= val.height * this.ratio) {
 			splitHeight = false;
 		} else if(val.height >= val.width * this.ratio) {
@@ -487,12 +503,12 @@ dropecho_dungen_bsp_Generator.prototype = $extend(dropecho_dungen_bsp_BSPGenerat
 			return;
 		}
 		if(splitHeight) {
-			splitAt = Std.random(val.height - this.minHeight * 2 + 1) + this.minHeight;
+			splitAt = this.random.randomInt(0,val.height - this.minHeight * 2) + this.minHeight;
 			var rHeight = val.height - splitAt;
 			lData = new dropecho_dungen_bsp_BspData({ height : splitAt, width : val.width, x : val.x, y : val.y});
 			rData = new dropecho_dungen_bsp_BspData({ height : rHeight, width : val.width, x : val.x, y : val.y + splitAt});
 		} else {
-			splitAt = Std.random(val.width - this.minWidth * 2 + 1) + this.minWidth;
+			splitAt = this.random.randomInt(0,val.width - this.minWidth * 2) + this.minWidth;
 			var rWidth = val.width - splitAt;
 			lData = new dropecho_dungen_bsp_BspData({ height : val.height, width : splitAt, x : val.x, y : val.y});
 			rData = new dropecho_dungen_bsp_BspData({ height : val.height, width : rWidth, x : val.x + splitAt, y : val.y});
@@ -503,35 +519,15 @@ dropecho_dungen_bsp_Generator.prototype = $extend(dropecho_dungen_bsp_BSPGenerat
 	}
 	,__class__: dropecho_dungen_bsp_Generator
 });
-var dropecho_dungen_ca_CA_$PARAM_$STEP = $hx_exports["dungen"]["CA_PARAM_STEP"] = function() {
-	this.r2_cutoff = 2;
-	this.r1_cutoff = 5;
-	this.reps = 4;
-};
-dropecho_dungen_ca_CA_$PARAM_$STEP.__name__ = "dropecho.dungen.ca.CA_PARAM_STEP";
-dropecho_dungen_ca_CA_$PARAM_$STEP.prototype = {
-	reps: null
-	,r1_cutoff: null
-	,r2_cutoff: null
-	,__class__: dropecho_dungen_ca_CA_$PARAM_$STEP
-};
 var dropecho_dungen_ca_CA_$PARAMS = $hx_exports["dungen"]["CA_PARAMS"] = function() {
+	this.seed = "0";
 	this.start_fill_percent = 65;
 	this.tile_wall = 0;
 	this.tile_floor = 1;
 	this.width = 64;
 	this.height = 64;
 	this.steps = [];
-	var step1 = new dropecho_dungen_ca_CA_$PARAM_$STEP();
-	step1.reps = 4;
-	step1.r1_cutoff = 5;
-	step1.r2_cutoff = 2;
-	var step2 = new dropecho_dungen_ca_CA_$PARAM_$STEP();
-	step2.reps = 3;
-	step2.r1_cutoff = 5;
-	step2.r2_cutoff = 0;
-	this.steps.push(step1);
-	this.steps.push(step2);
+	this.steps = [{ reps : 4, r1_cutoff : 5, r2_cutoff : 2},{ reps : 3, r1_cutoff : 5, r2_cutoff : 0}];
 };
 dropecho_dungen_ca_CA_$PARAMS.__name__ = "dropecho.dungen.ca.CA_PARAMS";
 dropecho_dungen_ca_CA_$PARAMS.prototype = {
@@ -541,14 +537,14 @@ dropecho_dungen_ca_CA_$PARAMS.prototype = {
 	,tile_floor: null
 	,tile_wall: null
 	,start_fill_percent: null
+	,seed: null
 	,__class__: dropecho_dungen_ca_CA_$PARAMS
 };
 var dropecho_dungen_ca_Generator = $hx_exports["dungen"]["CAGenerator"] = function() { };
 dropecho_dungen_ca_Generator.__name__ = "dropecho.dungen.ca.Generator";
 dropecho_dungen_ca_Generator.generate = function(opts) {
-	var params = dropecho_utils_Extender.defaults(new dropecho_dungen_ca_CA_$PARAMS(),opts);
-	var map = new dropecho_dungen_map_Map2d(params.width,params.height,-1);
-	map.fillMapRandomly(params.tile_wall,params.tile_floor,params.start_fill_percent);
+	var params = dropecho_interop_Extender.defaults(new dropecho_dungen_ca_CA_$PARAMS(),opts);
+	var map = dropecho_dungen_map_generators_RandomGenerator.generate(params);
 	map.ensureEdgesAreWalls(params.tile_wall);
 	var _g = 0;
 	var _g1 = params.steps;
@@ -575,13 +571,13 @@ dropecho_dungen_ca_Generator.buildFromCA = function(map,params,step) {
 		var _g11 = params.height - 1;
 		while(_g2 < _g11) {
 			var y = _g2++;
-			var nCount = map.getNeighborCount(x,y,params.tile_wall);
-			var nCount2 = map.getNeighborCount(x,y,params.tile_wall,2);
+			var nCount = map.getNeighborCount(x,y,params.tile_floor);
+			var nCount2 = map.getNeighborCount(x,y,params.tile_floor,2);
 			var pos = map.XYtoIndex(x,y);
 			if(nCount >= step.r1_cutoff || nCount2 <= step.r2_cutoff) {
-				temp.h[pos] = params.tile_floor;
-			} else {
 				temp.h[pos] = params.tile_wall;
+			} else {
+				temp.h[pos] = params.tile_floor;
 			}
 		}
 	}
@@ -713,17 +709,6 @@ dropecho_dungen_map_Map2d.prototype = {
 		while(_g < _g1) {
 			var i = _g++;
 			this._mapData[i] = initTileData;
-		}
-	}
-	,fillMapRandomly: function(wallTile,floorTile,wallPercent) {
-		if(wallPercent == null) {
-			wallPercent = 45;
-		}
-		var _g = 0;
-		var _g1 = this._width * this._height;
-		while(_g < _g1) {
-			var i = _g++;
-			this._mapData[i] = Std.random(100) > wallPercent ? floorTile : wallTile;
 		}
 	}
 	,ensureEdgesAreWalls: function(tileType) {
@@ -963,6 +948,7 @@ dropecho_dungen_map_MapHelper.getHallwayTiles = function(map,tile) {
 var dropecho_dungen_map_generators_DrunkWalkGenerator = $hx_exports["dungen"]["WalkGenerator"] = function() { };
 dropecho_dungen_map_generators_DrunkWalkGenerator.__name__ = "dropecho.dungen.map.generators.DrunkWalkGenerator";
 dropecho_dungen_map_generators_DrunkWalkGenerator.generate = function(params) {
+	var random = new seedyrng_Random();
 	var height = params.height;
 	var width = params.width;
 	var tile_floor = params.tile_floor;
@@ -975,9 +961,9 @@ dropecho_dungen_map_generators_DrunkWalkGenerator.generate = function(params) {
 	var walkerPos_y = height / 2 | 0;
 	map.set(walkerPos_x,walkerPos_y,0);
 	var counter = 0;
-	var direction = Std.random(4);
+	var direction = random.randomInt(0,3);
 	while(countOfFilled < totalCount * (start_fill_percent / 100)) {
-		direction = Std.random(4);
+		direction = random.randomInt(0,3);
 		if(map.get(walkerPos_x,walkerPos_y) != tile_floor) {
 			map.set(walkerPos_x,walkerPos_y,tile_floor);
 			++countOfFilled;
@@ -1020,9 +1006,11 @@ dropecho_dungen_map_generators_FloorPlanGenerator.generate = function(params) {
 dropecho_dungen_map_generators_FloorPlanGenerator.scaleFloorPlan = function(map,rooms) {
 };
 dropecho_dungen_map_generators_FloorPlanGenerator.arrangeRooms = function(map,rooms) {
+	var random = new seedyrng_Random();
 	var mapMidX = map._width / 2;
 	var mapMidY = map._height / 2;
-	var randomRooms = dropecho_dungen_map_helpers_Utils.shuffleArray(rooms);
+	var randomRooms = rooms.slice();
+	random.shuffle(randomRooms);
 	var _g = 0;
 	while(_g < randomRooms.length) {
 		var r = randomRooms[_g];
@@ -1035,18 +1023,19 @@ dropecho_dungen_map_generators_FloorPlanGenerator.arrangeRooms = function(map,ro
 };
 var dropecho_dungen_map_generators_MixedGenerator = function() { };
 dropecho_dungen_map_generators_MixedGenerator.__name__ = "dropecho.dungen.map.generators.MixedGenerator";
-dropecho_dungen_map_generators_MixedGenerator.buildRooms = function(tree,userData) {
-	userData = { tile_wall : 0, tile_floor : 1};
+dropecho_dungen_map_generators_MixedGenerator.buildRooms = function(tree,opts) {
+	var random = new seedyrng_Random();
+	var params = dropecho_interop_Extender.defaults({ tile_wall : 0, tile_floor : 1, cave_percent : 20},opts);
 	var rootvalue = tree.root.value;
-	var map = new dropecho_dungen_map_Map2d(rootvalue.width,rootvalue.height,userData.tile_wall);
+	var map = new dropecho_dungen_map_Map2d(rootvalue.width,rootvalue.height,params.tile_wall);
 	var makeRooms = function(node) {
 		if(node.hasLeft() || node.hasRight()) {
 			return true;
 		}
-		var roomStartX = node.value.x + (Math.random() * 2 | 0) + 1;
-		var roomStartY = node.value.y + (Math.random() * 2 | 0) + 1;
-		var roomEndX = node.value.x + node.value.width - (Math.random() * 2 | 0) - 1;
-		var roomEndY = node.value.y + node.value.height - (Math.random() * 2 | 0) - 1;
+		var roomStartX = node.value.x + 1;
+		var roomStartY = node.value.y + 1;
+		var roomEndX = node.value.x + node.value.width - 1;
+		var roomEndY = node.value.y + node.value.height - 1;
 		var _g = roomStartX;
 		var _g1 = roomEndX;
 		while(_g < _g1) {
@@ -1055,7 +1044,7 @@ dropecho_dungen_map_generators_MixedGenerator.buildRooms = function(tree,userDat
 			var _g11 = roomEndY;
 			while(_g2 < _g11) {
 				var y = _g2++;
-				map.set(x,y,userData.tile_floor);
+				map.set(x,y,params.tile_floor);
 			}
 		}
 		return true;
@@ -1064,8 +1053,8 @@ dropecho_dungen_map_generators_MixedGenerator.buildRooms = function(tree,userDat
 		if((node1.hasLeft() || node1.hasRight()) && (node1.right.hasRight() || node1.right.hasLeft() || node1.left.hasRight() || node1.left.hasLeft())) {
 			return true;
 		}
-		var roomStartX1 = node1.value.x + (Math.random() * 2 | 0);
-		var roomStartY1 = node1.value.y + (Math.random() * 2 | 0);
+		var roomStartX1 = node1.value.x + 1;
+		var roomStartY1 = node1.value.y + 1;
 		var cave = dropecho_dungen_ca_Generator.generate({ height : node1.value.height, width : node1.value.width});
 		var _g3 = 0;
 		var _g12 = cave._width;
@@ -1097,18 +1086,18 @@ dropecho_dungen_map_generators_MixedGenerator.buildRooms = function(tree,userDat
 		var _g14 = endX;
 		while(_g5 < _g14) {
 			var x2 = _g5++;
-			map.set(x2,startY,userData.tile_floor);
+			map.set(x2,startY,params.tile_floor);
 		}
 		var _g21 = startY;
 		var _g31 = endY;
 		while(_g21 < _g31) {
 			var y2 = _g21++;
-			map.set(startX,y2,userData.tile_floor);
+			map.set(startX,y2,params.tile_floor);
 		}
 		return true;
 	};
 	var chooseRoomOrCave = function(node3) {
-		if(Std.random(10) > 2) {
+		if(random.random() * 100 > params.cave_percent) {
 			return makeRooms(node3);
 		} else {
 			return makeCaveFromCA(node3);
@@ -1122,15 +1111,15 @@ dropecho_dungen_map_generators_MixedGenerator.buildRooms = function(tree,userDat
 		var _g15 = node4.value.width;
 		while(_g6 < _g15) {
 			var x3 = _g6++;
-			map.set(x3,0,userData.tile_wall);
-			map.set(x3,node4.value.height,userData.tile_wall);
+			map.set(x3,0,params.tile_wall);
+			map.set(x3,node4.value.height,params.tile_wall);
 		}
 		var _g22 = 0;
 		var _g32 = node4.value.height;
 		while(_g22 < _g32) {
 			var y3 = _g22++;
-			map.set(0,y3,userData.tile_wall);
-			map.set(node4.value.width,y3,userData.tile_wall);
+			map.set(0,y3,params.tile_wall);
+			map.set(node4.value.width,y3,params.tile_wall);
 		}
 		return false;
 	};
@@ -1142,8 +1131,28 @@ dropecho_dungen_map_generators_MixedGenerator.buildRooms = function(tree,userDat
 	povisitor.run(tree.root,makeCorridors);
 	return map;
 };
+var dropecho_dungen_map_generators_RandomGenerator = $hx_exports["dungen"]["RandomGenerator"] = function() { };
+dropecho_dungen_map_generators_RandomGenerator.__name__ = "dropecho.dungen.map.generators.RandomGenerator";
+dropecho_dungen_map_generators_RandomGenerator.generate = function(params) {
+	var random = new seedyrng_Random();
+	if(params.seed != null) {
+		random.setStringSeed(params.seed);
+	}
+	var height = params.height;
+	var width = params.width;
+	var tile_floor = params.tile_floor;
+	var tile_wall = params.tile_wall;
+	var start_fill_percent = params.start_fill_percent;
+	var map = new dropecho_dungen_map_Map2d(width,height,tile_wall);
+	var _g = 0;
+	var _g1 = width * height;
+	while(_g < _g1) {
+		var i = _g++;
+		map._mapData[i] = random.random() * 100 > start_fill_percent ? tile_floor : tile_wall;
+	}
+	return map;
+};
 var dropecho_dungen_map_generators_RoomParams = function() {
-	this.paddingRatio = 0.001;
 	this.tileWall = 0;
 	this.tileFloor = 1;
 };
@@ -1151,25 +1160,22 @@ dropecho_dungen_map_generators_RoomParams.__name__ = "dropecho.dungen.map.genera
 dropecho_dungen_map_generators_RoomParams.prototype = {
 	tileFloor: null
 	,tileWall: null
-	,paddingRatio: null
 	,__class__: dropecho_dungen_map_generators_RoomParams
 };
 var dropecho_dungen_map_generators_RoomGenerator = $hx_exports["dungen"]["RoomGenerator"] = function() { };
 dropecho_dungen_map_generators_RoomGenerator.__name__ = "dropecho.dungen.map.generators.RoomGenerator";
 dropecho_dungen_map_generators_RoomGenerator.buildRooms = function(tree,opts) {
-	var params = dropecho_utils_Extender.defaults(new dropecho_dungen_map_generators_RoomParams(),opts);
+	var params = dropecho_interop_Extender.defaults(new dropecho_dungen_map_generators_RoomParams(),opts);
 	var rootvalue = tree.getRoot().value;
 	var map = new dropecho_dungen_map_Map2d(rootvalue.width,rootvalue.height,params.tileWall);
 	var makeRoom = function(node) {
 		if(node.hasLeft() || node.hasRight()) {
 			return true;
 		}
-		var xPadding = Math.random() * (node.value.width * params.paddingRatio) | 0;
-		var yPadding = Math.random() * (node.value.height * params.paddingRatio) | 0;
-		var roomStartX = node.value.x + (xPadding | 0) + 1;
-		var roomStartY = node.value.y + (xPadding | 0) + 1;
-		var roomEndX = node.value.x + node.value.width - yPadding - 1;
-		var roomEndY = node.value.y + node.value.height - yPadding - 1;
+		var roomStartX = node.value.x + 1;
+		var roomStartY = node.value.y + 1;
+		var roomEndX = node.value.x + node.value.width - 1;
+		var roomEndY = node.value.y + node.value.height - 1;
 		var _g = roomStartX;
 		var _g1 = roomEndX;
 		while(_g < _g1) {
@@ -1232,8 +1238,9 @@ dropecho_dungen_map_generators_TunnelerGenerator.generate = function(params) {
 	return map;
 };
 dropecho_dungen_map_generators_TunnelerGenerator.getEntrancePosition = function(map) {
-	var top = Std.random(2) == 1;
-	var right = Std.random(2) == 1;
+	var random = new seedyrng_Random();
+	var top = random.randomInt(0,1) == 1;
+	var right = random.randomInt(0,1) == 1;
 	return null;
 };
 var dropecho_dungen_map_generators__$TunnelerGenerator_Tunneler = function(map,position,width,direction,lifeSpan) {
@@ -1325,19 +1332,9 @@ dropecho_dungen_map_helpers_Utils.isOverlappingArray = function(r1,a) {
 	}
 	return false;
 };
-dropecho_dungen_map_helpers_Utils.shuffleArray = function(a) {
-	var rand;
-	var shuffled = [];
-	var copy = a.slice(0);
-	while(copy.length > 0) {
-		rand = copy.splice(Std.random(copy.length),1)[0];
-		shuffled.push(rand);
-	}
-	return shuffled;
-};
-var dropecho_utils__$AbstractArray_AbstractArray_$Impl_$ = {};
-dropecho_utils__$AbstractArray_AbstractArray_$Impl_$.__name__ = "dropecho.interop._AbstractArray.AbstractArray_Impl_";
-dropecho_utils__$AbstractArray_AbstractArray_$Impl_$._new = function(a) {
+var dropecho_interop__$AbstractArray_AbstractArray_$Impl_$ = {};
+dropecho_interop__$AbstractArray_AbstractArray_$Impl_$.__name__ = "dropecho.interop._AbstractArray.AbstractArray_Impl_";
+dropecho_interop__$AbstractArray_AbstractArray_$Impl_$._new = function(a) {
 	var this1;
 	if(a != null) {
 		this1 = a;
@@ -1346,7 +1343,7 @@ dropecho_utils__$AbstractArray_AbstractArray_$Impl_$._new = function(a) {
 	}
 	return this1;
 };
-dropecho_utils__$AbstractArray_AbstractArray_$Impl_$.fromAny = function(d) {
+dropecho_interop__$AbstractArray_AbstractArray_$Impl_$.fromAny = function(d) {
 	var arr = js_Boot.__cast(d , Array);
 	var _g = [];
 	var _g1 = 0;
@@ -1355,15 +1352,15 @@ dropecho_utils__$AbstractArray_AbstractArray_$Impl_$.fromAny = function(d) {
 		++_g1;
 		_g.push(v);
 	}
-	return dropecho_utils__$AbstractArray_AbstractArray_$Impl_$._new(_g);
+	return dropecho_interop__$AbstractArray_AbstractArray_$Impl_$._new(_g);
 };
-var dropecho_utils__$AbstractMap_AbstractMap_$Impl_$ = {};
-dropecho_utils__$AbstractMap_AbstractMap_$Impl_$.__name__ = "dropecho.interop._AbstractMap.AbstractMap_Impl_";
-dropecho_utils__$AbstractMap_AbstractMap_$Impl_$._new = function(s) {
+var dropecho_interop__$AbstractMap_AbstractMap_$Impl_$ = {};
+dropecho_interop__$AbstractMap_AbstractMap_$Impl_$.__name__ = "dropecho.interop._AbstractMap.AbstractMap_Impl_";
+dropecho_interop__$AbstractMap_AbstractMap_$Impl_$._new = function(s) {
 	var this1 = s;
 	return this1;
 };
-dropecho_utils__$AbstractMap_AbstractMap_$Impl_$.jsMap = function(d) {
+dropecho_interop__$AbstractMap_AbstractMap_$Impl_$.jsMap = function(d) {
 	var map = new haxe_ds_StringMap();
 	d.forEach(function(v,k,m) {
 		var key = k;
@@ -1374,11 +1371,11 @@ dropecho_utils__$AbstractMap_AbstractMap_$Impl_$.jsMap = function(d) {
 		}
 		return;
 	});
-	return dropecho_utils__$AbstractMap_AbstractMap_$Impl_$._new(map);
+	return dropecho_interop__$AbstractMap_AbstractMap_$Impl_$._new(map);
 };
-dropecho_utils__$AbstractMap_AbstractMap_$Impl_$.fromAny = function(d) {
-	if(dropecho_utils__$AbstractMap_AbstractMap_$Impl_$.isJsMap(d)) {
-		return dropecho_utils__$AbstractMap_AbstractMap_$Impl_$.jsMap(d);
+dropecho_interop__$AbstractMap_AbstractMap_$Impl_$.fromAny = function(d) {
+	if(dropecho_interop__$AbstractMap_AbstractMap_$Impl_$.isJsMap(d)) {
+		return dropecho_interop__$AbstractMap_AbstractMap_$Impl_$.jsMap(d);
 	}
 	var fields = Reflect.fields(d);
 	var _g = new haxe_ds_StringMap();
@@ -1394,14 +1391,14 @@ dropecho_utils__$AbstractMap_AbstractMap_$Impl_$.fromAny = function(d) {
 		}
 	}
 	var map = _g;
-	return dropecho_utils__$AbstractMap_AbstractMap_$Impl_$._new(map);
+	return dropecho_interop__$AbstractMap_AbstractMap_$Impl_$._new(map);
 };
-dropecho_utils__$AbstractMap_AbstractMap_$Impl_$.isJsMap = function(value) {
+dropecho_interop__$AbstractMap_AbstractMap_$Impl_$.isJsMap = function(value) {
 	return ((value) instanceof Map);
 };
-var dropecho_utils_Extender = $hx_exports["Extender"] = function() { };
-dropecho_utils_Extender.__name__ = "dropecho.interop.Extender";
-dropecho_utils_Extender.extendThis = function(base,extension) {
+var dropecho_interop_Extender = $hx_exports["Extender"] = function() { };
+dropecho_interop_Extender.__name__ = "dropecho.interop.Extender";
+dropecho_interop_Extender.extendThis = function(base,extension) {
 	if(extension == null) {
 		return;
 	}
@@ -1415,7 +1412,7 @@ dropecho_utils_Extender.extendThis = function(base,extension) {
 		base[f] = opt != null ? opt : def;
 	}
 };
-dropecho_utils_Extender.defaults = function(base,extension) {
+dropecho_interop_Extender.defaults = function(base,extension) {
 	if(extension == null) {
 		return base;
 	}
@@ -1454,11 +1451,11 @@ dropecho_utils_Extender.defaults = function(base,extension) {
 			++_g2;
 			var exField = Reflect.field(ex,ff);
 			var baseField = Reflect.field(base,ff);
-			var bfIsArray = dropecho_utils_Extender.isArray(baseField);
-			var bfIsMap = dropecho_utils_Extender.isMap(baseField);
-			var bfIsObject = !bfIsArray && !bfIsMap && dropecho_utils_Extender.isObject(baseField);
+			var bfIsArray = dropecho_interop_Extender.isArray(baseField);
+			var bfIsMap = dropecho_interop_Extender.isMap(baseField);
+			var bfIsObject = !bfIsArray && !bfIsMap && dropecho_interop_Extender.isObject(baseField);
 			if(bfIsArray) {
-				var copy = dropecho_utils__$AbstractArray_AbstractArray_$Impl_$.fromAny(exField);
+				var copy = dropecho_interop__$AbstractArray_AbstractArray_$Impl_$.fromAny(exField);
 				var _g3 = 0;
 				var _g12 = copy;
 				while(_g3 < _g12.length) {
@@ -1467,7 +1464,7 @@ dropecho_utils_Extender.defaults = function(base,extension) {
 					baseField.push(v);
 				}
 			} else if(bfIsMap) {
-				var copy1 = dropecho_utils__$AbstractMap_AbstractMap_$Impl_$.fromAny(exField);
+				var copy1 = dropecho_interop__$AbstractMap_AbstractMap_$Impl_$.fromAny(exField);
 				var _g4 = new haxe_iterators_MapKeyValueIterator(copy1);
 				while(_g4.hasNext()) {
 					var _g13 = _g4.next();
@@ -1476,7 +1473,7 @@ dropecho_utils_Extender.defaults = function(base,extension) {
 					baseField.set(k,v1);
 				}
 			} else if(bfIsObject) {
-				dropecho_utils_Extender.defaults(baseField,exField);
+				dropecho_interop_Extender.defaults(baseField,exField);
 			} else {
 				base[ff] = exField;
 			}
@@ -1484,7 +1481,7 @@ dropecho_utils_Extender.defaults = function(base,extension) {
 	}
 	return base;
 };
-dropecho_utils_Extender.isObject = function(obj) {
+dropecho_interop_Extender.isObject = function(obj) {
 	var stdis = Reflect.isObject(obj);
 	var type = js_Boot.getClass(obj);
 	var name = type != null ? type.__name__ : "";
@@ -1495,10 +1492,10 @@ dropecho_utils_Extender.isObject = function(obj) {
 		return false;
 	}
 };
-dropecho_utils_Extender.isArray = function(obj) {
+dropecho_interop_Extender.isArray = function(obj) {
 	return ((obj) instanceof Array);
 };
-dropecho_utils_Extender.isMap = function(obj) {
+dropecho_interop_Extender.isMap = function(obj) {
 	if(((obj) instanceof Map)) {
 		return true;
 	}
@@ -1515,6 +1512,149 @@ haxe_IMap.prototype = {
 	get: null
 	,keys: null
 	,__class__: haxe_IMap
+};
+var haxe__$Int32_Int32_$Impl_$ = {};
+haxe__$Int32_Int32_$Impl_$.__name__ = "haxe._Int32.Int32_Impl_";
+haxe__$Int32_Int32_$Impl_$.ucompare = function(a,b) {
+	if(a < 0) {
+		if(b < 0) {
+			return ~b - ~a | 0;
+		} else {
+			return 1;
+		}
+	}
+	if(b < 0) {
+		return -1;
+	} else {
+		return a - b | 0;
+	}
+};
+var haxe__$Int64__$_$_$Int64 = function(high,low) {
+	this.high = high;
+	this.low = low;
+};
+haxe__$Int64__$_$_$Int64.__name__ = "haxe._Int64.___Int64";
+haxe__$Int64__$_$_$Int64.prototype = {
+	high: null
+	,low: null
+	,__class__: haxe__$Int64__$_$_$Int64
+};
+var haxe_crypto_Sha1 = function() {
+};
+haxe_crypto_Sha1.__name__ = "haxe.crypto.Sha1";
+haxe_crypto_Sha1.make = function(b) {
+	var h = new haxe_crypto_Sha1().doEncode(haxe_crypto_Sha1.bytes2blks(b));
+	var out = new haxe_io_Bytes(new ArrayBuffer(20));
+	var p = 0;
+	out.b[p++] = h[0] >>> 24;
+	out.b[p++] = h[0] >> 16 & 255;
+	out.b[p++] = h[0] >> 8 & 255;
+	out.b[p++] = h[0] & 255;
+	out.b[p++] = h[1] >>> 24;
+	out.b[p++] = h[1] >> 16 & 255;
+	out.b[p++] = h[1] >> 8 & 255;
+	out.b[p++] = h[1] & 255;
+	out.b[p++] = h[2] >>> 24;
+	out.b[p++] = h[2] >> 16 & 255;
+	out.b[p++] = h[2] >> 8 & 255;
+	out.b[p++] = h[2] & 255;
+	out.b[p++] = h[3] >>> 24;
+	out.b[p++] = h[3] >> 16 & 255;
+	out.b[p++] = h[3] >> 8 & 255;
+	out.b[p++] = h[3] & 255;
+	out.b[p++] = h[4] >>> 24;
+	out.b[p++] = h[4] >> 16 & 255;
+	out.b[p++] = h[4] >> 8 & 255;
+	out.b[p++] = h[4] & 255;
+	return out;
+};
+haxe_crypto_Sha1.bytes2blks = function(b) {
+	var nblk = (b.length + 8 >> 6) + 1;
+	var blks = [];
+	var _g = 0;
+	var _g1 = nblk * 16;
+	while(_g < _g1) {
+		var i = _g++;
+		blks[i] = 0;
+	}
+	var _g2 = 0;
+	var _g3 = b.length;
+	while(_g2 < _g3) {
+		var i1 = _g2++;
+		var p = i1 >> 2;
+		blks[p] |= b.b[i1] << 24 - ((i1 & 3) << 3);
+	}
+	var i2 = b.length;
+	var p1 = i2 >> 2;
+	blks[p1] |= 128 << 24 - ((i2 & 3) << 3);
+	blks[nblk * 16 - 1] = b.length * 8;
+	return blks;
+};
+haxe_crypto_Sha1.prototype = {
+	doEncode: function(x) {
+		var w = [];
+		var a = 1732584193;
+		var b = -271733879;
+		var c = -1732584194;
+		var d = 271733878;
+		var e = -1009589776;
+		var i = 0;
+		while(i < x.length) {
+			var olda = a;
+			var oldb = b;
+			var oldc = c;
+			var oldd = d;
+			var olde = e;
+			var j = 0;
+			while(j < 80) {
+				if(j < 16) {
+					w[j] = x[i + j];
+				} else {
+					var num = w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16];
+					w[j] = num << 1 | num >>> 31;
+				}
+				var t = (a << 5 | a >>> 27) + this.ft(j,b,c,d) + e + w[j] + this.kt(j);
+				e = d;
+				d = c;
+				c = b << 30 | b >>> 2;
+				b = a;
+				a = t;
+				++j;
+			}
+			a += olda;
+			b += oldb;
+			c += oldc;
+			d += oldd;
+			e += olde;
+			i += 16;
+		}
+		return [a,b,c,d,e];
+	}
+	,ft: function(t,b,c,d) {
+		if(t < 20) {
+			return b & c | ~b & d;
+		}
+		if(t < 40) {
+			return b ^ c ^ d;
+		}
+		if(t < 60) {
+			return b & c | b & d | c & d;
+		}
+		return b ^ c ^ d;
+	}
+	,kt: function(t) {
+		if(t < 20) {
+			return 1518500249;
+		}
+		if(t < 40) {
+			return 1859775393;
+		}
+		if(t < 60) {
+			return -1894007588;
+		}
+		return -899497514;
+	}
+	,__class__: haxe_crypto_Sha1
 };
 var haxe_ds_ArraySort = function() { };
 haxe_ds_ArraySort.__name__ = "haxe.ds.ArraySort";
@@ -1765,6 +1905,136 @@ haxe_ds_StringMap.prototype = {
 	}
 	,__class__: haxe_ds_StringMap
 };
+var haxe_io_Bytes = function(data) {
+	this.length = data.byteLength;
+	this.b = new Uint8Array(data);
+	this.b.bufferValue = data;
+	data.hxBytes = this;
+	data.bytes = this.b;
+};
+haxe_io_Bytes.__name__ = "haxe.io.Bytes";
+haxe_io_Bytes.ofString = function(s,encoding) {
+	if(encoding == haxe_io_Encoding.RawNative) {
+		var buf = new Uint8Array(s.length << 1);
+		var _g = 0;
+		var _g1 = s.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var c = s.charCodeAt(i);
+			buf[i << 1] = c & 255;
+			buf[i << 1 | 1] = c >> 8;
+		}
+		return new haxe_io_Bytes(buf.buffer);
+	}
+	var a = [];
+	var i1 = 0;
+	while(i1 < s.length) {
+		var c1 = s.charCodeAt(i1++);
+		if(55296 <= c1 && c1 <= 56319) {
+			c1 = c1 - 55232 << 10 | s.charCodeAt(i1++) & 1023;
+		}
+		if(c1 <= 127) {
+			a.push(c1);
+		} else if(c1 <= 2047) {
+			a.push(192 | c1 >> 6);
+			a.push(128 | c1 & 63);
+		} else if(c1 <= 65535) {
+			a.push(224 | c1 >> 12);
+			a.push(128 | c1 >> 6 & 63);
+			a.push(128 | c1 & 63);
+		} else {
+			a.push(240 | c1 >> 18);
+			a.push(128 | c1 >> 12 & 63);
+			a.push(128 | c1 >> 6 & 63);
+			a.push(128 | c1 & 63);
+		}
+	}
+	return new haxe_io_Bytes(new Uint8Array(a).buffer);
+};
+haxe_io_Bytes.prototype = {
+	length: null
+	,b: null
+	,data: null
+	,getInt32: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getInt32(pos,true);
+	}
+	,setInt32: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setInt32(pos,v,true);
+	}
+	,getInt64: function(pos) {
+		var this1 = new haxe__$Int64__$_$_$Int64(this.getInt32(pos + 4),this.getInt32(pos));
+		return this1;
+	}
+	,setInt64: function(pos,v) {
+		this.setInt32(pos,v.low);
+		this.setInt32(pos + 4,v.high);
+	}
+	,getString: function(pos,len,encoding) {
+		if(pos < 0 || len < 0 || pos + len > this.length) {
+			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
+		}
+		if(encoding == null) {
+			encoding = haxe_io_Encoding.UTF8;
+		}
+		var s = "";
+		var b = this.b;
+		var i = pos;
+		var max = pos + len;
+		switch(encoding._hx_index) {
+		case 0:
+			var debug = pos > 0;
+			while(i < max) {
+				var c = b[i++];
+				if(c < 128) {
+					if(c == 0) {
+						break;
+					}
+					s += String.fromCodePoint(c);
+				} else if(c < 224) {
+					var code = (c & 63) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(code);
+				} else if(c < 240) {
+					var c2 = b[i++];
+					var code1 = (c & 31) << 12 | (c2 & 127) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(code1);
+				} else {
+					var c21 = b[i++];
+					var c3 = b[i++];
+					var u = (c & 15) << 18 | (c21 & 127) << 12 | (c3 & 127) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(u);
+				}
+			}
+			break;
+		case 1:
+			while(i < max) {
+				var c1 = b[i++] | b[i++] << 8;
+				s += String.fromCodePoint(c1);
+			}
+			break;
+		}
+		return s;
+	}
+	,toString: function() {
+		return this.getString(0,this.length);
+	}
+	,__class__: haxe_io_Bytes
+};
+var haxe_io_Encoding = $hxEnums["haxe.io.Encoding"] = { __ename__ : true, __constructs__ : ["UTF8","RawNative"]
+	,UTF8: {_hx_index:0,__enum__:"haxe.io.Encoding",toString:$estr}
+	,RawNative: {_hx_index:1,__enum__:"haxe.io.Encoding",toString:$estr}
+};
+var haxe_io_Error = $hxEnums["haxe.io.Error"] = { __ename__ : true, __constructs__ : ["Blocked","Overflow","OutsideBounds","Custom"]
+	,Blocked: {_hx_index:0,__enum__:"haxe.io.Error",toString:$estr}
+	,Overflow: {_hx_index:1,__enum__:"haxe.io.Error",toString:$estr}
+	,OutsideBounds: {_hx_index:2,__enum__:"haxe.io.Error",toString:$estr}
+	,Custom: ($_=function(e) { return {_hx_index:3,e:e,__enum__:"haxe.io.Error",toString:$estr}; },$_.__params__ = ["e"],$_)
+};
 var haxe_iterators_MapKeyValueIterator = function(map) {
 	this.map = map;
 	this.keys = map.keys();
@@ -1829,6 +2099,34 @@ js_Boot.__string_rec = function(o,s) {
 	case "function":
 		return "<function>";
 	case "object":
+		if(o.__enum__) {
+			var e = $hxEnums[o.__enum__];
+			var n = e.__constructs__[o._hx_index];
+			var con = e[n];
+			if(con.__params__) {
+				s = s + "\t";
+				return n + "(" + ((function($this) {
+					var $r;
+					var _g = [];
+					{
+						var _g1 = 0;
+						var _g2 = con.__params__;
+						while(true) {
+							if(!(_g1 < _g2.length)) {
+								break;
+							}
+							var p = _g2[_g1];
+							_g1 = _g1 + 1;
+							_g.push(js_Boot.__string_rec(o[p],s));
+						}
+					}
+					$r = _g;
+					return $r;
+				}(this))).join(",") + ")";
+			} else {
+				return n;
+			}
+		}
 		if(((o) instanceof Array)) {
 			var str = "[";
 			s += "\t";
@@ -1942,7 +2240,7 @@ js_Boot.__instanceof = function(o,cl) {
 		if(cl == Enum ? o.__ename__ != null : false) {
 			return true;
 		}
-		return false;
+		return o.__enum__ != null ? $hxEnums[o.__enum__] == cl : false;
 	}
 };
 js_Boot.__downcastCheck = function(o,cl) {
@@ -1976,6 +2274,234 @@ js_Boot.__isNativeObj = function(o) {
 js_Boot.__resolveNativeClass = function(name) {
 	return $global[name];
 };
+var seedyrng_GeneratorInterface = function() { };
+seedyrng_GeneratorInterface.__name__ = "seedyrng.GeneratorInterface";
+seedyrng_GeneratorInterface.__isInterface__ = true;
+seedyrng_GeneratorInterface.prototype = {
+	get_seed: null
+	,set_seed: null
+	,get_state: null
+	,set_state: null
+	,get_usesAllBits: null
+	,nextInt: null
+	,__class__: seedyrng_GeneratorInterface
+};
+var seedyrng_Random = function(seed,generator) {
+	if(seed == null) {
+		var this1 = new haxe__$Int64__$_$_$Int64(seedyrng_Random.randomSystemInt(),seedyrng_Random.randomSystemInt());
+		seed = this1;
+	}
+	if(generator == null) {
+		generator = new seedyrng_Xorshift128Plus();
+	}
+	this.generator = generator;
+	this.set_seed(seed);
+};
+seedyrng_Random.__name__ = "seedyrng.Random";
+seedyrng_Random.__interfaces__ = [seedyrng_GeneratorInterface];
+seedyrng_Random.randomSystemInt = function() {
+	var value = Std.random(255) << 24 | Std.random(255) << 16 | Std.random(255) << 8 | Std.random(255);
+	return value;
+};
+seedyrng_Random.prototype = {
+	generator: null
+	,get_seed: function() {
+		return this.generator.get_seed();
+	}
+	,set_seed: function(value) {
+		return this.generator.set_seed(value);
+	}
+	,get_state: function() {
+		return this.generator.get_state();
+	}
+	,set_state: function(value) {
+		return this.generator.set_state(value);
+	}
+	,get_usesAllBits: function() {
+		return this.generator.get_usesAllBits();
+	}
+	,nextInt: function() {
+		return this.generator.nextInt();
+	}
+	,nextFullInt: function() {
+		if(this.generator.get_usesAllBits()) {
+			return this.generator.nextInt();
+		} else {
+			var num1 = this.generator.nextInt();
+			var num2 = this.generator.nextInt();
+			num2 = num2 >>> 16 | num2 << 16;
+			return num1 ^ num2;
+		}
+	}
+	,setStringSeed: function(seed) {
+		this.setBytesSeed(haxe_io_Bytes.ofString(seed));
+	}
+	,setBytesSeed: function(seed) {
+		var hash = haxe_crypto_Sha1.make(seed);
+		this.set_seed(hash.getInt64(0));
+	}
+	,random: function() {
+		var upper = this.nextFullInt() & 2097151;
+		var lower = this.nextFullInt();
+		var b = upper * Math.pow(2,32);
+		var floatNum = _$UInt_UInt_$Impl_$.toFloat(lower) + b;
+		var result = floatNum * Math.pow(2,-53);
+		return result;
+	}
+	,randomInt: function(lower,upper) {
+		return Math.floor(this.random() * (upper - lower + 1)) + lower;
+	}
+	,uniform: function(lower,upper) {
+		return this.random() * (upper - lower) + lower;
+	}
+	,choice: function(array) {
+		return array[this.randomInt(0,array.length - 1)];
+	}
+	,shuffle: function(array) {
+		var _g = 0;
+		var _g1 = array.length - 1;
+		while(_g < _g1) {
+			var index = _g++;
+			var randIndex = this.randomInt(index,array.length - 1);
+			var tempA = array[index];
+			var tempB = array[randIndex];
+			array[index] = tempB;
+			array[randIndex] = tempA;
+		}
+	}
+	,__class__: seedyrng_Random
+};
+var seedyrng_Xorshift128Plus = function() {
+	this._currentAvailable = false;
+	var this1 = new haxe__$Int64__$_$_$Int64(0,1);
+	this.set_seed(this1);
+};
+seedyrng_Xorshift128Plus.__name__ = "seedyrng.Xorshift128Plus";
+seedyrng_Xorshift128Plus.__interfaces__ = [seedyrng_GeneratorInterface];
+seedyrng_Xorshift128Plus.prototype = {
+	_seed: null
+	,_state0: null
+	,_state1: null
+	,_current: null
+	,_currentAvailable: null
+	,get_usesAllBits: function() {
+		return false;
+	}
+	,get_seed: function() {
+		return this._seed;
+	}
+	,set_seed: function(value) {
+		var b_high = 0;
+		var b_low = 0;
+		if(value.high != b_high || value.low != b_low) {
+			value = value;
+		} else {
+			var this1 = new haxe__$Int64__$_$_$Int64(0,1);
+			value = this1;
+		}
+		this._seed = value;
+		this._state0 = value;
+		this._state1 = seedyrng_Xorshift128Plus.SEED_1;
+		this._currentAvailable = false;
+		return value;
+	}
+	,get_state: function() {
+		var bytes = new haxe_io_Bytes(new ArrayBuffer(33));
+		bytes.setInt64(0,this._seed);
+		bytes.setInt64(8,this._state0);
+		bytes.setInt64(16,this._state1);
+		bytes.b[24] = this._currentAvailable ? 1 : 0;
+		if(this._currentAvailable) {
+			bytes.setInt64(25,this._current);
+		}
+		return bytes;
+	}
+	,set_state: function(value) {
+		if(value.length != 33) {
+			throw new js__$Boot_HaxeError("Wrong state size " + value.length);
+		}
+		this._seed = value.getInt64(0);
+		this._state0 = value.getInt64(8);
+		this._state1 = value.getInt64(16);
+		this._currentAvailable = value.b[24] == 1;
+		if(this._currentAvailable) {
+			this._current = value.getInt64(25);
+		}
+		return value;
+	}
+	,stepNext: function() {
+		var x = this._state0;
+		var y = this._state1;
+		this._state0 = y;
+		var b = 23;
+		b &= 63;
+		var b1;
+		if(b == 0) {
+			var this1 = new haxe__$Int64__$_$_$Int64(x.high,x.low);
+			b1 = this1;
+		} else if(b < 32) {
+			var this2 = new haxe__$Int64__$_$_$Int64(x.high << b | x.low >>> 32 - b,x.low << b);
+			b1 = this2;
+		} else {
+			var this3 = new haxe__$Int64__$_$_$Int64(x.low << b - 32,0);
+			b1 = this3;
+		}
+		var this4 = new haxe__$Int64__$_$_$Int64(x.high ^ b1.high,x.low ^ b1.low);
+		x = this4;
+		var a_high = x.high ^ y.high;
+		var a_low = x.low ^ y.low;
+		var b2 = 17;
+		b2 &= 63;
+		var b3;
+		if(b2 == 0) {
+			var this5 = new haxe__$Int64__$_$_$Int64(x.high,x.low);
+			b3 = this5;
+		} else if(b2 < 32) {
+			var this6 = new haxe__$Int64__$_$_$Int64(x.high >> b2,x.high << 32 - b2 | x.low >>> b2);
+			b3 = this6;
+		} else {
+			var this7 = new haxe__$Int64__$_$_$Int64(x.high >> 31,x.high >> b2 - 32);
+			b3 = this7;
+		}
+		var a_high1 = a_high ^ b3.high;
+		var a_low1 = a_low ^ b3.low;
+		var b4 = 26;
+		b4 &= 63;
+		var b5;
+		if(b4 == 0) {
+			var this8 = new haxe__$Int64__$_$_$Int64(y.high,y.low);
+			b5 = this8;
+		} else if(b4 < 32) {
+			var this9 = new haxe__$Int64__$_$_$Int64(y.high >> b4,y.high << 32 - b4 | y.low >>> b4);
+			b5 = this9;
+		} else {
+			var this10 = new haxe__$Int64__$_$_$Int64(y.high >> 31,y.high >> b4 - 32);
+			b5 = this10;
+		}
+		var this11 = new haxe__$Int64__$_$_$Int64(a_high1 ^ b5.high,a_low1 ^ b5.low);
+		this._state1 = this11;
+		var a = this._state1;
+		var high = a.high + y.high | 0;
+		var low = a.low + y.low | 0;
+		if(haxe__$Int32_Int32_$Impl_$.ucompare(low,a.low) < 0) {
+			var ret = high++;
+			high = high | 0;
+		}
+		var this12 = new haxe__$Int64__$_$_$Int64(high,low);
+		this._current = this12;
+	}
+	,nextInt: function() {
+		if(this._currentAvailable) {
+			this._currentAvailable = false;
+			return this._current.low;
+		} else {
+			this.stepNext();
+			this._currentAvailable = true;
+			return this._current.high;
+		}
+	}
+	,__class__: seedyrng_Xorshift128Plus
+};
 function $getIterator(o) { if( o instanceof Array ) return HxOverrides.iter(o); else return o.iterator(); }
 if( String.fromCodePoint == null ) String.fromCodePoint = function(c) { return c < 0x10000 ? String.fromCharCode(c) : String.fromCharCode((c>>10)+0xD7C0)+String.fromCharCode((c&0x3FF)+0xDC00); }
 String.prototype.__class__ = String;
@@ -1992,4 +2518,13 @@ Object.defineProperty(js__$Boot_HaxeError.prototype,"message",{ get : function()
 	return String(this.val);
 }});
 js_Boot.__toStr = ({ }).toString;
+seedyrng_Xorshift128Plus.PARAMETER_A = 23;
+seedyrng_Xorshift128Plus.PARAMETER_B = 17;
+seedyrng_Xorshift128Plus.PARAMETER_C = 26;
+seedyrng_Xorshift128Plus.SEED_1 = (function($this) {
+	var $r;
+	var this1 = new haxe__$Int64__$_$_$Int64(842650776,685298713);
+	$r = this1;
+	return $r;
+}(this));
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

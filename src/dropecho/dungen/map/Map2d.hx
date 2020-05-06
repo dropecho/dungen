@@ -28,12 +28,6 @@ class Map2d {
 		}
 	}
 
-	public function fillMapRandomly(wallTile:Int, floorTile:Int, wallPercent:Float = 45) {
-		for (i in 0...(_width * _height)) {
-			_mapData[i] = Std.random(100) > wallPercent ? floorTile : wallTile;
-		}
-	}
-
 	public function ensureEdgesAreWalls(tileType:Int = 0) {
 		for (x in 0...(_width - 1)) {
 			_mapData[XYtoIndex(x, 0)] = tileType;
@@ -114,12 +108,12 @@ class Map2d {
 
 		for (y in 0..._height) {
 			for (x in 0..._width) {
-        var val = _mapData[XYtoIndex(x, y)];
-        if(val != 0 && val != 1) {
-          output += String.fromCharCode(val);
-        } else {
-          output += val;
-        }
+				var val = _mapData[XYtoIndex(x, y)];
+				if (val != 0 && val != 1) {
+					output += String.fromCharCode(val);
+				} else {
+					output += val;
+				}
 			}
 
 			output += "\n";

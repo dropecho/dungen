@@ -24,12 +24,12 @@ class MapHelperTest {
     Assert.isTrue(firstEmpty == null);
   }
 
-  @Test
-  public function get_first_empty_of_0_on_random_0_1_filled_map_should_return_non_null_tile() {
-    map.fillMapRandomly(1,0,50);
-    var firstEmpty = MapHelper.getFirstEmptyTile(map, 0);
-    Assert.isTrue(firstEmpty != null);
-  }
+  // @Test
+  // public function get_first_empty_of_0_on_random_0_1_filled_map_should_return_non_null_tile() {
+  //   map.fillMapRandomly(1,0,50);
+  //   var firstEmpty = MapHelper.getFirstEmptyTile(map, 0);
+  //   Assert.isTrue(firstEmpty != null);
+  // }
 
   @Test
   public function get_first_empty_of_1_on_manually_filled_array_without_ignore_array_should_return_non_null() {
