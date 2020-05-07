@@ -589,10 +589,12 @@ dropecho_dungen_ca_Generator.buildFromCA = function(map,params,step) {
 	}
 };
 var dropecho_dungen_convchain_ConvChain = $hx_exports["dungen"]["ConvChain"] = function(sample) {
+	this.seed = "0";
 	this.sample = sample;
-	this.cachedN = null;
+	this.cachedN = -1;
 	this.cachedWeights = null;
 	this.rng = new seedyrng_Random();
+	this.rng.setStringSeed(this.seed);
 };
 dropecho_dungen_convchain_ConvChain.__name__ = "dropecho.dungen.convchain.ConvChain";
 dropecho_dungen_convchain_ConvChain.prototype = {
@@ -602,79 +604,237 @@ dropecho_dungen_convchain_ConvChain.prototype = {
 	,rng: null
 	,seed: null
 	,processWeights: function(sample,n) {
+		var size = Math.pow(2,n * n) | 0;
 		var _g = [];
 		var _g1 = 0;
-		var _g2 = n * n;
+		var _g2 = size;
 		while(_g1 < _g2) {
 			var _ = _g1++;
 			_g.push(0.0);
 		}
 		var weights = _g;
-		var pattern = function(fn) {
-			var result = [];
-			var _g3 = 0;
-			var _g4 = n;
-			while(_g3 < _g4) {
-				var y = _g3++;
-				var _g31 = 0;
-				var _g41 = n;
-				while(_g31 < _g41) {
-					var x = _g31++;
-					result[x + y * n] = fn(x,y);
-				}
-			}
-			return result;
-		};
-		var rotate = function(p) {
-			return pattern(function(x1,y1) {
-				return p[n - 1 - y1 + x1 * n];
-			});
-		};
-		var reflect = function(p1) {
-			return pattern(function(x2,y2) {
-				return p1[n - 1 - x2 + y2 * n];
-			});
-		};
-		var index = function(p2) {
-			var result1 = 0;
-			var power = 1;
-			var _g32 = 0;
-			var _g42 = p2.length;
-			while(_g32 < _g42) {
-				var i = _g32++;
-				result1 += p2[p2.length - 1 - i] != 0 ? power : 0;
-				power *= 2;
-			}
-			return result1;
-		};
-		var _g33 = 0;
-		var _g43 = sample._height;
-		while(_g33 < _g43) {
-			var y3 = [_g33++];
-			var _g34 = 0;
-			var _g44 = sample._width;
-			while(_g34 < _g44) {
-				var x3 = [_g34++];
-				var initial = (function(x4,y4) {
+		var _g3 = 0;
+		var _g4 = sample._height;
+		while(_g3 < _g4) {
+			var y = [_g3++];
+			var _g31 = 0;
+			var _g41 = sample._width;
+			while(_g31 < _g41) {
+				var x = [_g31++];
+				var initial = (function(x1,y1) {
 					return function(dx,dy) {
-						var a = (x4[0] + dx) % sample._width;
-						var b = (y4[0] + dy) % sample._height;
-						return sample._mapData[a + b * sample._width];
+						var a = (x1[0] + dx) % sample._width;
+						var b = (y1[0] + dy) % sample._height;
+						return sample.get(a,b);
 					};
-				})(x3,y3);
-				var p0 = pattern(initial);
-				weights[index(p0)] += 1;
+				})(x,y);
+				var _g32 = [];
+				var _g42 = 0;
+				var _g5 = n;
+				while(_g42 < _g5) {
+					var y2 = _g42++;
+					var _g43 = 0;
+					var _g51 = n;
+					while(_g43 < _g51) {
+						var x2 = _g43++;
+						_g32.push(initial(x2,y2));
+					}
+				}
+				var p0 = _g32;
+				var p = p0;
+				var _g33 = [];
+				var _g44 = 0;
+				var _g52 = n;
+				while(_g44 < _g52) {
+					var y3 = _g44++;
+					var _g45 = 0;
+					var _g53 = n;
+					while(_g45 < _g53) {
+						var x3 = _g45++;
+						_g33.push(p[n - 1 - y3 + x3 * n]);
+					}
+				}
+				var p1 = _g33;
+				var p2 = p1;
+				var _g34 = [];
+				var _g46 = 0;
+				var _g54 = n;
+				while(_g46 < _g54) {
+					var y4 = _g46++;
+					var _g47 = 0;
+					var _g55 = n;
+					while(_g47 < _g55) {
+						var x4 = _g47++;
+						_g34.push(p2[n - 1 - y4 + x4 * n]);
+					}
+				}
+				var p21 = _g34;
+				var p3 = p21;
+				var _g35 = [];
+				var _g48 = 0;
+				var _g56 = n;
+				while(_g48 < _g56) {
+					var y5 = _g48++;
+					var _g49 = 0;
+					var _g57 = n;
+					while(_g49 < _g57) {
+						var x5 = _g49++;
+						_g35.push(p3[n - 1 - y5 + x5 * n]);
+					}
+				}
+				var p31 = _g35;
+				var p4 = p0;
+				var _g36 = [];
+				var _g410 = 0;
+				var _g58 = n;
+				while(_g410 < _g58) {
+					var y6 = _g410++;
+					var _g411 = 0;
+					var _g59 = n;
+					while(_g411 < _g59) {
+						var x6 = _g411++;
+						_g36.push(p4[n - 1 - x6 + y6 * n]);
+					}
+				}
+				var p41 = _g36;
+				var p5 = p1;
+				var _g37 = [];
+				var _g412 = 0;
+				var _g510 = n;
+				while(_g412 < _g510) {
+					var y7 = _g412++;
+					var _g413 = 0;
+					var _g511 = n;
+					while(_g413 < _g511) {
+						var x7 = _g413++;
+						_g37.push(p5[n - 1 - x7 + y7 * n]);
+					}
+				}
+				var p51 = _g37;
+				var p6 = p21;
+				var _g38 = [];
+				var _g414 = 0;
+				var _g512 = n;
+				while(_g414 < _g512) {
+					var y8 = _g414++;
+					var _g415 = 0;
+					var _g513 = n;
+					while(_g415 < _g513) {
+						var x8 = _g415++;
+						_g38.push(p6[n - 1 - x8 + y8 * n]);
+					}
+				}
+				var p61 = _g38;
+				var p7 = p31;
+				var _g39 = [];
+				var _g416 = 0;
+				var _g514 = n;
+				while(_g416 < _g514) {
+					var y9 = _g416++;
+					var _g417 = 0;
+					var _g515 = n;
+					while(_g417 < _g515) {
+						var x9 = _g417++;
+						_g39.push(p7[n - 1 - x9 + y9 * n]);
+					}
+				}
+				var p71 = _g39;
+				var weights1 = weights;
+				var result = 0;
+				var power = 1;
+				var _g310 = 0;
+				var _g418 = p0.length;
+				while(_g310 < _g418) {
+					var i = _g310++;
+					result += p0[p0.length - 1 - i] != 0 ? power : 0;
+					power *= 2;
+				}
+				weights1[result] += 1;
+				var weights2 = weights;
+				var result1 = 0;
+				var power1 = 1;
+				var _g311 = 0;
+				var _g419 = p1.length;
+				while(_g311 < _g419) {
+					var i1 = _g311++;
+					result1 += p1[p1.length - 1 - i1] != 0 ? power1 : 0;
+					power1 *= 2;
+				}
+				weights2[result1] += 1;
+				var weights3 = weights;
+				var result2 = 0;
+				var power2 = 1;
+				var _g312 = 0;
+				var _g420 = p21.length;
+				while(_g312 < _g420) {
+					var i2 = _g312++;
+					result2 += p21[p21.length - 1 - i2] != 0 ? power2 : 0;
+					power2 *= 2;
+				}
+				weights3[result2] += 1;
+				var weights4 = weights;
+				var result3 = 0;
+				var power3 = 1;
+				var _g313 = 0;
+				var _g421 = p31.length;
+				while(_g313 < _g421) {
+					var i3 = _g313++;
+					result3 += p31[p31.length - 1 - i3] != 0 ? power3 : 0;
+					power3 *= 2;
+				}
+				weights4[result3] += 1;
+				var weights5 = weights;
+				var result4 = 0;
+				var power4 = 1;
+				var _g314 = 0;
+				var _g422 = p41.length;
+				while(_g314 < _g422) {
+					var i4 = _g314++;
+					result4 += p41[p41.length - 1 - i4] != 0 ? power4 : 0;
+					power4 *= 2;
+				}
+				weights5[result4] += 1;
+				var weights6 = weights;
+				var result5 = 0;
+				var power5 = 1;
+				var _g315 = 0;
+				var _g423 = p51.length;
+				while(_g315 < _g423) {
+					var i5 = _g315++;
+					result5 += p51[p51.length - 1 - i5] != 0 ? power5 : 0;
+					power5 *= 2;
+				}
+				weights6[result5] += 1;
+				var weights7 = weights;
+				var result6 = 0;
+				var power6 = 1;
+				var _g316 = 0;
+				var _g424 = p61.length;
+				while(_g316 < _g424) {
+					var i6 = _g316++;
+					result6 += p61[p61.length - 1 - i6] != 0 ? power6 : 0;
+					power6 *= 2;
+				}
+				weights7[result6] += 1;
+				var weights8 = weights;
+				var result7 = 0;
+				var power7 = 1;
+				var _g317 = 0;
+				var _g425 = p71.length;
+				while(_g317 < _g425) {
+					var i7 = _g317++;
+					result7 += p71[p71.length - 1 - i7] != 0 ? power7 : 0;
+					power7 *= 2;
+				}
+				weights8[result7] += 1;
 			}
 		}
-		var _g5 = 0;
+		var _g516 = 0;
 		var _g6 = weights.length;
-		while(_g5 < _g6) {
-			var k = _g5++;
-			if(weights[k] <= 0 || weights[k] == null) {
-				weights[k] = 0.1;
-			}
+		while(_g516 < _g6) {
+			var k = _g516++;
+			weights[k] = weights[k] <= 0 ? 0.1 : weights[k];
 		}
-		console.log("src/dropecho/dungen/convchain/ConvChain.hx:94:","weights: " + Std.string(weights));
 		return weights;
 	}
 	,getWeights: function(n) {
@@ -685,9 +845,9 @@ dropecho_dungen_convchain_ConvChain.prototype = {
 		return this.cachedWeights;
 	}
 	,generateBaseField: function(width,height) {
-		return dropecho_dungen_map_generators_RandomGenerator.generate({ height : height, width : width});
+		return dropecho_dungen_map_generators_RandomGenerator.generate({ height : height, width : width, seed : this.seed});
 	}
-	,applyChanges: function(field,weights,resultWidth,resultHeight,n,temperature,changes) {
+	,applyChanges: function(field,weights,n,temperature,changes) {
 		var r;
 		var q;
 		var x;
@@ -699,15 +859,15 @@ dropecho_dungen_convchain_ConvChain.prototype = {
 		while(_g < _g1) {
 			var _ = _g++;
 			q = 1.0;
-			r = this.rng.randomInt(0,resultWidth * resultHeight);
-			x = r % resultWidth | 0;
-			y = r / resultWidth | 0;
+			r = this.rng.randomInt(0,field._mapData.length);
+			x = r % field._width | 0;
+			y = r / field._width | 0;
 			var _g2 = y - n + 1;
-			var _g11 = y + n - 1;
+			var _g11 = y + n;
 			while(_g2 < _g11) {
 				var sy = _g2++;
 				var _g3 = x - n + 1;
-				var _g12 = x + n - 1;
+				var _g12 = x + n;
 				while(_g3 < _g12) {
 					var sx = _g3++;
 					ind = 0;
@@ -724,14 +884,14 @@ dropecho_dungen_convchain_ConvChain.prototype = {
 							var X = sx + dx;
 							var Y = sy + dy;
 							if(X < 0) {
-								X += resultWidth;
-							} else if(X >= resultWidth) {
-								X -= resultWidth;
+								X += field._width;
+							} else if(X >= field._width) {
+								X -= field._width;
 							}
 							if(Y < 0) {
-								Y += resultHeight;
-							} else if(Y >= resultHeight) {
-								Y -= resultHeight;
+								Y += field._height;
+							} else if(Y >= field._height) {
+								Y -= field._height;
 							}
 							var value = field.get(X,Y);
 							ind += value != 0 ? power : 0;
@@ -743,17 +903,16 @@ dropecho_dungen_convchain_ConvChain.prototype = {
 					var a = weights[ind - difference];
 					var b = weights[ind];
 					q *= a / b;
-					if(typeof(q) == "number") {
-						q = 0.5;
-					}
 				}
 			}
 			if(q >= 1) {
-				field.set(x,y,field.get(x,y) == 0 ? 1 : 0);
+				field.set(x,y,field.get(x,y) != 1 ? 1 : 0);
 			} else {
-				var tmp = temperature != 1;
+				if(temperature != 1) {
+					q = Math.pow(q,1.0 / temperature);
+				}
 				if(q > this.rng.random()) {
-					field.set(x,y,field.get(x,y) == 0 ? 1 : 0);
+					field.set(x,y,field.get(x,y) != 1 ? 1 : 0);
 				}
 			}
 		}
@@ -761,15 +920,12 @@ dropecho_dungen_convchain_ConvChain.prototype = {
 	,generate: function(width,height,n,temperature,iterations) {
 		var changesPerIterations = width * height;
 		var field = this.generateBaseField(width,height);
-		var field2 = this.generateBaseField(width,height);
-		console.log("src/dropecho/dungen/convchain/ConvChain.hx:204:",field.toString());
-		console.log("src/dropecho/dungen/convchain/ConvChain.hx:205:",field2.toString());
 		var weights = this.getWeights(n);
 		var _g = 0;
 		var _g1 = iterations;
 		while(_g < _g1) {
 			var _ = _g++;
-			this.applyChanges(field,weights,width,height,n,temperature,changesPerIterations);
+			this.applyChanges(field,weights,n,temperature,changesPerIterations);
 		}
 		return field;
 	}
@@ -999,6 +1155,21 @@ dropecho_dungen_map_Map2d.prototype = {
 	,get: function(x,y) {
 		return this._mapData[this.XYtoIndex(x,y)];
 	}
+	,getRect: function(x,y,x2,y2) {
+		var _g = [];
+		var _g1 = x;
+		var _g2 = x2 + 1;
+		while(_g1 < _g2) {
+			var i = _g1++;
+			var _g11 = y;
+			var _g21 = y2 + 1;
+			while(_g11 < _g21) {
+				var j = _g11++;
+				_g.push(this.get(i,j));
+			}
+		}
+		return _g;
+	}
 	,toString: function() {
 		var output = "\n MAP2d: \n\n";
 		var _g = 0;
@@ -1013,7 +1184,7 @@ dropecho_dungen_map_Map2d.prototype = {
 				if(val != 0 && val != 1) {
 					output += String.fromCodePoint(val);
 				} else {
-					output += val == 1 ? "#" : ".";
+					output += val == 0 ? " " : String.fromCodePoint(9608);
 				}
 			}
 			output += "\n";
@@ -1320,7 +1491,7 @@ dropecho_dungen_map_generators_MixedGenerator.buildRooms = function(tree,opts) {
 };
 var dropecho_dungen_map_generators_RandomParams = function() {
 	this.seed = "0";
-	this.start_fill_percent = 65;
+	this.start_fill_percent = 50;
 	this.tile_wall = 0;
 	this.tile_floor = 1;
 	this.width = 64;
@@ -1637,13 +1808,27 @@ dropecho_interop_Extender.defaults = function(base,extension) {
 			var _g11 = _this.length;
 			while(_g1 < _g11) {
 				var i = _g1++;
-				result[i] = _this[i].split("_")[1];
+				var f = _this[i];
+				var typeFields1;
+				if(StringTools.startsWith(f,"get_") || StringTools.startsWith(f,"set_")) {
+					var parts = f.split("_");
+					parts.shift();
+					typeFields1 = parts.join("_");
+				} else {
+					typeFields1 = f;
+				}
+				result[i] = typeFields1;
 			}
 			typeFields = result;
 		} else {
 			typeFields = [];
 		}
 		fields = fields.length == 0 ? typeFields : fields;
+		var baseFields = [];
+		var baseClass = js_Boot.getClass(base);
+		if(baseClass != null) {
+			baseFields = Type.getInstanceFields(baseClass);
+		}
 		var _g2 = 0;
 		while(_g2 < fields.length) {
 			var ff = fields[_g2];
@@ -1674,7 +1859,11 @@ dropecho_interop_Extender.defaults = function(base,extension) {
 			} else if(bfIsObject) {
 				dropecho_interop_Extender.defaults(baseField,exField);
 			} else {
-				base[ff] = exField;
+				try {
+					base[ff] = exField;
+				} catch( ex1 ) {
+					console.log("dropecho/interop/Extender.hx:82:","FAILED SETTING PROP: " + ff + " error: " + Std.string(((ex1) instanceof js__$Boot_HaxeError) ? ex1.val : ex1));
+				}
 			}
 		}
 	}

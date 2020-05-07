@@ -13,28 +13,45 @@ import dropecho.dungen.ca.Generator as CaGen;
 class Map2dTest {
 	@Test
 	public function bspMapTest() {
-		var sample = CaGen.generate({
-			width: 24,
-			height: 12,
-			start_fill_percent: 64,
-			tile_floor: 1,
-			tile_wall: 0
-		});
+		// var sample = CaGen.generate({
+		//   width: 24,
+		//   height: 12,
+		//   start_fill_percent: 64,
+		//   tile_floor: 1,
+		//   tile_wall: 0
+		// });
 
 		// var bsp = new Generator({
-		//   width: 16,
-		//   height: 16,
+		//   width: 12,
+		//   height: 8,
 		//   minWidth: 3,
 		//   minHeight: 3,
 		//   depth: 1,
 		//   ratio: .95
 		// }).generate();
-
+		//
 		// var sample = RoomGenerator.buildRooms(bsp);
-		trace(sample);
 
+		// var sample = new Map2d(4, 4);
+		// sample._mapData = [
+		//   1, 1, 1, 1,
+		//   1, 0, 0, 0,
+		//   1, 0, 1, 0,
+		//   1, 0, 0, 0,
+		// ];
+
+    var sample = new Map2d(5, 5);
+    sample._mapData = [
+      1, 1, 0, 1, 1,
+      1, 0, 0, 0, 1,
+      0, 0, 0, 0, 0,
+      1, 0, 0, 0, 1,
+      1, 1, 0, 1, 1,
+    ];
+
+		trace(sample);
 		var gen = new ConvChain(sample);
-		var map = gen.generate(80, 40, 4, 0.1, 10);
+		var map = gen.generate(80, 40, 3, 0.1, 10);
 
 		trace(map);
 		Assert.isTrue(true);

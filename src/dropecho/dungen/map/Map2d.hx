@@ -117,7 +117,9 @@ class Map2d {
 				if (val != 0 && val != 1) {
 					output += String.fromCharCode(val);
 				} else {
-					output += val == 0 ? '#' : '.';
+          // output += val == 0 ? ' ' : String.fromCharCode(9608);
+          // output += val == 0 ? '.' : '#';
+          output += val;
 				}
 			}
 
