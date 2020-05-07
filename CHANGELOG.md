@@ -1,6 +1,17 @@
+## 0.5.0 (2020-05-07)
+
+* CHORE: get started on moving to seedyrng ([e6e9811](https://github.com/dropecho/dungen/commit/e6e9811))
+* CHORE: More tests and examples ([7e59302](https://github.com/dropecho/dungen/commit/7e59302))
+* CHORE: Move everything to use seedyrng for allowed seeds ([b213624](https://github.com/dropecho/dungen/commit/b213624))
+* FEAT: Add convchain generator. ([ae1bfcd](https://github.com/dropecho/dungen/commit/ae1bfcd))
+
+
+
 ## 0.4.0 (2020-05-05)
 
 * Lots of cleanup, setup interop lib ([7567e50](https://github.com/dropecho/dungen/commit/7567e50))
+* Release 0.4.0 ([df7fd41](https://github.com/dropecho/dungen/commit/df7fd41))
+* version ([a3b6162](https://github.com/dropecho/dungen/commit/a3b6162))
 
 
 
