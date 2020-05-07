@@ -3,6 +3,7 @@ package map;
 import massive.munit.Assert;
 import dropecho.dungen.map.Map2d;
 import dropecho.dungen.bsp.Generator;
+import dropecho.dungen.convchain.ConvChain;
 import dropecho.dungen.bsp.BspData;
 import dropecho.dungen.map.generators.RoomGenerator;
 import dropecho.dungen.map.generators.MixedGenerator;
@@ -12,53 +13,29 @@ import dropecho.dungen.ca.Generator as CaGen;
 class Map2dTest {
 	@Test
 	public function bspMapTest() {
-		// var map = RandomGenerator.generate({
-		//   width: 80,
-		//   height: 40,
-		//   start_fill_percent: 52,
-		//   tile_floor: 46,
-		//   tile_wall: 35
-		// });
-		var map = CaGen.generate({
-			width: 80,
-			height: 40,
-			start_fill_percent: 52,
-			tile_floor: 46,
-			tile_wall: 35,
-			steps: [
-				{
-					reps: 2,
-					r1_cutoff: 5,
-					r2_cutoff: 2
-				},
-				{
-					reps: 2,
-					r1_cutoff: 5,
-					r2_cutoff: 0
-				},
-				{
-					reps: 2,
-					r1_cutoff: 5,
-					r2_cutoff: 2
-				},
-				{
-					reps: 2,
-					r1_cutoff: 5,
-					r2_cutoff: 0
-				}
-			]
+		var sample = CaGen.generate({
+			width: 24,
+			height: 12,
+			start_fill_percent: 64,
+			tile_floor: 1,
+			tile_wall: 0
 		});
 
 		// var bsp = new Generator({
-		//   width: 64,
-		//   height: 32,
-		//   minWidth: 8,
-		//   minHeight: 8,
-		//   depth: 6,
+		//   width: 16,
+		//   height: 16,
+		//   minWidth: 3,
+		//   minHeight: 3,
+		//   depth: 1,
 		//   ratio: .95
 		// }).generate();
-		//
-		// var map = RoomGenerator.buildRooms(bsp, {tileFloor: 46, tileWall: 35});
+
+		// var sample = RoomGenerator.buildRooms(bsp);
+		trace(sample);
+
+		var gen = new ConvChain(sample);
+		var map = gen.generate(80, 40, 4, 0.1, 10);
+
 		trace(map);
 		Assert.isTrue(true);
 	}
@@ -77,5 +54,24 @@ class Map2dTest {
 
 		var neighbors = map.getNeighbors(2, 2);
 		Assert.areEqual(neighbors.length, 8);
+	}
+
+	@Test
+	public function get_rect_should_return_correct_tiles() {
+		var sample = new Map2d(8, 8);
+		sample._mapData = [
+			0, 0, 0, 0, 0, 0, 0, 0,
+			1, 1, 1, 1, 1, 1, 1, 1,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0
+		];
+
+		var tiles = sample.getRect(0, 1, 1, 2);
+
+		Assert.areEqual(4, tiles.length);
 	}
 }

@@ -588,6 +588,193 @@ dropecho_dungen_ca_Generator.buildFromCA = function(map,params,step) {
 		map.set(pos1.x,pos1.y,temp.h[i1]);
 	}
 };
+var dropecho_dungen_convchain_ConvChain = $hx_exports["dungen"]["ConvChain"] = function(sample) {
+	this.sample = sample;
+	this.cachedN = null;
+	this.cachedWeights = null;
+	this.rng = new seedyrng_Random();
+};
+dropecho_dungen_convchain_ConvChain.__name__ = "dropecho.dungen.convchain.ConvChain";
+dropecho_dungen_convchain_ConvChain.prototype = {
+	sample: null
+	,cachedN: null
+	,cachedWeights: null
+	,rng: null
+	,seed: null
+	,processWeights: function(sample,n) {
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = n * n;
+		while(_g1 < _g2) {
+			var _ = _g1++;
+			_g.push(0.0);
+		}
+		var weights = _g;
+		var pattern = function(fn) {
+			var result = [];
+			var _g3 = 0;
+			var _g4 = n;
+			while(_g3 < _g4) {
+				var y = _g3++;
+				var _g31 = 0;
+				var _g41 = n;
+				while(_g31 < _g41) {
+					var x = _g31++;
+					result[x + y * n] = fn(x,y);
+				}
+			}
+			return result;
+		};
+		var rotate = function(p) {
+			return pattern(function(x1,y1) {
+				return p[n - 1 - y1 + x1 * n];
+			});
+		};
+		var reflect = function(p1) {
+			return pattern(function(x2,y2) {
+				return p1[n - 1 - x2 + y2 * n];
+			});
+		};
+		var index = function(p2) {
+			var result1 = 0;
+			var power = 1;
+			var _g32 = 0;
+			var _g42 = p2.length;
+			while(_g32 < _g42) {
+				var i = _g32++;
+				result1 += p2[p2.length - 1 - i] != 0 ? power : 0;
+				power *= 2;
+			}
+			return result1;
+		};
+		var _g33 = 0;
+		var _g43 = sample._height;
+		while(_g33 < _g43) {
+			var y3 = [_g33++];
+			var _g34 = 0;
+			var _g44 = sample._width;
+			while(_g34 < _g44) {
+				var x3 = [_g34++];
+				var initial = (function(x4,y4) {
+					return function(dx,dy) {
+						var a = (x4[0] + dx) % sample._width;
+						var b = (y4[0] + dy) % sample._height;
+						return sample._mapData[a + b * sample._width];
+					};
+				})(x3,y3);
+				var p0 = pattern(initial);
+				weights[index(p0)] += 1;
+			}
+		}
+		var _g5 = 0;
+		var _g6 = weights.length;
+		while(_g5 < _g6) {
+			var k = _g5++;
+			if(weights[k] <= 0 || weights[k] == null) {
+				weights[k] = 0.1;
+			}
+		}
+		console.log("src/dropecho/dungen/convchain/ConvChain.hx:94:","weights: " + Std.string(weights));
+		return weights;
+	}
+	,getWeights: function(n) {
+		if(this.cachedN != n) {
+			this.cachedN = n;
+			this.cachedWeights = this.processWeights(this.sample,n);
+		}
+		return this.cachedWeights;
+	}
+	,generateBaseField: function(width,height) {
+		return dropecho_dungen_map_generators_RandomGenerator.generate({ height : height, width : width});
+	}
+	,applyChanges: function(field,weights,resultWidth,resultHeight,n,temperature,changes) {
+		var r;
+		var q;
+		var x;
+		var y;
+		var ind;
+		var difference;
+		var _g = 0;
+		var _g1 = changes;
+		while(_g < _g1) {
+			var _ = _g++;
+			q = 1.0;
+			r = this.rng.randomInt(0,resultWidth * resultHeight);
+			x = r % resultWidth | 0;
+			y = r / resultWidth | 0;
+			var _g2 = y - n + 1;
+			var _g11 = y + n - 1;
+			while(_g2 < _g11) {
+				var sy = _g2++;
+				var _g3 = x - n + 1;
+				var _g12 = x + n - 1;
+				while(_g3 < _g12) {
+					var sx = _g3++;
+					ind = 0;
+					difference = 0;
+					var _g4 = 0;
+					var _g13 = n;
+					while(_g4 < _g13) {
+						var dy = _g4++;
+						var _g5 = 0;
+						var _g14 = n;
+						while(_g5 < _g14) {
+							var dx = _g5++;
+							var power = 1 << dy * n + dx;
+							var X = sx + dx;
+							var Y = sy + dy;
+							if(X < 0) {
+								X += resultWidth;
+							} else if(X >= resultWidth) {
+								X -= resultWidth;
+							}
+							if(Y < 0) {
+								Y += resultHeight;
+							} else if(Y >= resultHeight) {
+								Y -= resultHeight;
+							}
+							var value = field.get(X,Y);
+							ind += value != 0 ? power : 0;
+							if(X == x && Y == y) {
+								difference = value != 0 ? power : -power;
+							}
+						}
+					}
+					var a = weights[ind - difference];
+					var b = weights[ind];
+					q *= a / b;
+					if(typeof(q) == "number") {
+						q = 0.5;
+					}
+				}
+			}
+			if(q >= 1) {
+				field.set(x,y,field.get(x,y) == 0 ? 1 : 0);
+			} else {
+				var tmp = temperature != 1;
+				if(q > this.rng.random()) {
+					field.set(x,y,field.get(x,y) == 0 ? 1 : 0);
+				}
+			}
+		}
+	}
+	,generate: function(width,height,n,temperature,iterations) {
+		var changesPerIterations = width * height;
+		var field = this.generateBaseField(width,height);
+		var field2 = this.generateBaseField(width,height);
+		console.log("src/dropecho/dungen/convchain/ConvChain.hx:204:",field.toString());
+		console.log("src/dropecho/dungen/convchain/ConvChain.hx:205:",field2.toString());
+		var weights = this.getWeights(n);
+		var _g = 0;
+		var _g1 = iterations;
+		while(_g < _g1) {
+			var _ = _g++;
+			this.applyChanges(field,weights,width,height,n,temperature,changesPerIterations);
+		}
+		return field;
+	}
+	,__class__: dropecho_dungen_convchain_ConvChain
+};
 var dropecho_dungen_export__$TiledExporter_TiledMap = function(map) {
 	this.width = 0;
 	this.version = 1;
@@ -684,7 +871,7 @@ dropecho_dungen_export_TiledExporter.export = function(map) {
 	var json = JSON.stringify(tiled_map,null," ");
 	return json;
 };
-var dropecho_dungen_map_Map2d = function(width,height,initTileData) {
+var dropecho_dungen_map_Map2d = $hx_exports["dungen"]["Map2d"] = function(width,height,initTileData) {
 	if(initTileData == null) {
 		initTileData = 0;
 	}
@@ -826,7 +1013,7 @@ dropecho_dungen_map_Map2d.prototype = {
 				if(val != 0 && val != 1) {
 					output += String.fromCodePoint(val);
 				} else {
-					output += val;
+					output += val == 1 ? "#" : ".";
 				}
 			}
 			output += "\n";
@@ -1131,24 +1318,36 @@ dropecho_dungen_map_generators_MixedGenerator.buildRooms = function(tree,opts) {
 	povisitor.run(tree.root,makeCorridors);
 	return map;
 };
+var dropecho_dungen_map_generators_RandomParams = function() {
+	this.seed = "0";
+	this.start_fill_percent = 65;
+	this.tile_wall = 0;
+	this.tile_floor = 1;
+	this.width = 64;
+	this.height = 64;
+};
+dropecho_dungen_map_generators_RandomParams.__name__ = "dropecho.dungen.map.generators.RandomParams";
+dropecho_dungen_map_generators_RandomParams.prototype = {
+	height: null
+	,width: null
+	,tile_floor: null
+	,tile_wall: null
+	,start_fill_percent: null
+	,seed: null
+	,__class__: dropecho_dungen_map_generators_RandomParams
+};
 var dropecho_dungen_map_generators_RandomGenerator = $hx_exports["dungen"]["RandomGenerator"] = function() { };
 dropecho_dungen_map_generators_RandomGenerator.__name__ = "dropecho.dungen.map.generators.RandomGenerator";
-dropecho_dungen_map_generators_RandomGenerator.generate = function(params) {
+dropecho_dungen_map_generators_RandomGenerator.generate = function(opts) {
+	var params = dropecho_interop_Extender.defaults(new dropecho_dungen_map_generators_RandomParams(),opts);
 	var random = new seedyrng_Random();
-	if(params.seed != null) {
-		random.setStringSeed(params.seed);
-	}
-	var height = params.height;
-	var width = params.width;
-	var tile_floor = params.tile_floor;
-	var tile_wall = params.tile_wall;
-	var start_fill_percent = params.start_fill_percent;
-	var map = new dropecho_dungen_map_Map2d(width,height,tile_wall);
+	random.setStringSeed(params.seed);
+	var map = new dropecho_dungen_map_Map2d(params.width,params.height,params.tile_wall);
 	var _g = 0;
-	var _g1 = width * height;
+	var _g1 = params.width * params.height;
 	while(_g < _g1) {
 		var i = _g++;
-		map._mapData[i] = random.random() * 100 > start_fill_percent ? tile_floor : tile_wall;
+		map._mapData[i] = random.random() * 100 > params.start_fill_percent ? params.tile_floor : params.tile_wall;
 	}
 	return map;
 };

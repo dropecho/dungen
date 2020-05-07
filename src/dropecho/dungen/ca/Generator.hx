@@ -24,7 +24,7 @@ class CA_PARAMS {
 	public var tile_floor:Int = 1;
 	public var tile_wall:Int = 0;
 	public var start_fill_percent:Int = 65;
-  public var seed:String = "0";
+	public var seed:String = "0";
 
 	public function new() {
 		steps = [
@@ -57,7 +57,7 @@ class CA_PARAMS {
 @:expose("dungen.CAGenerator")
 class Generator {
 	public static function generate(?opts:Dynamic = null):Map2d {
-		var params = Extender.defaults(new CA_PARAMS(), opts);
+		var params:CA_PARAMS = Extender.defaults(new CA_PARAMS(), opts);
 
 		var map = RandomGenerator.generate(params);
 		map.ensureEdgesAreWalls(params.tile_wall);

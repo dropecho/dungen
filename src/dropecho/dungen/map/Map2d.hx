@@ -6,6 +6,7 @@ typedef Tile2d = {
 	onMap:Bool
 }
 
+@:expose("dungen.Map2d")
 class Map2d {
 	public var _width:Int = 0;
 	public var _height:Int = 0;
@@ -103,16 +104,20 @@ class Map2d {
 		return _mapData[XYtoIndex(x, y)];
 	}
 
+	public function getRect(x:Int, y:Int, x2:Int, y2:Int):Array<Int> {
+		return [for (i in x...x2 + 1) for (j in y...y2 + 1) this.get(i, j)];
+	}
+
 	public function toString():String {
 		var output = "\n MAP2d: \n\n";
 
 		for (y in 0..._height) {
 			for (x in 0..._width) {
-				var val = _mapData[XYtoIndex(x, y)];
+        var val = _mapData[XYtoIndex(x, y)];
 				if (val != 0 && val != 1) {
 					output += String.fromCharCode(val);
 				} else {
-					output += val;
+					output += val == 0 ? '#' : '.';
 				}
 			}
 
