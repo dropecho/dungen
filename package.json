@@ -19,6 +19,7 @@
     "bump": "npm version --no-git-tag-version",
     "haxe:submit": "haxelib run submit",
     "version": "npm run build-changelog",
-    "postversion": "git add . && git commit -m 'version' && npm run haxe:submit && npm publish"
+    "postversion": "git add . && git commit -m 'version' && npm run haxe:submit && npm publish && npm run cs:release",
+    "release:cs": "hub release create -a dist/cs/dropecho.dungen/bin/dropecho.dungen.dll -m \"DLL for unity.\" `git tag | tail -n1`"
   }
 }
