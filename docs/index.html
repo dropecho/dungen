@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <script src="dungen.js"></script>
+  <script src="dropecho.dungen.js"></script>
   <script src="dat.gui.min.js"></script>
     <title></title>
 </head>
@@ -46,15 +46,31 @@
 
   var opts = {
     type: 'room',
+    seed: '0',
+    generateNewSeed: function (){
+      opts.seed = Math.round(Math.random() * 99999999).toString();
+      this.generate();
+    },
     generate: function (){
       switch(opts.type){
         case 'cave': 
+          caveGenParams.seed = opts.seed;
           map = dungen.CAGenerator.generate(caveGenParams);
           break;
         case 'walk': 
+          caveGenParams.seed = opts.seed;
           map = dungen.WalkGenerator.generate(caveGenParams);
           break;
+        case 'random': 
+          caveGenParams.seed = opts.seed;
+          map = dungen.RandomGenerator.generate(caveGenParams);
+          break;
+        case 'mixed': 
+          bsp.seed = opts.seed;
+          map = dungen.MixedGenerator.buildRooms(bsp.generate(), roomGenParams);
+          break;
         case 'room': 
+          bsp.seed = opts.seed;
           map = dungen.RoomGenerator.buildRooms(bsp.generate(), roomGenParams);
           break;
       }
@@ -89,7 +105,8 @@
   };
 
   var gui = new dat.GUI();
-  gui.add(opts, 'type', ['room', 'cave', 'walk']);
+  gui.add(opts, 'type', ['room', 'cave', 'walk', 'random', 'mixed']);
+  gui.add(opts, 'seed', "0").listen();
 
   (function addRoomGui(){
     var roomGui = gui.addFolder('room') 
@@ -119,6 +136,7 @@
   })();
 
   gui.add(opts, 'generate');
+  gui.add(opts, 'generateNewSeed');
   gui.add(opts, 'generateJson');
 
 

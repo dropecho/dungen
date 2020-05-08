@@ -28,6 +28,7 @@ class Generator extends BSPGeneratorConfig {
 	}
 
 	public function generate():BSPTree {
+		random.setStringSeed(this.seed);
 		var rootData = {
 			height: height,
 			width: width,

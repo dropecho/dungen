@@ -8,6 +8,7 @@ import dropecho.ds.BSPTree;
 import dropecho.ds.algos.InOrderTraversal;
 import dropecho.ds.algos.PostOrderTraversal;
 
+@:expose("dungen.MixedGenerator")
 class MixedGenerator {
 	public static function buildRooms(tree:BSPTree, opts:Dynamic):Map2d { // tile_floor:Int = 1, tile_wall:Int = 0) : Map2d {
 		var random = new Random();
