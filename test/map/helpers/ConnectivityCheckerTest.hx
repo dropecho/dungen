@@ -1,7 +1,7 @@
 package map.helpers;
 
 import massive.munit.Assert;
-import dropecho.dungen.map.Map2d;
+import dropecho.dungen.Map2d;
 import dropecho.dungen.bsp.BspData;
 import dropecho.dungen.map.helpers.ConnectivityChecker;
 

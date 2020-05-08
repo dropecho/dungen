@@ -1,4 +1,4 @@
-package dropecho.dungen.map.generators;
+package dropecho.dungen.generators;
 
 import seedyrng.Random;
 import dropecho.dungen.map.helpers.Utils;

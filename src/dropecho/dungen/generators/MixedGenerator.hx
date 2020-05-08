@@ -1,7 +1,7 @@
-package dropecho.dungen.map.generators;
+package dropecho.dungen.generators;
 
 import seedyrng.Random;
-import dropecho.dungen.ca.Generator as CAGen;
+import dropecho.dungen.generators.CAGenerator;
 import dropecho.interop.Extender;
 import dropecho.ds.BSPNode;
 import dropecho.ds.BSPTree;
@@ -45,7 +45,7 @@ class MixedGenerator {
 			var roomStartX:Int = node.value.x + 1;
 			var roomStartY:Int = node.value.y + 1;
 
-			var cave = CAGen.generate({height: node.value.height, width: node.value.width});
+			var cave = CAGenerator.generate({height: node.value.height, width: node.value.width});
 
 			for (x in 0...cave._width) {
 				for (y in 0...cave._height) {

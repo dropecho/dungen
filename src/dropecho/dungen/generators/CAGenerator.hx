@@ -1,8 +1,8 @@
-package dropecho.dungen.ca;
+package dropecho.dungen.generators;
 
-import dropecho.dungen.map.generators.RandomGenerator;
+import dropecho.dungen.generators.RandomGenerator;
 import dropecho.interop.Extender;
-import dropecho.dungen.map.Map2d;
+import dropecho.dungen.Map2d;
 
 @:expose("dungen.CA_PARAM_STEP")
 // class CA_PARAM_STEP = {
@@ -55,7 +55,7 @@ class CA_PARAMS {
 }
 
 @:expose("dungen.CAGenerator")
-class Generator {
+class CAGenerator {
 	public static function generate(?opts:Dynamic = null):Map2d {
 		var params:CA_PARAMS = Extender.defaults(new CA_PARAMS(), opts);
 

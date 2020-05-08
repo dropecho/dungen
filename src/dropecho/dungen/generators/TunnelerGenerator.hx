@@ -1,9 +1,9 @@
-package dropecho.dungen.map.generators;
+package dropecho.dungen.generators;
 
 import seedyrng.Random;
-import dropecho.dungen.ca.Generator as CAGen;
+import dropecho.dungen.generators.CAGenerator;
 import dropecho.interop.Extender;
-import dropecho.dungen.map.Map2d;
+import dropecho.dungen.Map2d;
 
 @:expose("dungen.TunnelerGenerator")
 class TunnelerGenerator {

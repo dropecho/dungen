@@ -1,7 +1,7 @@
 package map;
 
 import massive.munit.Assert;
-import dropecho.dungen.map.Map2d;
+import dropecho.dungen.Map2d;
 import dropecho.dungen.map.MapHelper;
 
 class MapHelperTest {

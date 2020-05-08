@@ -1,19 +1,19 @@
 package map;
 
 import massive.munit.Assert;
-import dropecho.dungen.map.Map2d;
+import dropecho.dungen.Map2d;
 import dropecho.dungen.bsp.Generator;
-import dropecho.dungen.convchain.ConvChain;
+import dropecho.dungen.generators.ConvChain;
 import dropecho.dungen.bsp.BspData;
-import dropecho.dungen.map.generators.RoomGenerator;
-import dropecho.dungen.map.generators.MixedGenerator;
-import dropecho.dungen.map.generators.RandomGenerator;
-import dropecho.dungen.ca.Generator as CaGen;
+import dropecho.dungen.generators.RoomGenerator;
+import dropecho.dungen.generators.MixedGenerator;
+import dropecho.dungen.generators.RandomGenerator;
+import dropecho.dungen.generators.CAGenerator;
 
 class Map2dTest {
 	@Test
 	public function bspMapTest() {
-		// var sample = CaGen.generate({
+		// var sample = CAGenerator.generate({
 		//   width: 24,
 		//   height: 12,
 		//   start_fill_percent: 64,

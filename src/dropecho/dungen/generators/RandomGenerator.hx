@@ -1,4 +1,4 @@
-package dropecho.dungen.map.generators;
+package dropecho.dungen.generators;
 
 import seedyrng.Random;
 import dropecho.interop.Extender;
@@ -17,8 +17,7 @@ class RandomParams {
 @:expose("dungen.RandomGenerator")
 class RandomGenerator {
 	public static function generate(?opts:Dynamic = null):Map2d {
-    // var params = new RandomParams();
-    var params:RandomParams = Extender.defaults(new RandomParams(), opts);
+		var params:RandomParams = Extender.defaults(new RandomParams(), opts);
 
 		var random:Random = new Random();
 		random.setStringSeed(params.seed);

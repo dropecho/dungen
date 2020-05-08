@@ -1,4 +1,4 @@
-package dropecho.dungen.map;
+package dropecho.dungen;
 
 typedef Tile2d = {
 	x:Int,

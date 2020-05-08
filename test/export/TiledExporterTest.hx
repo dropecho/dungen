@@ -3,9 +3,9 @@ package export;
 import massive.munit.Assert;
 import dropecho.dungen.bsp.Generator;
 import dropecho.dungen.bsp.BspData;
-import dropecho.dungen.map.generators.RoomGenerator;
-import dropecho.dungen.map.Map2d;
-import dropecho.dungen.ca.Generator as CaGen;
+import dropecho.dungen.generators.RoomGenerator;
+import dropecho.dungen.Map2d;
+import dropecho.dungen.generators.CAGenerator;
 import dropecho.dungen.export.TiledExporter;
 #if !js
 import sys.io.File;
@@ -36,7 +36,7 @@ class TiledExporterTest {
 			start_fill_percent: 45
 		};
 
-		var map = CaGen.generate(params);
+		var map = CAGenerator.generate(params);
     var json = TiledExporter.export(map);
 
 		#if !js

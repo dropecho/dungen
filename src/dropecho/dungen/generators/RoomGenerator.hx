@@ -1,4 +1,4 @@
-package dropecho.dungen.map.generators;
+package dropecho.dungen.generators;
 
 import dropecho.interop.Extender;
 import dropecho.ds.BSPTree;

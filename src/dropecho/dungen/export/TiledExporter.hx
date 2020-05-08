@@ -1,6 +1,6 @@
 package dropecho.dungen.export;
 
-import dropecho.dungen.map.Map2d;
+import dropecho.dungen.Map2d;
 import haxe.Json;
 
 private class TiledMap {

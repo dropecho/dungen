@@ -1,6 +1,6 @@
 package dropecho.dungen.map;
 
-import dropecho.dungen.map.Map2d;
+import dropecho.dungen.Map2d;
 import haxe.ds.IntMap;
 
 using Lambda;
