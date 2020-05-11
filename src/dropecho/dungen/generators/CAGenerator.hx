@@ -4,12 +4,6 @@ import dropecho.dungen.generators.RandomGenerator;
 import dropecho.interop.Extender;
 import dropecho.dungen.Map2d;
 
-@:expose("dungen.CA_PARAM_STEP")
-// class CA_PARAM_STEP = {
-//   public var reps:Int = 4;
-//   public var r1_cutoff:Int = 5;
-//   public var r2_cutoff:Int = 2;
-// }
 typedef CA_PARAM_STEP = {
 	reps:Int,
 	r1_cutoff:Int,
@@ -39,18 +33,6 @@ class CA_PARAMS {
 				r2_cutoff: 0
 			}
 		];
-		// var step1 = new CA_PARAM_STEP();
-		// step1.reps = 4;
-		// step1.r1_cutoff = 5;
-		// step1.r2_cutoff = 2;
-		//
-		// var step2 = new CA_PARAM_STEP();
-		// step2.reps = 3;
-		// step2.r1_cutoff = 5;
-		// step2.r2_cutoff = 0;
-		//
-		// steps.push(step1);
-		// steps.push(step2);
 	}
 }
 
@@ -58,9 +40,7 @@ class CA_PARAMS {
 class CAGenerator {
 	public static function generate(?opts:Dynamic = null):Map2d {
 		var params:CA_PARAMS = Extender.defaults(new CA_PARAMS(), opts);
-
 		var map = RandomGenerator.generate(params);
-		map.ensureEdgesAreWalls(params.tile_wall);
 
 		for (step in params.steps) {
 			for (_ in 0...step.reps) {
@@ -68,17 +48,16 @@ class CAGenerator {
 			}
 		}
 
-		map.ensureEdgesAreWalls(params.tile_wall);
 		return map;
 	}
 
 	private static function buildFromCA(map:Map2d, params:CA_PARAMS, step:CA_PARAM_STEP):Void {
 		var temp = new Map<Int, Int>();
 
-		for (x in 1...params.width - 1) {
-			for (y in 1...params.height - 1) {
-				var nCount = map.getNeighborCount(x, y, params.tile_floor);
-				var nCount2 = map.getNeighborCount(x, y, params.tile_floor, 2);
+		for (x in 0...params.width) {
+			for (y in 0...params.height) {
+				var nCount = map.getNeighborCount(x, y, params.tile_wall);
+				var nCount2 = map.getNeighborCount(x, y, params.tile_wall, 2);
 				var pos = map.XYtoIndex(x, y);
 
 				if (nCount >= step.r1_cutoff || nCount2 <= step.r2_cutoff) {

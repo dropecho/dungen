@@ -32,12 +32,12 @@ class Map2d {
 	}
 
 	public function ensureEdgesAreWalls(tileType:Int = 0) {
-		for (x in 0...(_width - 1)) {
+		for (x in 0..._width) {
 			_mapData[XYtoIndex(x, 0)] = tileType;
-			_mapData[XYtoIndex(x, _height - 1)] = tileType;
+			_mapData[XYtoIndex(x, _height-1)] = tileType;
 		}
 
-		for (y in 0...(_height - 1)) {
+		for (y in 0..._height) {
 			_mapData[XYtoIndex(0, y)] = tileType;
 			_mapData[XYtoIndex(_width - 1, y)] = tileType;
 		}
