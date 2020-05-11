@@ -9,6 +9,7 @@ package dropecho.dungen.generators;
 import seedyrng.Random;
 import dropecho.dungen.generators.RandomGenerator;
 import dropecho.dungen.Map2d;
+import dropecho.dungen.map.Pattern;
 
 @:expose("dungen.ConvChain")
 class ConvChain {
@@ -30,55 +31,13 @@ class ConvChain {
 		var size = Std.int(Math.pow(2, n * n));
 		var weights = [for (_ in 0...(size)) 0.0];
 
-		inline function pattern(fn:(Int, Int) -> Int) {
-			return [for (y in 0...n) for (x in 0...n) fn(x, y)];
-		}
-
-		inline function rotate(p:Array<Int>) {
-			return pattern((x, y) -> p[n - 1 - y + x * n]);
-		}
-
-		inline function reflect(p:Array<Int>) {
-			return pattern((x, y) -> p[n - 1 - x + y * n]);
-		}
-
-		inline function index(p:Array<Int>):Int {
-			var result = 0;
-			var power = 1;
-
-			for (i in 0...p.length) {
-				result += p[p.length - 1 - i] != 0 ? power : 0;
-				power *= 2;
-			}
-
-			return result;
-		};
-
-		for (y in 0...sample._height) {
-			for (x in 0...sample._width) {
-				function initial(dx, dy) {
-					var a = ((x + dx) % sample._width);
-					var b = ((y + dy) % sample._height);
-					return sample.get(a, b);
+		for (x in 0...sample._height) {
+			for (y in 0...sample._width) {
+				var rect = sample.getRect(x, y, x + n - 1, y + n - 1, true);
+				var p = Pattern.init(n, rect);
+				for (h in 0...p.hashes.length) {
+					weights[p.hashes[h]] += 1;
 				}
-
-				var p0 = pattern(initial);
-				var p1 = rotate(p0);
-				var p2 = rotate(p1);
-				var p3 = rotate(p2);
-				var p4 = reflect(p0);
-				var p5 = reflect(p1);
-				var p6 = reflect(p2);
-				var p7 = reflect(p3);
-
-				weights[index(p0)] += 1;
-				weights[index(p1)] += 1;
-				weights[index(p2)] += 1;
-				weights[index(p3)] += 1;
-				weights[index(p4)] += 1;
-				weights[index(p5)] += 1;
-				weights[index(p6)] += 1;
-				weights[index(p7)] += 1;
 			}
 		}
 
@@ -126,10 +85,10 @@ class ConvChain {
 	public function applyChanges(field:Map2d, weights:Array<Float>, n:Int, temperature:Float, changes:Int):Void {
 		var r:Int;
 		var q:Float;
-		var x;
-		var y;
-		var ind;
-		var difference;
+		var x:Int;
+		var y:Int;
+		var ind:Int;
+		var difference:Int;
 
 		for (_ in 0...changes) {
 			q = 1.0;
@@ -137,6 +96,7 @@ class ConvChain {
 			x = Std.int(r % field._width);
 			y = Std.int(r / field._width);
 
+			// Check similarity
 			for (sy in (y - n + 1)...(y + n)) {
 				for (sx in (x - n + 1)...(x + n)) {
 					ind = 0;
@@ -147,21 +107,11 @@ class ConvChain {
 							var power = 1 << (dy * n + dx);
 							var X = sx + dx;
 							var Y = sy + dy;
-							var value;
 
-							if (X < 0) {
-								X += field._width;
-							} else if (X >= field._width) {
-								X -= field._width;
-							}
+							X = Std.int(Math.abs(X % field._width));
+							Y = Std.int(Math.abs(Y % field._height));
 
-							if (Y < 0) {
-								Y += field._height;
-							} else if (Y >= field._height) {
-								Y -= field._height;
-							}
-
-							value = field.get(X, Y);
+							var value = field.get(X, Y);
 							ind += value != 0 ? power : 0;
 
 							if (X == x && Y == y) {
@@ -180,7 +130,7 @@ class ConvChain {
 				field.set(x, y, field.get(x, y) != 1 ? 1 : 0);
 			} else {
 				if (temperature != 1) {
-          q = Math.pow(q, 1.0 / temperature);
+					q = Math.pow(q, 1.0 / temperature);
 				}
 
 				if (q > rng.random()) {
