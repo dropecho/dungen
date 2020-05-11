@@ -9,11 +9,10 @@
 -lib munit
 -lib hamcrest
 
-
 -main TestMain
 
--cs artifacts/cs_test/
+# -cs artifacts/cs_test/
 
 # -neko artifacts/test/neko_test.n
-# -lib hxnodejs
-# -js artifacts/test/js_test.js
+-lib hxnodejs
+-js artifacts/test/js_test.js
