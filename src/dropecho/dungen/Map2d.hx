@@ -1,5 +1,7 @@
 package dropecho.dungen;
 
+using Lambda;
+
 typedef Tile2d = {
 	x:Int,
 	y:Int,
@@ -41,12 +43,21 @@ class Map2d {
 		}
 	}
 
-	public function getNeighborCount(x:Int, y:Int, neighborType:Int, dist:Int = 1):Int {
+	/**
+	 * Get count of neighbors within distance matching neighborType.
+	 *
+	 * @param {Int} x - The x position of the tile.
+	 * @param {Int} y - The y position of the tile.
+	 * @param {Int} neighborType - The integer representing the type of tile to find.
+	 * @param {Int} [dist] - The distance to search within.
+	 * @return {Int} The count of matching neighbors.
+	 */
+	public function getNeighborCount(x:Int, y:Int, neighborType:Int, dist:Int = 1, diagonal:Bool = true):Int {
 		function isNeighborType(tile) {
-			return _mapData[XYtoIndex(tile.x, tile.y)] == neighborType || tile.onMap == false;
+			return get(tile.x, tile.y) == neighborType;
 		}
 
-		return getNeighbors(x, y, dist).filter(isNeighborType).length;
+		return getNeighbors(x, y, dist, diagonal).count(isNeighborType);
 	}
 
 	public function getNeighbors(x:Int, y:Int, dist:Int = 1, diagonal:Bool = true):Array<Tile2d> {
@@ -57,13 +68,13 @@ class Map2d {
 		for (i in -dist...dist + 1) {
 			for (j in -dist...dist + 1) {
 				isSelf = (i == 0 && j == 0);
-				isNotOnMap = x + i < 0 || x + i > (_width - 1) || y + j < 0 || y + j > (_height - 1);
+				isNotOnMap = x + i < 0 || x + i >= (_width) || y + j < 0 || y + j >= (_height);
 
 				if (isSelf || isNotOnMap) {
 					continue;
 				}
 
-				if (!diagonal && i == j) {
+				if (!diagonal && ((i == j) || (i == -dist && j == dist) || (j == -dist && i == dist))) {
 					continue;
 				}
 
@@ -74,7 +85,7 @@ class Map2d {
 		return neighbors;
 	}
 
-	public function XYtoIndex(x:Int, y:Int):Int {
+	inline public function XYtoIndex(x:Int, y:Int):Int {
 		return (_width * y) + x;
 	}
 
@@ -88,7 +99,7 @@ class Map2d {
 		}
 	}
 
-	public function set(x:Int, y:Int, data:Int):Void {
+	inline public function set(x:Int, y:Int, data:Int):Void {
 		_mapData[XYtoIndex(x, y)] = data;
 	}
 
@@ -100,29 +111,57 @@ class Map2d {
 		}
 	}
 
-	public function get(x:Int, y:Int):Int {
+	public function splat(map:Map2d, x:Int, y:Int) {
+		for (i in 0...map._width) {
+			for (j in 0...map._height) {
+				this.set(i + x, j + y, map.get(i, j));
+			}
+		}
+	}
+
+	inline public function get(x:Int, y:Int):Int {
 		return _mapData[XYtoIndex(x, y)];
 	}
 
-	public function getRect(x:Int, y:Int, x2:Int, y2:Int):Array<Int> {
-		return [for (i in x...x2 + 1) for (j in y...y2 + 1) this.get(i, j)];
+	public function getRect(x:Int, y:Int, x2:Int, y2:Int, wrap:Bool = false):Array<Int> {
+		return [
+			for (i in x...x2 + 1) {
+				for (j in y...y2 + 1) {
+					if (wrap) {
+						this.get(i % _width, j % _height);
+					} else {
+						this.get(i, j);
+					}
+				}
+			}
+		];
 	}
 
-	public function toString():String {
+	public function toPrettyString(char:Array<String> = null) {
+		if (char == null) {
+			char = ["#", "."];
+		}
 		var output = "\n MAP2d: \n\n";
 
 		for (y in 0..._height) {
 			for (x in 0..._width) {
-        var val = _mapData[XYtoIndex(x, y)];
-				if (val != 0 && val != 1) {
-					output += String.fromCharCode(val);
-				} else {
-          // output += val == 0 ? ' ' : String.fromCharCode(9608);
-          // output += val == 0 ? '.' : '#';
-          output += val;
-				}
+				output += char[_mapData[XYtoIndex(x, y)]];
 			}
 
+			output += "\n";
+		}
+
+		return output;
+	}
+
+	public function toString(ascii:Bool = false):String {
+		var output = "\n MAP2d: \n\n";
+
+		for (y in 0..._height) {
+			for (x in 0..._width) {
+				var val = _mapData[XYtoIndex(x, y)];
+				output += val;
+			}
 			output += "\n";
 		}
 
