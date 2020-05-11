@@ -34,7 +34,7 @@ class Map2d {
 	public function ensureEdgesAreWalls(tileType:Int = 0) {
 		for (x in 0..._width) {
 			_mapData[XYtoIndex(x, 0)] = tileType;
-			_mapData[XYtoIndex(x, _height-1)] = tileType;
+			_mapData[XYtoIndex(x, _height - 1)] = tileType;
 		}
 
 		for (y in 0..._height) {
@@ -111,10 +111,10 @@ class Map2d {
 		}
 	}
 
-	public function splat(map:Map2d, x:Int, y:Int) {
-		for (i in 0...map._width) {
-			for (j in 0...map._height) {
-				this.set(i + x, j + y, map.get(i, j));
+	public function splat(other:Map2d, x:Int, y:Int) {
+		for (i in 0...other._width) {
+			for (j in 0...other._height) {
+				this.set(i + x, j + y, other.get(i, j));
 			}
 		}
 	}
@@ -124,17 +124,19 @@ class Map2d {
 	}
 
 	public function getRect(x:Int, y:Int, x2:Int, y2:Int, wrap:Bool = false):Array<Int> {
-		return [
-			for (i in x...x2 + 1) {
-				for (j in y...y2 + 1) {
-					if (wrap) {
-						this.get(i % _width, j % _height);
-					} else {
-						this.get(i, j);
-					}
-				}
-			}
-		];
+    var arr = new Array<Int>();
+
+    return [
+      for (j in y...y2 + 1) {
+        for (i in x...x2 + 1) {
+          if (wrap) {
+            this.get(i % _width, j % _height);
+          } else {
+            this.get(i, j);
+          }
+        }
+      }
+    ];
 	}
 
 	public function toPrettyString(char:Array<String> = null) {

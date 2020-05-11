@@ -9,11 +9,32 @@ class Pattern extends Map2d {
 		super(size, size, initTileData);
 	}
 
-	public static function init(size:Int, pattern:Array<Int> = null) {
+	public static function init(size:Int, pattern:Array<Int> = null, symmetry:Int = 255) {
 		var p = new Pattern(size, 0);
 		p._mapData = pattern;
-		p.buildVariations();
+		p.buildVariations(symmetry);
 		return p;
+	}
+
+	public function matchesIndex(map:Map2d, x:Int, y:Int):Int {
+		var toMatch:Array<Int> = map.getRect(x, y, x + _width - 1, y + _height - 1);
+		var match = false;
+
+		for (p in 0...patterns.length) {
+			var pattern = patterns[p];
+
+			for (tile in 0...pattern.length) {
+				match = toMatch[tile] == pattern[tile];
+				if (!match) {
+					break;
+				}
+			}
+
+			if (match) {
+				return p;
+			}
+		}
+		return -1;
 	}
 
 	public function matches(map:Map2d, x:Int, y:Int):Bool {
