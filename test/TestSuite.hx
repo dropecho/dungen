@@ -3,6 +3,7 @@ import massive.munit.TestSuite;
 import map.PatternTest;
 import map.MapHelperTest;
 import map.Map2dTest;
+import map.helpers.RegionManagerTest;
 import map.helpers.ConnectivityCheckerTest;
 import bsp.GeneratorTest;
 import bsp.NodeTest;
@@ -21,6 +22,7 @@ class TestSuite extends massive.munit.TestSuite
 		add(map.PatternTest);
 		add(map.MapHelperTest);
 		add(map.Map2dTest);
+		add(map.helpers.RegionManagerTest);
 		add(map.helpers.ConnectivityCheckerTest);
 		add(bsp.GeneratorTest);
 		add(bsp.NodeTest);

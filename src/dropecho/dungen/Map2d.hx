@@ -5,7 +5,8 @@ using Lambda;
 typedef Tile2d = {
 	x:Int,
 	y:Int,
-	onMap:Bool
+	onMap:Bool,
+	?val:Int
 }
 
 @:expose("dungen.Map2d")
@@ -34,7 +35,7 @@ class Map2d {
 	public function ensureEdgesAreWalls(tileType:Int = 0) {
 		for (x in 0..._width) {
 			_mapData[XYtoIndex(x, 0)] = tileType;
-			_mapData[XYtoIndex(x, _height-1)] = tileType;
+			_mapData[XYtoIndex(x, _height - 1)] = tileType;
 		}
 
 		for (y in 0..._height) {
@@ -78,7 +79,14 @@ class Map2d {
 					continue;
 				}
 
-				neighbors.push({x: x + i, y: y + j, onMap: true});
+				var val = get(x + i, y + j);
+
+				neighbors.push({
+					x: x + i,
+					y: y + j,
+					onMap: true,
+					val: val
+				});
 			}
 		}
 

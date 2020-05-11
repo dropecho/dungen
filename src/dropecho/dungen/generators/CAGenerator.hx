@@ -7,7 +7,8 @@ import dropecho.dungen.Map2d;
 typedef CA_PARAM_STEP = {
 	reps:Int,
 	r1_cutoff:Int,
-	r2_cutoff:Int
+	r2_cutoff:Int,
+	invert:Bool
 }
 
 @:expose("dungen.CA_PARAMS")
@@ -25,12 +26,14 @@ class CA_PARAMS {
 			{
 				reps: 4,
 				r1_cutoff: 5,
-				r2_cutoff: 2
+				r2_cutoff: 2,
+				invert: true
 			},
 			{
 				reps: 3,
 				r1_cutoff: 5,
-				r2_cutoff: 0
+				r2_cutoff: 0,
+				invert: true
 			}
 		];
 	}
@@ -56,8 +59,9 @@ class CAGenerator {
 
 		for (x in 0...params.width) {
 			for (y in 0...params.height) {
-				var nCount = map.getNeighborCount(x, y, params.tile_wall);
-				var nCount2 = map.getNeighborCount(x, y, params.tile_wall, 2);
+				var tile_to_count = step.invert ? params.tile_floor : params.tile_wall;
+				var nCount = map.getNeighborCount(x, y, tile_to_count);
+				var nCount2 = map.getNeighborCount(x, y, tile_to_count, 2);
 				var pos = map.XYtoIndex(x, y);
 
 				if (nCount >= step.r1_cutoff || nCount2 <= step.r2_cutoff) {

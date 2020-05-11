@@ -23,12 +23,12 @@ class Map2dTest {
 	@Test
 	public function bspMapTest() {
     var sample = CAGenerator.generate({
-      width: 24,
-      height: 12,
-      start_fill_percent: 64,
+      width: 30,
+      height: 15,
+      start_fill_percent: 65,
       tile_floor: 1,
       tile_wall: 0,
-      seed: "2"
+      seed: "0"
     });
 
     // var bsp = new Generator({
@@ -62,11 +62,11 @@ class Map2dTest {
     //   0, 0, 1, 0, 0
     // ];
 
-		trace(sample.toPrettyString());
+		// trace(sample.toPrettyString());
 		var gen = new ConvChain(sample);
 		var map = gen.generate(80, 40, 3, 0.1, 4);
 
-		trace(map.toPrettyString());
+		// trace(map.toPrettyString());
 		Assert.isTrue(true);
 	}
 

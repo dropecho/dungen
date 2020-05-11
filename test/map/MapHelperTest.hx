@@ -18,20 +18,20 @@ class MapHelperTest {
 
 	@Test
 	public function get_first_empty_of_0_on_0_filled_map_should_return_non_null_tile() {
-		var firstEmpty = MapHelper.getFirstEmptyTile(map, 0);
+		var firstEmpty = MapHelper.getFirstTileOfType(map, 0);
 		Assert.isTrue(firstEmpty != null);
 	}
 
 	@Test
 	public function get_first_empty_of_1_on_0_filled_map_should_return_null() {
-		var firstEmpty = MapHelper.getFirstEmptyTile(map, 1);
+		var firstEmpty = MapHelper.getFirstTileOfType(map, 1);
 		Assert.isTrue(firstEmpty == null);
 	}
 
 	// @Test
 	// public function get_first_empty_of_0_on_random_0_1_filled_map_should_return_non_null_tile() {
 	//   map.fillMapRandomly(1,0,50);
-	//   var firstEmpty = MapHelper.getFirstEmptyTile(map, 0);
+	//   var firstEmpty = MapHelper.getFirstTileOfType(map, 0);
 	//   Assert.isTrue(firstEmpty != null);
 	// }
 
@@ -39,7 +39,7 @@ class MapHelperTest {
 	public function get_first_empty_of_1_on_manually_filled_array_without_ignore_array_should_return_non_null() {
 		map.set(0, 0, 1);
 
-		var firstEmpty = MapHelper.getFirstEmptyTile(map, 1);
+		var firstEmpty = MapHelper.getFirstTileOfType(map, 1);
 		Assert.isTrue(firstEmpty != null);
 	}
 
@@ -52,7 +52,7 @@ class MapHelperTest {
 
 		ignoreArray.push(ignore);
 
-		var firstEmpty = MapHelper.getFirstEmptyTile(map, 1, ignoreArray);
+		var firstEmpty = MapHelper.getFirstTileOfType(map, 1, ignoreArray);
 		Assert.isTrue(firstEmpty == null);
 	}
 
@@ -241,32 +241,42 @@ class MapHelperTest {
 
 	@Test
 	public function distanceMap_on_splat_house_with_no_door_should_be_false() {
-    // var bspGen = new Generator({
-    //   width: 80,
-    //   height: 40,
-    //   minWidth: 6,
-    //   minHeight: 6,
-    //   depth: 10,
-    //   ratio: .95
-    // });
-    //
-    // var map = RoomGenerator.buildRooms(bspGen.generate());
-    //
-    var map = CAGenerator.generate({
-      width: 80,
-      height: 40,
-      start_fill_percent: 64,
-      tile_floor: 1,
-      tile_wall: 0,
-      seed: "1"
-    });
+		var map = CAGenerator.generate({
+			width: 80,
+			height: 40,
+			start_fill_percent: 64,
+			tile_floor: 1,
+			tile_wall: 0,
+			seed: "0",
+			steps: [
+				{
+					reps: 1,
+					r1_cutoff: 5,
+					r2_cutoff: 2,
+					invert: false
+				},
+				{
+					reps: 0,
+					r1_cutoff: 5,
+					r2_cutoff: 0,
+					invert: true
+				}
+			]
+		});
 
-    // trace(map);
+		map.ensureEdgesAreWalls();
+
+		// trace(map.toPrettyString());
 
 		var distanceMap = MapHelper.distanceFill(map);
 		// trace("distanceMap:" + distanceMap);
 
-    var regionmap = MapHelper.expandRegions(distanceMap);
-    // trace(regionmap.toPrettyString(['#', '+', '.']));
+		var regionmap = MapHelper.expandRegions(distanceMap);
+		// regionmap.toColors();
+		// trace(regionmap);
+		// trace(regionmap.toPrettyString([
+		//   '#', '+', '.', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'j', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A',
+		//   'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
+		// ]));
 	}
 }

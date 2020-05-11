@@ -8,13 +8,13 @@ using Lambda;
 
 class MapHelper {
 	public static function isMapConnected(map:Map2d, tile:Int = 0, diagonal:Bool = true):Bool {
-		var start = getFirstEmptyTile(map, tile);
+		var start = getFirstTileOfType(map, tile);
 		var filled = floodFill(map, start.x, start.y, tile, diagonal);
 
-		return getFirstEmptyTile(map, tile, filled) == null;
+		return getFirstTileOfType(map, tile, filled) == null;
 	}
 
-	public static function getFirstEmptyTile(map:Map2d, tile:Int = 0, ignore:Array<Tile2d> = null):Tile2d {
+	public static function getFirstTileOfType(map:Map2d, tile:Int = 0, ignore:Array<Tile2d> = null):Tile2d {
 		for (i in 0...map._height * map._width) {
 			if (map._mapData[i] == tile) {
 				var cur = map.IndexToXY(i);
@@ -144,6 +144,7 @@ class MapHelper {
 		return regionmap;
 	}
 
+	
 	// public static function getHallwayTiles(map:Map2d, tile:Int):Array<Tile2d> {
 	//   var hallwayTiles = new Array<Tile2d>();
 	//
