@@ -3,10 +3,10 @@ package dropecho.dungen.map.helpers;
 import dropecho.dungen.Map2d;
 
 class DistanceFill {
-	public static function run(map:Map2d, tile:Int = 0, diagonal:Bool = true, maxDepth:Int = 40) {
+	public static function distanceFill(map:Map2d, tile:Int = 0, diagonal:Bool = true, maxDepth:Int = 40) {
 		var distanceMap = new Map2d(map._width, map._height);
 		for (i in 0...map._mapData.length) {
-			distanceMap._mapData[i] = map._mapData[i] == tile ? tile : 999;
+			distanceMap._mapData[i] = map._mapData[i] == tile ? 0 : 999;
 		}
 
 		var pass = 0;

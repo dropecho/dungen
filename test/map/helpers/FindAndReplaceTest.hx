@@ -5,7 +5,8 @@ import dropecho.dungen.bsp.Generator;
 import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.map.Pattern;
-import dropecho.dungen.map.helpers.FindAndReplace;
+
+using dropecho.dungen.map.helpers.FindAndReplace;
 
 class FindAndReplaceTest {
 	@Test
@@ -59,9 +60,9 @@ class FindAndReplaceTest {
 		]);
 		// trace('before: ' + map.toPrettyString(["#", ".", "+"]));
 
-		map = FindAndReplace.run(map, matcher, splat);
-		map = FindAndReplace.run(map, matcher3, splat3);
-		map = FindAndReplace.run(map, matcher2, splat2);
+		map = map.findAndReplace(matcher, splat);
+		map = map.findAndReplace(matcher3, splat3);
+		map = map.findAndReplace(matcher2, splat2);
 
 		// trace('after: ' + map.toPrettyString(["#", ".", "+"]));
 	}

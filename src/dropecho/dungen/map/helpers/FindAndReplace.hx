@@ -4,7 +4,7 @@ import dropecho.dungen.Map2d;
 import dropecho.dungen.map.Pattern;
 
 class FindAndReplace {
-	public static function run(map:Map2d, pattern1:Pattern, pattern2:Pattern):Map2d {
+	public static function findAndReplace(map:Map2d, pattern1:Pattern, pattern2:Pattern):Map2d {
 		for (x in 0...map._width) {
 			for (y in 0...map._height) {
 				var matchesIndex = pattern1.matchesIndex(map, x, y);
