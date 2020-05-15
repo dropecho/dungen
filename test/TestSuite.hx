@@ -1,8 +1,9 @@
 import massive.munit.TestSuite;
 
 import map.PatternTest;
-import map.MapHelperTest;
 import map.Map2dTest;
+import map.helpers.GetFirstEmptyTileTest;
+import map.helpers.FloodFillTest;
 import map.helpers.FindAndReplaceTest;
 import map.helpers.ConnectivityCheckerTest;
 import bsp.GeneratorTest;
@@ -20,8 +21,9 @@ class TestSuite extends massive.munit.TestSuite
 		super();
 
 		add(map.PatternTest);
-		add(map.MapHelperTest);
 		add(map.Map2dTest);
+		add(map.helpers.GetFirstEmptyTileTest);
+		add(map.helpers.FloodFillTest);
 		add(map.helpers.FindAndReplaceTest);
 		add(map.helpers.ConnectivityCheckerTest);
 		add(bsp.GeneratorTest);

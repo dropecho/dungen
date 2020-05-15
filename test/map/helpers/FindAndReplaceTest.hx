@@ -77,12 +77,12 @@ class FindAndReplaceTest {
 			1, 1, 1, 1,
 			1, 1, 1, 1
 		]);
-		trace('before: ' + map.toPrettyString(["#", ".", "+"]));
+		// trace('before: ' + map.toPrettyString(["#", ".", "+"]));
 
 		map = FindAndReplace.run(map, matcher, splat);
 		map = FindAndReplace.run(map, matcher3, splat3);
 		map = FindAndReplace.run(map, matcher2, splat2);
 
-		trace('after: ' + map.toPrettyString(["#", ".", "+"]));
+		// trace('after: ' + map.toPrettyString(["#", ".", "+"]));
 	}
 }

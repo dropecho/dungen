@@ -1,22 +1,13 @@
 package dropecho.dungen.map.helpers;
 
+using dropecho.dungen.map.helpers.GetFirstEmptyTile;
+using dropecho.dungen.map.helpers.FloodFill;
+
 class ConnectivityChecker {
-  function check(map : Map2d, tile : Int = 0) : Bool {
+	public static function run(map:Map2d, tile:Int = 0, diagonal:Bool = true):Bool {
+		var start = map.getFirstEmptyTile(tile);
+		var filled = map.floodFill(start.x, start.y, tile, diagonal);
 
-    //get random non-filled tile
-    var firstEmpty = MapHelper.getFirstEmptyTile(map, tile);
-    if(firstEmpty == null){
-      return false;
-    }
-
-    //floodfill from tile
-    var filledTiles = MapHelper.floodFill(map, tile, firstEmpty.x, firstEmpty.y);
-
-    //get random non-filled tile if existing
-    //if exists, map is not connected!
-    firstEmpty = MapHelper.getFirstEmptyTile(map, tile);
-
-    return firstEmpty != null;
-
-  }
+		return map.getFirstEmptyTile(tile, filled) == null;
+	}
 }

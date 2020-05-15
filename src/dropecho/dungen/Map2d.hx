@@ -124,19 +124,19 @@ class Map2d {
 	}
 
 	public function getRect(x:Int, y:Int, x2:Int, y2:Int, wrap:Bool = false):Array<Int> {
-    var arr = new Array<Int>();
+		var arr = new Array<Int>();
 
-    return [
-      for (j in y...y2 + 1) {
-        for (i in x...x2 + 1) {
-          if (wrap) {
-            this.get(i % _width, j % _height);
-          } else {
-            this.get(i, j);
-          }
-        }
-      }
-    ];
+		return [
+			for (j in y...y2 + 1) {
+				for (i in x...x2 + 1) {
+					if (wrap) {
+						this.get(i % _width, j % _height);
+					} else {
+						this.get(i, j);
+					}
+				}
+			}
+		];
 	}
 
 	public function toPrettyString(char:Array<String> = null) {
