@@ -3,7 +3,6 @@ package map;
 import massive.munit.Assert;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.map.Pattern.Pattern;
-import dropecho.dungen.map.Pattern.RegionPatterns;
 
 class PatternTest {
 	var map:Map2d;
@@ -11,7 +10,6 @@ class PatternTest {
 	@Before
 	public function setup() {
 		map = new Map2d(3, 3, 0);
-		RegionPatterns.init();
 	}
 
 	public function ArraysEqual(expected:Array<Int>, value:Array<Int>) {
@@ -108,62 +106,3 @@ class PatternTest {
 		}
 	}
 }
-// @Test
-// public function same_should_match() {
-//   var alcovePattern = RegionPatterns.patterns[0];
-//   map._mapData = [
-//     2, 2, 2,
-//     0, 1, 0,
-//     0, 0, 0
-//   ];
-//
-//   Assert.isTrue(alcovePattern.matches(map, 1, 1));
-// }
-//
-// @Test
-// public function rot_should_match() {
-//   var alcovePattern = RegionPatterns.patterns[0];
-//   map._mapData = [
-//     0, 0, 2,
-//     0, 1, 2,
-//     0, 0, 2
-//   ];
-//
-//   Assert.isTrue(alcovePattern.matches(map, 1, 1));
-// }
-//
-// @Test
-// public function should_not_match() {
-//   var alcovePattern = RegionPatterns.patterns[0];
-//   map._mapData = [
-//     2, 2, 2,
-//     0, 1, 0,
-//     0, 0, 0
-//   ];
-//
-//   Assert.isTrue(alcovePattern.matches(map, 1, 1));
-// }
-//
-// @Test
-// public function should_match_wild() {
-//   var testPattern = Pattern.init(3, [
-//      1, 1, 0,
-//      1, 1, 0,
-//     -4, 0, 0
-//   ]);
-//
-//   map._mapData = [
-//     1, 1, 0,
-//     1, 1, 0,
-//     1, 0, 0
-//   ];
-//   Assert.isTrue(testPattern.matches(map, 1, 1));
-//
-//   map._mapData = [
-//     1, 1, 0,
-//     1, 1, 0,
-//     2, 0, 0
-//   ];
-//   Assert.isTrue(testPattern.matches(map, 1, 1));
-// }
-// }

@@ -4,8 +4,8 @@ import massive.munit.Assert;
 import dropecho.dungen.bsp.Generator;
 import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.generators.CAGenerator;
-import dropecho.dungen.map.MapHelper;
 import dropecho.dungen.map.helpers.RegionManager;
+using dropecho.dungen.map.helpers.DistanceFill;
 
 class RegionManagerTest {
 	@Test
@@ -21,13 +21,13 @@ class RegionManagerTest {
 
 		map.ensureEdgesAreWalls();
 
-		var distanceMap = MapHelper.distanceFill(map);
+		var distanceMap = map.distanceFill();
 		var regionmap = RegionManager.findAndTagRegions(distanceMap);
-    // trace(regionmap.toPrettyString([
-    //   '#', '+', '.', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'j', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-    //   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3',
-    //   '4', '5', '6', '7', '8', '9'
-    // ]));
+		// trace(regionmap.toPrettyString([
+		//   '#', '+', '.', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'j', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+		//   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3',
+		//   '4', '5', '6', '7', '8', '9'
+		// ]));
 	}
 
 	@Test
@@ -45,7 +45,7 @@ class RegionManagerTest {
 
 		// trace(map.toPrettyString());
 
-		var distanceMap = MapHelper.distanceFill(map);
+		var distanceMap = map.distanceFill();
 		var regionmap = RegionManager.findAndTagRegions(distanceMap);
 		regionmap = RegionManager.expandRegions(regionmap);
 		// trace(regionmap.toPrettyString([
@@ -70,14 +70,14 @@ class RegionManagerTest {
 
 		// trace(map.toPrettyString());
 
-		var distanceMap = MapHelper.distanceFill(map);
+		var distanceMap = map.distanceFill();
 		var regionmap = RegionManager.findAndTagRegions(distanceMap);
 		regionmap = RegionManager.expandRegions(regionmap);
-    // trace(regionmap.toPrettyString([
-    //   '#', '+', '.', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'j', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-    //   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3',
-    //   '4', '5', '6', '7', '8', '9'
-    // ]));
+		// trace(regionmap.toPrettyString([
+		//   '#', '+', '.', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'j', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+		//   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3',
+		//   '4', '5', '6', '7', '8', '9'
+		// ]));
 
 		for (i in 0...regionmap._mapData.length) {
 			if (regionmap._mapData[i] > 1) {
@@ -85,6 +85,6 @@ class RegionManagerTest {
 			}
 		}
 
-    // trace(regionmap.toPrettyString(["#","+","."]));
+    trace(regionmap.toPrettyString(["#","+","."]));
 	}
 }

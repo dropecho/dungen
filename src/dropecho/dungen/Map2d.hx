@@ -119,10 +119,13 @@ class Map2d {
 		}
 	}
 
-	public function splat(map:Map2d, x:Int, y:Int) {
-		for (i in 0...map._width) {
-			for (j in 0...map._height) {
-				this.set(i + x, j + y, map.get(i, j));
+	public function splat(other:Map2d, x:Int, y:Int, ignoreTile:Int = -1) {
+		for (i in 0...other._width) {
+			for (j in 0...other._height) {
+				var otherTile = other.get(i, j);
+				if (otherTile != ignoreTile) {
+					this.set(i + x, j + y, otherTile);
+				}
 			}
 		}
 	}
@@ -132,9 +135,11 @@ class Map2d {
 	}
 
 	public function getRect(x:Int, y:Int, x2:Int, y2:Int, wrap:Bool = false):Array<Int> {
+		var arr = new Array<Int>();
+
 		return [
-			for (i in x...x2 + 1) {
-				for (j in y...y2 + 1) {
+			for (j in y...y2 + 1) {
+				for (i in x...x2 + 1) {
 					if (wrap) {
 						this.get(i % _width, j % _height);
 					} else {

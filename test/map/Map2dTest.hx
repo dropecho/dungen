@@ -22,25 +22,25 @@ class Map2dTest {
 
 	@Test
 	public function bspMapTest() {
-    var sample = CAGenerator.generate({
-      width: 30,
-      height: 15,
-      start_fill_percent: 65,
-      tile_floor: 1,
-      tile_wall: 0,
-      seed: "0"
-    });
+		var sample = CAGenerator.generate({
+			width: 24,
+			height: 12,
+			start_fill_percent: 64,
+			tile_floor: 1,
+			tile_wall: 0,
+			seed: "0"
+		});
 
-    // var bsp = new Generator({
-    //   width: 12,
-    //   height: 8,
-    //   minWidth: 3,
-    //   minHeight: 3,
-    //   depth: 1,
-    //   ratio: .95
-    // }).generate();
+		// var bsp = new Generator({
+		//   width: 12,
+		//   height: 8,
+		//   minWidth: 3,
+		//   minHeight: 3,
+		//   depth: 1,
+		//   ratio: .95
+		// }).generate();
 
-    // var sample = RoomGenerator.buildRooms(bsp);
+		// var sample = RoomGenerator.buildRooms(bsp);
 
 		// var sample = new Map2d(4, 4);
 		// sample._mapData = [
@@ -53,14 +53,14 @@ class Map2dTest {
 		// var sample = new Map2d(3, 3);
 		// sample._mapData = [0, 1, 1, 1, 1, 1, 1, 1, 1];
 		// sample._mapData = [1, 1, 1, 0, 0, 0, 0, 0, 0];
-    // var sample = new Map2d(5, 5);
-    // sample._mapData = [
-    //   0, 0, 1, 0, 0,
-    //   0, 1, 1, 1, 0,
-    //   1, 1, 1, 1, 1,
-    //   0, 1, 1, 1, 0,
-    //   0, 0, 1, 0, 0
-    // ];
+		// var sample = new Map2d(5, 5);
+		// sample._mapData = [
+		//   0, 0, 1, 0, 0,
+		//   0, 1, 1, 1, 0,
+		//   1, 1, 1, 1, 1,
+		//   0, 1, 1, 1, 0,
+		//   0, 0, 1, 0, 0
+		// ];
 
 		// trace(sample.toPrettyString());
 		var gen = new ConvChain(sample);
@@ -147,6 +147,28 @@ class Map2dTest {
 		// for (t in 0...tiles2.length) {
 		//   Assert.areEqual(tile_2_expected[t], tiles2[t]);
 		// }
+	}
+
+	@Test
+	public function get_rect_big_should_return_correct() {
+		var sample = new Map2d(4, 4);
+		sample._mapData = [
+			0, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 2, 0,
+			0, 0, 0, 3,
+		];
+
+		var tiles = sample.getRect(0, 0, 3, 3, true);
+		// var tiles = sample.getRect(1, 1, 3, 3, true);
+
+		var tiles_expected = [
+			0, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 2, 0,
+			0, 0, 0, 3,
+		];
+		Assert.isTrue(ArraysEqual(tiles_expected, tiles));
 	}
 
 	@Test

@@ -1,7 +1,9 @@
 package dropecho.dungen.map.helpers;
 
 import dropecho.dungen.Map2d;
-import dropecho.dungen.map.MapHelper;
+
+using dropecho.dungen.map.helpers.GetFirstTileOfType;
+using dropecho.dungen.map.helpers.FloodFill;
 
 class RegionManager {
 	public static function findAndTagRegions(map:Map2d, depth:Int = 2) {
@@ -13,8 +15,8 @@ class RegionManager {
 		var nextRegion:Tile2d;
 		var nextTag = 3;
 
-		while ((nextRegion = MapHelper.getFirstTileOfType(regionmap, 2)) != null) {
-			var tilesToFill = MapHelper.floodFill(regionmap, nextRegion.x, nextRegion.y, depth);
+		while ((nextRegion = regionmap.getFirstTileOfType(2)) != null) {
+			var tilesToFill = regionmap.floodFill(nextRegion.x, nextRegion.y, depth);
 
 			for (t in tilesToFill) {
 				regionmap.set(t.x, t.y, nextTag);
