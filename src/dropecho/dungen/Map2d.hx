@@ -111,10 +111,13 @@ class Map2d {
 		}
 	}
 
-	public function splat(other:Map2d, x:Int, y:Int) {
+	public function splat(other:Map2d, x:Int, y:Int, ignoreTile:Int = -1) {
 		for (i in 0...other._width) {
 			for (j in 0...other._height) {
-				this.set(i + x, j + y, other.get(i, j));
+				var otherTile = other.get(i, j);
+				if (otherTile != ignoreTile) {
+					this.set(i + x, j + y, otherTile);
+				}
 			}
 		}
 	}
