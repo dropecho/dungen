@@ -21,26 +21,6 @@ class FindAndReplaceTest {
 
 		var map = RoomGenerator.buildRooms(bspGen.generate());
 
-		// var map = CAGenerator.generate({
-		//   width: 80,
-		//   height: 40,
-		//   start_fill_percent: 64,
-		//   tile_floor: 1,
-		//   tile_wall: 0,
-		//   seed: "1"
-		// });
-
-		// var map = new Map2d(6, 6);
-		// var testData = [
-		//   0, 2, 2, 0, 0, 0,
-		//   0, 2, 2, 0, 2, 0,
-		//   0, 0, 2, 2, 2, 0,
-		//   0, 2, 2, 0, 2, 0,
-		//   0, 0, 2, 0, 2, 0,
-		//   0, 2, 2, 0, 0, 0,
-		// ];
-		// map._mapData = testData;
-
 		var matcher = Pattern.init(3, [
 			1, 1, 1,
 			0, 1, 0,
