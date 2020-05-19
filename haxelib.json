@@ -11,8 +11,8 @@
 	"contributors": [
 		"vantreeseba"
 	],
-	"version": "0.6.1",
-	"releasenote": "Fix issue with broken utils / duplicate code.",
+	"version": "0.6.2",
+	"releasenote": "Cleanup build, setup to build before version/push occurs",
 	"tags": [
 		"game",
 		"procedural",
