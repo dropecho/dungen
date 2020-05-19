@@ -58,8 +58,8 @@ class RegionManagerTest {
 	@Test
 	public function region_tagging_caves() {
 		var map = CAGenerator.generate({
-			width: 120,
-			height: 60,
+			width: 60,
+			height: 40,
 			start_fill_percent: 64,
 			tile_floor: 1,
 			tile_wall: 0,
