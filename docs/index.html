@@ -14,25 +14,34 @@
   </div>
 
   <div style="position:absolute; top: 0px; left: 400px;">
-    <canvas id="canvas" height="1024" width="1024"></canvas>
+    <canvas id="canvas" height="600" width="800"></canvas>
+  </div>
+
+  <div style="position:absolute; top: 550px; left: 400px;">
+    <canvas id="cccanvas" height="600" width="800"></canvas>
   </div>
 </body>
 <script type="text/javascript">
   var map;
   var bsp = new dungen.BSPGenerator();
-  var ctx = document.querySelector('canvas').getContext('2d');
+  var ctx = document.querySelector('#canvas').getContext('2d');
+  var convChainMap;
+  var convChainCtx = document.querySelector('#cccanvas').getContext('2d');
   var roomGenParams = {
+    padding: 0
   };
   var caveGenParams = {
     steps: [{
-      reps: 6,
+      reps: 4,
       r1_cutoff: 5,
-      r2_cutoff: 2
+      r2_cutoff: 2,
+      invert: true
     },
     {
-      reps : 6,
+      reps : 3,
       r1_cutoff: 5,
-      r2_cutoff: -1
+      r2_cutoff: 0,
+      invert: true
     }
     ],
     height: 64,
@@ -42,7 +51,15 @@
     start_fill_percent: 40
   };
 
-  var mapScale = 10;
+  var convChainParams = {
+	  width: 64,
+    height: 64,
+    n: 3,
+    temperature:1,
+    iterations:20
+  };
+
+  var mapScale = 4;
 
   var opts = {
     type: 'room',
@@ -51,6 +68,33 @@
       opts.seed = Math.round(Math.random() * 99999999).toString();
       this.generate();
     },
+
+    generateConvChainNewSeed: function() {
+      this.generateConvChain(Math.round(Math.random() * 99999999).toString());
+    },
+
+    generateConvChain: function(seed = "0") {
+      convChainCtx.clearRect(0,0,1024,1024);
+
+      var gen = new dungen.ConvChain(map);
+      gen.rng.setStringSeed(seed);
+      var convChainMap = gen.generate(
+        convChainParams.width,
+        convChainParams.height,
+        convChainParams.n,
+        convChainParams.temperature,
+        convChainParams.iterations,
+      );
+
+      console.log('what', convChainMap);
+
+      convChainMap._mapData.forEach(function(tile,i){
+        var pos = convChainMap.IndexToXY(i);
+        convChainCtx.fillStyle = tile == 0 ? '#333' : "#aaa"; 
+        convChainCtx.fillRect(pos.x*mapScale,pos.y*mapScale,mapScale,mapScale);
+      });
+    },
+
     generate: function (){
       switch(opts.type){
         case 'cave': 
@@ -74,27 +118,12 @@
           map = dungen.RoomGenerator.buildRooms(bsp.generate(), roomGenParams);
           break;
       }
+      convChainCtx.clearRect(0,0,1024,1024);
       ctx.clearRect(0,0,1024,1024);
 
       map._mapData.forEach(function(tile,i){
         var pos = map.IndexToXY(i);
-        ctx.fillStyle = tile == 1 ? '#aaffaa' : "#aaa"; 
-        if(tile == 0){
-          var n1 = map.getNeighborCount(pos.x, pos.y, 0, 1);
-          var n3 = map.getNeighborCount(pos.x, pos.y, 0, 3);
-          color = 216 - (n3 * 4);
-          ctx.fillStyle = 'rgb(' + color +',' + color +',' + color +')';
-        } else {
-          var nWalls = map.getNeighborCount(pos.x, pos.y, 0, 1);
-          var nFloor = map.getNeighborCount(pos.x, pos.y, 1, 1);
-          var nWalls2 = map.getNeighborCount(pos.x, pos.y, 0, 2);
-          var nFloor2 = map.getNeighborCount(pos.x, pos.y, 1, 2);
-
-          //var color = 192 - (nWalls - nFloor * 8); 
-          //color += nFloor * 8;
-
-          //ctx.fillStyle = 'rgb(' + color + 2 +',' + color +',' + color +')';
-        }
+        ctx.fillStyle = tile == 0 ? '#333' : "#aaa"; 
         ctx.fillRect(pos.x*mapScale,pos.y*mapScale,mapScale,mapScale);
       });
     },
@@ -116,11 +145,11 @@
     roomGui.add(bsp, 'minHeight', 2, 32).step(1);
     roomGui.add(bsp, 'depth', 1, 10).step(1);
     roomGui.add(bsp, 'ratio', 0, 1).step(0.1);
-    //roomGui.add(roomGenParams, 'padding', 0, 16).step(1);
+    roomGui.add(roomGenParams, 'padding', 0, 16).step(1);
   })();
 
   (function addCaveGui(){
-    var caveGui = gui.addFolder('cave') 
+    var caveGui = gui.addFolder('cave');
     caveGui.add(caveGenParams, 'width', 16, 128);
     caveGui.add(caveGenParams, 'height', 16, 128);
 
@@ -128,15 +157,24 @@
     step1.add(caveGenParams.steps[0], 'reps', 1, 10).step(1);
     step1.add(caveGenParams.steps[0], 'r1_cutoff', 0, 10).step(1);
     step1.add(caveGenParams.steps[0], 'r2_cutoff', 0, 10).step(1);
+    step1.add(caveGenParams.steps[0], 'invert')
 
     var step2 = caveGui.addFolder('step2') 
-    step2.add(caveGenParams.steps[0], 'reps', 1, 10).step(1);
-    step2.add(caveGenParams.steps[0], 'r1_cutoff', 0, 10).step(1);
-    step2.add(caveGenParams.steps[0], 'r2_cutoff', 0, 10).step(1);
+    step2.add(caveGenParams.steps[1], 'reps', 1, 10).step(1);
+    step2.add(caveGenParams.steps[1], 'r1_cutoff', 0, 10).step(1);
+    step2.add(caveGenParams.steps[1], 'r2_cutoff', 0, 10).step(1);
+    step2.add(caveGenParams.steps[1], 'invert')
   })();
+
+  var convchaingui = gui.addFolder('ConvChain');
+  convchaingui.add(convChainParams, 'width', 16, 128);
+  convchaingui.add(convChainParams, 'height', 16, 128);
+  convchaingui.add(convChainParams, 'n', 2, 8);
 
   gui.add(opts, 'generate');
   gui.add(opts, 'generateNewSeed');
+  gui.add(opts, 'generateConvChain');
+  gui.add(opts, 'generateConvChainNewSeed');
   gui.add(opts, 'generateJson');
 
 
