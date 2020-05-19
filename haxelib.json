@@ -11,8 +11,8 @@
 	"contributors": [
 		"vantreeseba"
 	],
-	"version": "0.7.0",
-	"releasenote": "First version of region manager/detection.",
+	"version": "0.7.1",
+	"releasenote": "Add expose to more classes, add more examples to docs",
 	"tags": [
 		"game",
 		"procedural",
