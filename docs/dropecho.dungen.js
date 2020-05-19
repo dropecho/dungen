@@ -37,6 +37,25 @@ Lambda.array = function(it) {
 	}
 	return a;
 };
+Lambda.count = function(it,pred) {
+	var n = 0;
+	if(pred == null) {
+		var _ = $getIterator(it);
+		while(_.hasNext()) {
+			var _1 = _.next();
+			++n;
+		}
+	} else {
+		var x = $getIterator(it);
+		while(x.hasNext()) {
+			var x1 = x.next();
+			if(pred(x1)) {
+				++n;
+			}
+		}
+	}
+	return n;
+};
 Lambda.find = function(it,f) {
 	var v = $getIterator(it);
 	while(v.hasNext()) {
@@ -420,6 +439,202 @@ dropecho_ds_algos_PostOrderTraversal.prototype = {
 	}
 	,__class__: dropecho_ds_algos_PostOrderTraversal
 };
+var dropecho_dungen_Map2d = $hx_exports["dungen"]["Map2d"] = function(width,height,initTileData) {
+	if(initTileData == null) {
+		initTileData = 0;
+	}
+	this._height = 0;
+	this._width = 0;
+	this._width = width;
+	this._height = height;
+	this._mapData = [];
+	this.initializeData(initTileData);
+};
+dropecho_dungen_Map2d.__name__ = "dropecho.dungen.Map2d";
+dropecho_dungen_Map2d.prototype = {
+	_width: null
+	,_height: null
+	,_mapData: null
+	,initializeData: function(initTileData) {
+		if(initTileData == -1) {
+			return;
+		}
+		var _g = 0;
+		var _g1 = this._height * this._width;
+		while(_g < _g1) {
+			var i = _g++;
+			this._mapData[i] = initTileData;
+		}
+	}
+	,ensureEdgesAreWalls: function(tileType) {
+		if(tileType == null) {
+			tileType = 0;
+		}
+		var _g = 0;
+		var _g1 = this._width;
+		while(_g < _g1) {
+			var x = _g++;
+			this._mapData[this._width * 0 + x] = tileType;
+			this._mapData[this._width * (this._height - 1) + x] = tileType;
+		}
+		var _g2 = 0;
+		var _g3 = this._height;
+		while(_g2 < _g3) {
+			var y = _g2++;
+			this._mapData[this._width * y] = tileType;
+			this._mapData[this._width * y + (this._width - 1)] = tileType;
+		}
+	}
+	,getNeighborCount: function(x,y,neighborType,dist,diagonal) {
+		if(diagonal == null) {
+			diagonal = true;
+		}
+		if(dist == null) {
+			dist = 1;
+		}
+		var _gthis = this;
+		var isNeighborType = function(tile) {
+			return _gthis._mapData[_gthis._width * tile.y + tile.x] == neighborType;
+		};
+		return Lambda.count(this.getNeighbors(x,y,dist,diagonal),isNeighborType);
+	}
+	,getNeighbors: function(x,y,dist,diagonal) {
+		if(diagonal == null) {
+			diagonal = true;
+		}
+		if(dist == null) {
+			dist = 1;
+		}
+		var neighbors = [];
+		var isSelf = false;
+		var isNotOnMap = false;
+		var _g = -dist;
+		var _g1 = dist + 1;
+		while(_g < _g1) {
+			var i = _g++;
+			var _g2 = -dist;
+			var _g11 = dist + 1;
+			while(_g2 < _g11) {
+				var j = _g2++;
+				isSelf = i == 0 && j == 0;
+				isNotOnMap = x + i < 0 || x + i >= this._width || y + j < 0 || y + j >= this._height;
+				if(isSelf || isNotOnMap) {
+					continue;
+				}
+				if(!diagonal && (i == j || i == -dist && j == dist || j == -dist && i == dist)) {
+					continue;
+				}
+				neighbors.push({ x : x + i, y : y + j, onMap : true});
+			}
+		}
+		return neighbors;
+	}
+	,XYtoIndex: function(x,y) {
+		return this._width * y + x;
+	}
+	,IndexToXY: function(index) {
+		var x = index % this._width | 0;
+		var y = index / this._width | 0;
+		return { x : x, y : y, onMap : x >= 0 && y >= 0 && x < this._width && y < this._height};
+	}
+	,set: function(x,y,data) {
+		this._mapData[this._width * y + x] = data;
+	}
+	,setRect: function(x,y,x2,y2,data) {
+		var _g = x;
+		var _g1 = x2;
+		while(_g < _g1) {
+			var i = _g++;
+			var _g2 = y;
+			var _g11 = y2;
+			while(_g2 < _g11) {
+				var j = _g2++;
+				this._mapData[this._width * j + i] = data;
+			}
+		}
+	}
+	,splat: function(other,x,y,ignoreTile) {
+		if(ignoreTile == null) {
+			ignoreTile = -1;
+		}
+		var _g = 0;
+		var _g1 = other._width;
+		while(_g < _g1) {
+			var i = _g++;
+			var _g2 = 0;
+			var _g11 = other._height;
+			while(_g2 < _g11) {
+				var j = _g2++;
+				var otherTile = other._mapData[other._width * j + i];
+				if(otherTile != ignoreTile) {
+					this._mapData[this._width * (j + y) + (i + x)] = otherTile;
+				}
+			}
+		}
+	}
+	,get: function(x,y) {
+		return this._mapData[this._width * y + x];
+	}
+	,getRect: function(x,y,x2,y2,wrap) {
+		if(wrap == null) {
+			wrap = false;
+		}
+		var arr = [];
+		var _g = [];
+		var _g1 = y;
+		var _g2 = y2 + 1;
+		while(_g1 < _g2) {
+			var j = _g1++;
+			var _g11 = x;
+			var _g21 = x2 + 1;
+			while(_g11 < _g21) {
+				var i = _g11++;
+				_g.push(wrap ? this._mapData[this._width * (j % this._height) + i % this._width] : this._mapData[this._width * j + i]);
+			}
+		}
+		return _g;
+	}
+	,toPrettyString: function(char) {
+		if(char == null) {
+			char = ["#","."];
+		}
+		var output = "\n MAP2d: \n\n";
+		var _g = 0;
+		var _g1 = this._height;
+		while(_g < _g1) {
+			var y = _g++;
+			var _g2 = 0;
+			var _g11 = this._width;
+			while(_g2 < _g11) {
+				var x = _g2++;
+				output += char[this._mapData[this._width * y + x]];
+			}
+			output += "\n";
+		}
+		return output;
+	}
+	,toString: function(ascii) {
+		if(ascii == null) {
+			ascii = false;
+		}
+		var output = "\n MAP2d: \n\n";
+		var _g = 0;
+		var _g1 = this._height;
+		while(_g < _g1) {
+			var y = _g++;
+			var _g2 = 0;
+			var _g11 = this._width;
+			while(_g2 < _g11) {
+				var x = _g2++;
+				var val = this._mapData[this._width * y + x];
+				output += val;
+			}
+			output += "\n";
+		}
+		return output;
+	}
+	,__class__: dropecho_dungen_Map2d
+};
 var dropecho_dungen_bsp_BspData = $hx_exports["dungen"]["BSPData"] = function(ops) {
 	this.y = 0;
 	this.x = 0;
@@ -520,418 +735,6 @@ dropecho_dungen_bsp_Generator.prototype = $extend(dropecho_dungen_bsp_BSPGenerat
 	}
 	,__class__: dropecho_dungen_bsp_Generator
 });
-var dropecho_dungen_ca_CA_$PARAMS = $hx_exports["dungen"]["CA_PARAMS"] = function() {
-	this.seed = "0";
-	this.start_fill_percent = 65;
-	this.tile_wall = 0;
-	this.tile_floor = 1;
-	this.width = 64;
-	this.height = 64;
-	this.steps = [];
-	this.steps = [{ reps : 4, r1_cutoff : 5, r2_cutoff : 2},{ reps : 3, r1_cutoff : 5, r2_cutoff : 0}];
-};
-dropecho_dungen_ca_CA_$PARAMS.__name__ = "dropecho.dungen.ca.CA_PARAMS";
-dropecho_dungen_ca_CA_$PARAMS.prototype = {
-	steps: null
-	,height: null
-	,width: null
-	,tile_floor: null
-	,tile_wall: null
-	,start_fill_percent: null
-	,seed: null
-	,__class__: dropecho_dungen_ca_CA_$PARAMS
-};
-var dropecho_dungen_ca_Generator = $hx_exports["dungen"]["CAGenerator"] = function() { };
-dropecho_dungen_ca_Generator.__name__ = "dropecho.dungen.ca.Generator";
-dropecho_dungen_ca_Generator.generate = function(opts) {
-	var params = dropecho_interop_Extender.defaults(new dropecho_dungen_ca_CA_$PARAMS(),opts);
-	var map = dropecho_dungen_map_generators_RandomGenerator.generate(params);
-	map.ensureEdgesAreWalls(params.tile_wall);
-	var _g = 0;
-	var _g1 = params.steps;
-	while(_g < _g1.length) {
-		var step = _g1[_g];
-		++_g;
-		var _g2 = 0;
-		var _g11 = step.reps;
-		while(_g2 < _g11) {
-			var _ = _g2++;
-			dropecho_dungen_ca_Generator.buildFromCA(map,params,step);
-		}
-	}
-	map.ensureEdgesAreWalls(params.tile_wall);
-	return map;
-};
-dropecho_dungen_ca_Generator.buildFromCA = function(map,params,step) {
-	var temp = new haxe_ds_IntMap();
-	var _g = 1;
-	var _g1 = params.width - 1;
-	while(_g < _g1) {
-		var x = _g++;
-		var _g2 = 1;
-		var _g11 = params.height - 1;
-		while(_g2 < _g11) {
-			var y = _g2++;
-			var nCount = map.getNeighborCount(x,y,params.tile_floor);
-			var nCount2 = map.getNeighborCount(x,y,params.tile_floor,2);
-			var pos = map.XYtoIndex(x,y);
-			if(nCount >= step.r1_cutoff || nCount2 <= step.r2_cutoff) {
-				temp.h[pos] = params.tile_wall;
-			} else {
-				temp.h[pos] = params.tile_floor;
-			}
-		}
-	}
-	var i = temp.keys();
-	while(i.hasNext()) {
-		var i1 = i.next();
-		var pos1 = map.IndexToXY(i1);
-		map.set(pos1.x,pos1.y,temp.h[i1]);
-	}
-};
-var dropecho_dungen_convchain_ConvChain = $hx_exports["dungen"]["ConvChain"] = function(sample) {
-	this.seed = "0";
-	this.sample = sample;
-	this.cachedN = -1;
-	this.cachedWeights = null;
-	this.rng = new seedyrng_Random();
-	this.rng.setStringSeed(this.seed);
-};
-dropecho_dungen_convchain_ConvChain.__name__ = "dropecho.dungen.convchain.ConvChain";
-dropecho_dungen_convchain_ConvChain.prototype = {
-	sample: null
-	,cachedN: null
-	,cachedWeights: null
-	,rng: null
-	,seed: null
-	,processWeights: function(sample,n) {
-		var size = Math.pow(2,n * n) | 0;
-		var _g = [];
-		var _g1 = 0;
-		var _g2 = size;
-		while(_g1 < _g2) {
-			var _ = _g1++;
-			_g.push(0.0);
-		}
-		var weights = _g;
-		var _g3 = 0;
-		var _g4 = sample._height;
-		while(_g3 < _g4) {
-			var y = [_g3++];
-			var _g31 = 0;
-			var _g41 = sample._width;
-			while(_g31 < _g41) {
-				var x = [_g31++];
-				var initial = (function(x1,y1) {
-					return function(dx,dy) {
-						var a = (x1[0] + dx) % sample._width;
-						var b = (y1[0] + dy) % sample._height;
-						return sample.get(a,b);
-					};
-				})(x,y);
-				var _g32 = [];
-				var _g42 = 0;
-				var _g5 = n;
-				while(_g42 < _g5) {
-					var y2 = _g42++;
-					var _g43 = 0;
-					var _g51 = n;
-					while(_g43 < _g51) {
-						var x2 = _g43++;
-						_g32.push(initial(x2,y2));
-					}
-				}
-				var p0 = _g32;
-				var p = p0;
-				var _g33 = [];
-				var _g44 = 0;
-				var _g52 = n;
-				while(_g44 < _g52) {
-					var y3 = _g44++;
-					var _g45 = 0;
-					var _g53 = n;
-					while(_g45 < _g53) {
-						var x3 = _g45++;
-						_g33.push(p[n - 1 - y3 + x3 * n]);
-					}
-				}
-				var p1 = _g33;
-				var p2 = p1;
-				var _g34 = [];
-				var _g46 = 0;
-				var _g54 = n;
-				while(_g46 < _g54) {
-					var y4 = _g46++;
-					var _g47 = 0;
-					var _g55 = n;
-					while(_g47 < _g55) {
-						var x4 = _g47++;
-						_g34.push(p2[n - 1 - y4 + x4 * n]);
-					}
-				}
-				var p21 = _g34;
-				var p3 = p21;
-				var _g35 = [];
-				var _g48 = 0;
-				var _g56 = n;
-				while(_g48 < _g56) {
-					var y5 = _g48++;
-					var _g49 = 0;
-					var _g57 = n;
-					while(_g49 < _g57) {
-						var x5 = _g49++;
-						_g35.push(p3[n - 1 - y5 + x5 * n]);
-					}
-				}
-				var p31 = _g35;
-				var p4 = p0;
-				var _g36 = [];
-				var _g410 = 0;
-				var _g58 = n;
-				while(_g410 < _g58) {
-					var y6 = _g410++;
-					var _g411 = 0;
-					var _g59 = n;
-					while(_g411 < _g59) {
-						var x6 = _g411++;
-						_g36.push(p4[n - 1 - x6 + y6 * n]);
-					}
-				}
-				var p41 = _g36;
-				var p5 = p1;
-				var _g37 = [];
-				var _g412 = 0;
-				var _g510 = n;
-				while(_g412 < _g510) {
-					var y7 = _g412++;
-					var _g413 = 0;
-					var _g511 = n;
-					while(_g413 < _g511) {
-						var x7 = _g413++;
-						_g37.push(p5[n - 1 - x7 + y7 * n]);
-					}
-				}
-				var p51 = _g37;
-				var p6 = p21;
-				var _g38 = [];
-				var _g414 = 0;
-				var _g512 = n;
-				while(_g414 < _g512) {
-					var y8 = _g414++;
-					var _g415 = 0;
-					var _g513 = n;
-					while(_g415 < _g513) {
-						var x8 = _g415++;
-						_g38.push(p6[n - 1 - x8 + y8 * n]);
-					}
-				}
-				var p61 = _g38;
-				var p7 = p31;
-				var _g39 = [];
-				var _g416 = 0;
-				var _g514 = n;
-				while(_g416 < _g514) {
-					var y9 = _g416++;
-					var _g417 = 0;
-					var _g515 = n;
-					while(_g417 < _g515) {
-						var x9 = _g417++;
-						_g39.push(p7[n - 1 - x9 + y9 * n]);
-					}
-				}
-				var p71 = _g39;
-				var weights1 = weights;
-				var result = 0;
-				var power = 1;
-				var _g310 = 0;
-				var _g418 = p0.length;
-				while(_g310 < _g418) {
-					var i = _g310++;
-					result += p0[p0.length - 1 - i] != 0 ? power : 0;
-					power *= 2;
-				}
-				weights1[result] += 1;
-				var weights2 = weights;
-				var result1 = 0;
-				var power1 = 1;
-				var _g311 = 0;
-				var _g419 = p1.length;
-				while(_g311 < _g419) {
-					var i1 = _g311++;
-					result1 += p1[p1.length - 1 - i1] != 0 ? power1 : 0;
-					power1 *= 2;
-				}
-				weights2[result1] += 1;
-				var weights3 = weights;
-				var result2 = 0;
-				var power2 = 1;
-				var _g312 = 0;
-				var _g420 = p21.length;
-				while(_g312 < _g420) {
-					var i2 = _g312++;
-					result2 += p21[p21.length - 1 - i2] != 0 ? power2 : 0;
-					power2 *= 2;
-				}
-				weights3[result2] += 1;
-				var weights4 = weights;
-				var result3 = 0;
-				var power3 = 1;
-				var _g313 = 0;
-				var _g421 = p31.length;
-				while(_g313 < _g421) {
-					var i3 = _g313++;
-					result3 += p31[p31.length - 1 - i3] != 0 ? power3 : 0;
-					power3 *= 2;
-				}
-				weights4[result3] += 1;
-				var weights5 = weights;
-				var result4 = 0;
-				var power4 = 1;
-				var _g314 = 0;
-				var _g422 = p41.length;
-				while(_g314 < _g422) {
-					var i4 = _g314++;
-					result4 += p41[p41.length - 1 - i4] != 0 ? power4 : 0;
-					power4 *= 2;
-				}
-				weights5[result4] += 1;
-				var weights6 = weights;
-				var result5 = 0;
-				var power5 = 1;
-				var _g315 = 0;
-				var _g423 = p51.length;
-				while(_g315 < _g423) {
-					var i5 = _g315++;
-					result5 += p51[p51.length - 1 - i5] != 0 ? power5 : 0;
-					power5 *= 2;
-				}
-				weights6[result5] += 1;
-				var weights7 = weights;
-				var result6 = 0;
-				var power6 = 1;
-				var _g316 = 0;
-				var _g424 = p61.length;
-				while(_g316 < _g424) {
-					var i6 = _g316++;
-					result6 += p61[p61.length - 1 - i6] != 0 ? power6 : 0;
-					power6 *= 2;
-				}
-				weights7[result6] += 1;
-				var weights8 = weights;
-				var result7 = 0;
-				var power7 = 1;
-				var _g317 = 0;
-				var _g425 = p71.length;
-				while(_g317 < _g425) {
-					var i7 = _g317++;
-					result7 += p71[p71.length - 1 - i7] != 0 ? power7 : 0;
-					power7 *= 2;
-				}
-				weights8[result7] += 1;
-			}
-		}
-		var _g516 = 0;
-		var _g6 = weights.length;
-		while(_g516 < _g6) {
-			var k = _g516++;
-			weights[k] = weights[k] <= 0 ? 0.1 : weights[k];
-		}
-		return weights;
-	}
-	,getWeights: function(n) {
-		if(this.cachedN != n) {
-			this.cachedN = n;
-			this.cachedWeights = this.processWeights(this.sample,n);
-		}
-		return this.cachedWeights;
-	}
-	,generateBaseField: function(width,height) {
-		return dropecho_dungen_map_generators_RandomGenerator.generate({ height : height, width : width, seed : this.seed});
-	}
-	,applyChanges: function(field,weights,n,temperature,changes) {
-		var r;
-		var q;
-		var x;
-		var y;
-		var ind;
-		var difference;
-		var _g = 0;
-		var _g1 = changes;
-		while(_g < _g1) {
-			var _ = _g++;
-			q = 1.0;
-			r = this.rng.randomInt(0,field._mapData.length);
-			x = r % field._width | 0;
-			y = r / field._width | 0;
-			var _g2 = y - n + 1;
-			var _g11 = y + n;
-			while(_g2 < _g11) {
-				var sy = _g2++;
-				var _g3 = x - n + 1;
-				var _g12 = x + n;
-				while(_g3 < _g12) {
-					var sx = _g3++;
-					ind = 0;
-					difference = 0;
-					var _g4 = 0;
-					var _g13 = n;
-					while(_g4 < _g13) {
-						var dy = _g4++;
-						var _g5 = 0;
-						var _g14 = n;
-						while(_g5 < _g14) {
-							var dx = _g5++;
-							var power = 1 << dy * n + dx;
-							var X = sx + dx;
-							var Y = sy + dy;
-							if(X < 0) {
-								X += field._width;
-							} else if(X >= field._width) {
-								X -= field._width;
-							}
-							if(Y < 0) {
-								Y += field._height;
-							} else if(Y >= field._height) {
-								Y -= field._height;
-							}
-							var value = field.get(X,Y);
-							ind += value != 0 ? power : 0;
-							if(X == x && Y == y) {
-								difference = value != 0 ? power : -power;
-							}
-						}
-					}
-					var a = weights[ind - difference];
-					var b = weights[ind];
-					q *= a / b;
-				}
-			}
-			if(q >= 1) {
-				field.set(x,y,field.get(x,y) != 1 ? 1 : 0);
-			} else {
-				if(temperature != 1) {
-					q = Math.pow(q,1.0 / temperature);
-				}
-				if(q > this.rng.random()) {
-					field.set(x,y,field.get(x,y) != 1 ? 1 : 0);
-				}
-			}
-		}
-	}
-	,generate: function(width,height,n,temperature,iterations) {
-		var changesPerIterations = width * height;
-		var field = this.generateBaseField(width,height);
-		var weights = this.getWeights(n);
-		var _g = 0;
-		var _g1 = iterations;
-		while(_g < _g1) {
-			var _ = _g++;
-			this.applyChanges(field,weights,n,temperature,changesPerIterations);
-		}
-		return field;
-	}
-	,__class__: dropecho_dungen_convchain_ConvChain
-};
 var dropecho_dungen_export__$TiledExporter_TiledMap = function(map) {
 	this.width = 0;
 	this.version = 1;
@@ -1028,186 +831,974 @@ dropecho_dungen_export_TiledExporter.export = function(map) {
 	var json = JSON.stringify(tiled_map,null," ");
 	return json;
 };
-var dropecho_dungen_map_Map2d = $hx_exports["dungen"]["Map2d"] = function(width,height,initTileData) {
+var dropecho_dungen_generators_CA_$PARAMS = $hx_exports["dungen"]["CA_PARAMS"] = function() {
+	this.seed = "0";
+	this.start_fill_percent = 65;
+	this.tile_wall = 0;
+	this.tile_floor = 1;
+	this.width = 64;
+	this.height = 64;
+	this.steps = [];
+	this.steps = [{ reps : 4, r1_cutoff : 5, r2_cutoff : 2},{ reps : 3, r1_cutoff : 5, r2_cutoff : 0}];
+};
+dropecho_dungen_generators_CA_$PARAMS.__name__ = "dropecho.dungen.generators.CA_PARAMS";
+dropecho_dungen_generators_CA_$PARAMS.prototype = {
+	steps: null
+	,height: null
+	,width: null
+	,tile_floor: null
+	,tile_wall: null
+	,start_fill_percent: null
+	,seed: null
+	,__class__: dropecho_dungen_generators_CA_$PARAMS
+};
+var dropecho_dungen_generators_CAGenerator = $hx_exports["dungen"]["CAGenerator"] = function() { };
+dropecho_dungen_generators_CAGenerator.__name__ = "dropecho.dungen.generators.CAGenerator";
+dropecho_dungen_generators_CAGenerator.generate = function(opts) {
+	var params = dropecho_interop_Extender.defaults(new dropecho_dungen_generators_CA_$PARAMS(),opts);
+	var map = dropecho_dungen_generators_RandomGenerator.generate(params);
+	var _g = 0;
+	var _g1 = params.steps;
+	while(_g < _g1.length) {
+		var step = _g1[_g];
+		++_g;
+		var _g2 = 0;
+		var _g11 = step.reps;
+		while(_g2 < _g11) {
+			var _ = _g2++;
+			dropecho_dungen_generators_CAGenerator.buildFromCA(map,params,step);
+		}
+	}
+	return map;
+};
+dropecho_dungen_generators_CAGenerator.buildFromCA = function(map,params,step) {
+	var temp = new haxe_ds_IntMap();
+	var _g = 0;
+	var _g1 = params.width;
+	while(_g < _g1) {
+		var x = _g++;
+		var _g2 = 0;
+		var _g11 = params.height;
+		while(_g2 < _g11) {
+			var y = _g2++;
+			var nCount = map.getNeighborCount(x,y,params.tile_wall);
+			var nCount2 = map.getNeighborCount(x,y,params.tile_wall,2);
+			var pos = map._width * y + x;
+			if(nCount >= step.r1_cutoff || nCount2 <= step.r2_cutoff) {
+				temp.h[pos] = params.tile_wall;
+			} else {
+				temp.h[pos] = params.tile_floor;
+			}
+		}
+	}
+	var i = temp.keys();
+	while(i.hasNext()) {
+		var i1 = i.next();
+		var pos1 = map.IndexToXY(i1);
+		map._mapData[map._width * pos1.y + pos1.x] = temp.h[i1];
+	}
+};
+var dropecho_dungen_generators_ConvChain = $hx_exports["dungen"]["ConvChain"] = function(sample) {
+	this.seed = "0";
+	this.sample = sample;
+	this.cachedN = -1;
+	this.cachedWeights = null;
+	this.rng = new seedyrng_Random();
+	this.rng.setStringSeed(this.seed);
+};
+dropecho_dungen_generators_ConvChain.__name__ = "dropecho.dungen.generators.ConvChain";
+dropecho_dungen_generators_ConvChain.prototype = {
+	sample: null
+	,cachedN: null
+	,cachedWeights: null
+	,rng: null
+	,seed: null
+	,processWeights: function(sample,n) {
+		var size = Math.pow(2,n * n) | 0;
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = size;
+		while(_g1 < _g2) {
+			var _ = _g1++;
+			_g.push(0.0);
+		}
+		var weights = _g;
+		var _g3 = 0;
+		var _g4 = sample._height;
+		while(_g3 < _g4) {
+			var x = _g3++;
+			var _g31 = 0;
+			var _g41 = sample._width;
+			while(_g31 < _g41) {
+				var y = _g31++;
+				var rect = sample.getRect(x,y,x + n - 1,y + n - 1,true);
+				var p = dropecho_dungen_map_Pattern.init(n,rect);
+				var _g32 = 0;
+				var _g42 = p.hashes.length;
+				while(_g32 < _g42) {
+					var h = _g32++;
+					weights[p.hashes[h]] += 1;
+				}
+			}
+		}
+		var _g5 = 0;
+		var _g6 = weights.length;
+		while(_g5 < _g6) {
+			var k = _g5++;
+			weights[k] = weights[k] <= 0 ? 0.1 : weights[k];
+		}
+		return weights;
+	}
+	,getWeights: function(n) {
+		if(this.cachedN != n) {
+			this.cachedN = n;
+			this.cachedWeights = this.processWeights(this.sample,n);
+		}
+		return this.cachedWeights;
+	}
+	,generateBaseField: function(width,height) {
+		return dropecho_dungen_generators_RandomGenerator.generate({ height : height, width : width, seed : this.seed});
+	}
+	,applyChanges: function(field,weights,n,temperature,changes) {
+		var r;
+		var q;
+		var x;
+		var y;
+		var ind;
+		var difference;
+		var _g = 0;
+		var _g1 = changes;
+		while(_g < _g1) {
+			var _ = _g++;
+			q = 1.0;
+			r = this.rng.randomInt(0,field._mapData.length);
+			x = r % field._width | 0;
+			y = r / field._width | 0;
+			var _g2 = y - n + 1;
+			var _g11 = y + n;
+			while(_g2 < _g11) {
+				var sy = _g2++;
+				var _g3 = x - n + 1;
+				var _g12 = x + n;
+				while(_g3 < _g12) {
+					var sx = _g3++;
+					ind = 0;
+					difference = 0;
+					var _g4 = 0;
+					var _g13 = n;
+					while(_g4 < _g13) {
+						var dy = _g4++;
+						var _g5 = 0;
+						var _g14 = n;
+						while(_g5 < _g14) {
+							var dx = _g5++;
+							var power = 1 << dy * n + dx;
+							var X = sx + dx;
+							var Y = sy + dy;
+							X = Math.abs(X % field._width) | 0;
+							Y = Math.abs(Y % field._height) | 0;
+							var value = field._mapData[field._width * Y + X];
+							ind += value != 0 ? power : 0;
+							if(X == x && Y == y) {
+								difference = value != 0 ? power : -power;
+							}
+						}
+					}
+					var a = weights[ind - difference];
+					var b = weights[ind];
+					q *= a / b;
+				}
+			}
+			if(q >= 1) {
+				field._mapData[field._width * y + x] = field._mapData[field._width * y + x] != 1 ? 1 : 0;
+			} else {
+				if(temperature != 1) {
+					q = Math.pow(q,1.0 / temperature);
+				}
+				if(q > this.rng.random()) {
+					field._mapData[field._width * y + x] = field._mapData[field._width * y + x] != 1 ? 1 : 0;
+				}
+			}
+		}
+	}
+	,generate: function(width,height,n,temperature,iterations) {
+		var changesPerIterations = width * height;
+		var field = this.generateBaseField(width,height);
+		var weights = this.getWeights(n);
+		var _g = 0;
+		var _g1 = iterations;
+		while(_g < _g1) {
+			var _ = _g++;
+			this.applyChanges(field,weights,n,temperature,changesPerIterations);
+		}
+		return field;
+	}
+	,__class__: dropecho_dungen_generators_ConvChain
+};
+var dropecho_dungen_generators_DrunkWalkGenerator = $hx_exports["dungen"]["WalkGenerator"] = function() { };
+dropecho_dungen_generators_DrunkWalkGenerator.__name__ = "dropecho.dungen.generators.DrunkWalkGenerator";
+dropecho_dungen_generators_DrunkWalkGenerator.generate = function(params) {
+	var random = new seedyrng_Random();
+	var height = params.height;
+	var width = params.width;
+	var tile_floor = params.tile_floor;
+	var tile_wall = params.tile_wall;
+	var start_fill_percent = params.start_fill_percent;
+	var countOfFilled = 0;
+	var totalCount = height * width;
+	var map = new dropecho_dungen_Map2d(width,height,tile_wall);
+	var walkerPos_x = width / 2 | 0;
+	var walkerPos_y = height / 2 | 0;
+	map._mapData[map._width * walkerPos_y + walkerPos_x] = 0;
+	var counter = 0;
+	var direction = random.randomInt(0,3);
+	while(countOfFilled < totalCount * (start_fill_percent / 100)) {
+		direction = random.randomInt(0,3);
+		if(map._mapData[map._width * walkerPos_y + walkerPos_x] != tile_floor) {
+			map._mapData[map._width * walkerPos_y + walkerPos_x] = tile_floor;
+			++countOfFilled;
+		}
+		walkerPos_y += direction == 0 ? -1 : 0;
+		walkerPos_y += direction == 2 ? 1 : 0;
+		walkerPos_x += direction == 1 ? -1 : 0;
+		walkerPos_x += direction == 3 ? 1 : 0;
+		if(walkerPos_x < 0 || walkerPos_x > width - 1) {
+			walkerPos_x = width / 2 | 0;
+			walkerPos_y = height / 2 | 0;
+		}
+		if(walkerPos_y < 0 || walkerPos_y > height - 1) {
+			walkerPos_x = width / 2 | 0;
+			walkerPos_y = height / 2 | 0;
+		}
+		if(counter >= 500000) {
+			break;
+		}
+		++counter;
+	}
+	return map;
+};
+var dropecho_dungen_generators_FloorPlanGenerator = $hx_exports["dungen"]["FloorPlanGenerator"] = function() { };
+dropecho_dungen_generators_FloorPlanGenerator.__name__ = "dropecho.dungen.generators.FloorPlanGenerator";
+dropecho_dungen_generators_FloorPlanGenerator.generate = function(params) {
+	var width = params.width;
+	var height = params.height;
+	var tile_floor = params.tile_floor;
+	var tile_wall = params.tile_wall;
+	var map = new dropecho_dungen_Map2d(width,height);
+	var rooms = [];
+	rooms.push({ width : 20, height : 20, x : -999999, y : -999999});
+	rooms.push({ width : 20, height : 20, x : -999999, y : -999999});
+	rooms.push({ width : 20, height : 30, x : -999999, y : -999999});
+	rooms.push({ width : 30, height : 20, x : -999999, y : -999999});
+	dropecho_dungen_generators_FloorPlanGenerator.arrangeRooms(map,rooms);
+	return map;
+};
+dropecho_dungen_generators_FloorPlanGenerator.scaleFloorPlan = function(map,rooms) {
+};
+dropecho_dungen_generators_FloorPlanGenerator.arrangeRooms = function(map,rooms) {
+	var random = new seedyrng_Random();
+	var mapMidX = map._width / 2;
+	var mapMidY = map._height / 2;
+	var randomRooms = rooms.slice();
+	random.shuffle(randomRooms);
+	var _g = 0;
+	while(_g < randomRooms.length) {
+		var r = randomRooms[_g];
+		++_g;
+		r.x = 500;
+		r.y = 500;
+		var isRight = r.x > mapMidX;
+		var isAbove = r.y > mapMidY;
+	}
+};
+var dropecho_dungen_generators_MixedGenerator = $hx_exports["dungen"]["MixedGenerator"] = function() { };
+dropecho_dungen_generators_MixedGenerator.__name__ = "dropecho.dungen.generators.MixedGenerator";
+dropecho_dungen_generators_MixedGenerator.buildRooms = function(tree,opts) {
+	var random = new seedyrng_Random();
+	var params = dropecho_interop_Extender.defaults({ tile_wall : 0, tile_floor : 1, cave_percent : 20},opts);
+	var rootvalue = tree.root.value;
+	var map = new dropecho_dungen_Map2d(rootvalue.width,rootvalue.height,params.tile_wall);
+	var makeRooms = function(node) {
+		if(node.hasLeft() || node.hasRight()) {
+			return true;
+		}
+		var roomStartX = node.value.x + 1;
+		var roomStartY = node.value.y + 1;
+		var roomEndX = node.value.x + node.value.width - 1;
+		var roomEndY = node.value.y + node.value.height - 1;
+		var _g = roomStartX;
+		var _g1 = roomEndX;
+		while(_g < _g1) {
+			var x = _g++;
+			var _g2 = roomStartY;
+			var _g11 = roomEndY;
+			while(_g2 < _g11) {
+				var y = _g2++;
+				map._mapData[map._width * y + x] = params.tile_floor;
+			}
+		}
+		return true;
+	};
+	var makeCaveFromCA = function(node1) {
+		if((node1.hasLeft() || node1.hasRight()) && (node1.right.hasRight() || node1.right.hasLeft() || node1.left.hasRight() || node1.left.hasLeft())) {
+			return true;
+		}
+		var roomStartX1 = node1.value.x + 1;
+		var roomStartY1 = node1.value.y + 1;
+		var cave = dropecho_dungen_generators_CAGenerator.generate({ height : node1.value.height, width : node1.value.width});
+		var _g3 = 0;
+		var _g12 = cave._width;
+		while(_g3 < _g12) {
+			var x1 = _g3++;
+			var _g4 = 0;
+			var _g13 = cave._height;
+			while(_g4 < _g13) {
+				var y1 = _g4++;
+				map._mapData[map._width * (y1 + roomStartY1) + (x1 + roomStartX1)] = cave._mapData[cave._width * y1 + x1];
+			}
+		}
+		return true;
+	};
+	var makeCorridors = function(node2) {
+		if(!node2.hasLeft() && !node2.hasRight()) {
+			return true;
+		}
+		var leftXcenter = node2.left.value.x + node2.left.value.width / 2 | 0;
+		var leftYcenter = node2.left.value.y + node2.left.value.height / 2 | 0;
+		var rightXcenter = node2.right.value.x + node2.right.value.width / 2 | 0;
+		var rightYcenter = node2.right.value.y + node2.right.value.height / 2 | 0;
+		var startX = leftXcenter <= rightXcenter ? leftXcenter : rightXcenter;
+		var endX = leftXcenter >= rightXcenter ? leftXcenter : rightXcenter;
+		var startY = leftYcenter <= rightYcenter ? leftYcenter : rightYcenter;
+		var endY = leftYcenter >= rightYcenter ? leftYcenter : rightYcenter;
+		var _g5 = startX;
+		var _g14 = endX;
+		while(_g5 < _g14) {
+			var x2 = _g5++;
+			map._mapData[map._width * startY + x2] = params.tile_floor;
+		}
+		var _g21 = startY;
+		var _g31 = endY;
+		while(_g21 < _g31) {
+			var y2 = _g21++;
+			map._mapData[map._width * y2 + startX] = params.tile_floor;
+		}
+		return true;
+	};
+	var chooseRoomOrCave = function(node3) {
+		if(random.random() * 100 > params.cave_percent) {
+			return makeRooms(node3);
+		} else {
+			return makeCaveFromCA(node3);
+		}
+	};
+	var closeEdges = function(node4) {
+		if(!node4.isRoot()) {
+			return true;
+		}
+		var _g6 = 0;
+		var _g15 = node4.value.width;
+		while(_g6 < _g15) {
+			var x3 = _g6++;
+			map._mapData[map._width * 0 + x3] = params.tile_wall;
+			map._mapData[map._width * node4.value.height + x3] = params.tile_wall;
+		}
+		var _g22 = 0;
+		var _g32 = node4.value.height;
+		while(_g22 < _g32) {
+			var y3 = _g22++;
+			map._mapData[map._width * y3] = params.tile_wall;
+			map._mapData[map._width * y3 + node4.value.width] = params.tile_wall;
+		}
+		return false;
+	};
+	var povisitor = new dropecho_ds_algos_PostOrderTraversal();
+	var invisitor = new dropecho_ds_algos_InOrderTraversal();
+	povisitor.run(tree.root,chooseRoomOrCave);
+	povisitor.visited.length = 0;
+	invisitor.run(tree.root,closeEdges);
+	povisitor.run(tree.root,makeCorridors);
+	return map;
+};
+var dropecho_dungen_generators_RandomParams = function() {
+	this.seed = "0";
+	this.start_fill_percent = 50;
+	this.tile_wall = 0;
+	this.tile_floor = 1;
+	this.width = 64;
+	this.height = 64;
+};
+dropecho_dungen_generators_RandomParams.__name__ = "dropecho.dungen.generators.RandomParams";
+dropecho_dungen_generators_RandomParams.prototype = {
+	height: null
+	,width: null
+	,tile_floor: null
+	,tile_wall: null
+	,start_fill_percent: null
+	,seed: null
+	,__class__: dropecho_dungen_generators_RandomParams
+};
+var dropecho_dungen_generators_RandomGenerator = $hx_exports["dungen"]["RandomGenerator"] = function() { };
+dropecho_dungen_generators_RandomGenerator.__name__ = "dropecho.dungen.generators.RandomGenerator";
+dropecho_dungen_generators_RandomGenerator.generate = function(opts) {
+	var params = dropecho_interop_Extender.defaults(new dropecho_dungen_generators_RandomParams(),opts);
+	var random = new seedyrng_Random();
+	random.setStringSeed(params.seed);
+	var map = new dropecho_dungen_Map2d(params.width,params.height,params.tile_wall);
+	var _g = 0;
+	var _g1 = params.width * params.height;
+	while(_g < _g1) {
+		var i = _g++;
+		map._mapData[i] = random.random() * 100 > params.start_fill_percent ? params.tile_floor : params.tile_wall;
+	}
+	return map;
+};
+var dropecho_dungen_generators_RoomParams = function() {
+	this.padding = 0;
+	this.tileWall = 0;
+	this.tileFloor = 1;
+};
+dropecho_dungen_generators_RoomParams.__name__ = "dropecho.dungen.generators.RoomParams";
+dropecho_dungen_generators_RoomParams.prototype = {
+	tileFloor: null
+	,tileWall: null
+	,padding: null
+	,__class__: dropecho_dungen_generators_RoomParams
+};
+var dropecho_dungen_generators_RoomGenerator = $hx_exports["dungen"]["RoomGenerator"] = function() { };
+dropecho_dungen_generators_RoomGenerator.__name__ = "dropecho.dungen.generators.RoomGenerator";
+dropecho_dungen_generators_RoomGenerator.buildRooms = function(tree,opts) {
+	var params = dropecho_interop_Extender.defaults(new dropecho_dungen_generators_RoomParams(),opts);
+	var rootvalue = tree.getRoot().value;
+	var map = new dropecho_dungen_Map2d(rootvalue.width,rootvalue.height,params.tileWall);
+	var makeRoom = function(node) {
+		if(node.hasLeft() || node.hasRight()) {
+			return true;
+		}
+		var lPad = params.padding / 2 | 0;
+		var rPad = (params.padding / 2 | 0) + params.padding % 2;
+		var roomStartX = node.value.x + 1 + lPad;
+		var roomStartY = node.value.y + 1 + lPad;
+		var roomEndX = node.value.x + node.value.width - 1 - rPad;
+		var roomEndY = node.value.y + node.value.height - 1 - rPad;
+		if(roomStartX != 1) {
+			--roomStartX;
+		}
+		if(roomStartY != 1) {
+			--roomStartY;
+		}
+		var _g = roomStartX;
+		var _g1 = roomEndX;
+		while(_g < _g1) {
+			var x = _g++;
+			var _g2 = roomStartY;
+			var _g11 = roomEndY;
+			while(_g2 < _g11) {
+				var y = _g2++;
+				map._mapData[map._width * y + x] = params.tileFloor;
+			}
+		}
+		return true;
+	};
+	var makeCorridors = function(node1) {
+		if(!node1.hasLeft() && !node1.hasRight()) {
+			return true;
+		}
+		var leftXcenter = node1.left.value.x + node1.left.value.width / 2 | 0;
+		var leftYcenter = node1.left.value.y + node1.left.value.height / 2 | 0;
+		var rightXcenter = node1.right.value.x + node1.right.value.width / 2 | 0;
+		var rightYcenter = node1.right.value.y + node1.right.value.height / 2 | 0;
+		var startX = leftXcenter <= rightXcenter ? leftXcenter : rightXcenter;
+		var endX = leftXcenter >= rightXcenter ? leftXcenter : rightXcenter;
+		var startY = leftYcenter <= rightYcenter ? leftYcenter : rightYcenter;
+		var endY = leftYcenter >= rightYcenter ? leftYcenter : rightYcenter;
+		var _g3 = startX;
+		var _g12 = endX;
+		while(_g3 < _g12) {
+			var x1 = _g3++;
+			map._mapData[map._width * startY + x1] = params.tileFloor;
+		}
+		var _g21 = startY;
+		var _g31 = endY;
+		while(_g21 < _g31) {
+			var y1 = _g21++;
+			map._mapData[map._width * y1 + startX] = params.tileFloor;
+		}
+		return true;
+	};
+	var visitor = new dropecho_ds_algos_PostOrderTraversal();
+	visitor.run(tree.root,makeRoom);
+	visitor.visited.length = 0;
+	visitor.run(tree.root,makeCorridors);
+	return map;
+};
+var dropecho_dungen_generators_TunnelerGenerator = $hx_exports["dungen"]["TunnelerGenerator"] = function() { };
+dropecho_dungen_generators_TunnelerGenerator.__name__ = "dropecho.dungen.generators.TunnelerGenerator";
+dropecho_dungen_generators_TunnelerGenerator.generate = function(params) {
+	var height = params.height;
+	var width = params.width;
+	var tile_floor = params.tile_floor;
+	var tile_wall = params.tile_wall;
+	var start_fill_percent = params.start_fill_percent;
+	var countOfFilled = 0;
+	var totalCount = height * width;
+	var map = new dropecho_dungen_Map2d(width,height,tile_wall);
+	var walkerPos_x = width / 2 | 0;
+	var walkerPos_y = height / 2 | 0;
+	map._mapData[map._width * walkerPos_y + walkerPos_x] = 0;
+	return map;
+};
+dropecho_dungen_generators_TunnelerGenerator.getEntrancePosition = function(map) {
+	var random = new seedyrng_Random();
+	var top = random.randomInt(0,1) == 1;
+	var right = random.randomInt(0,1) == 1;
+	return null;
+};
+var dropecho_dungen_generators__$TunnelerGenerator_Tunneler = function(map,position,width,direction,lifeSpan) {
+	if(lifeSpan == null) {
+		lifeSpan = 5;
+	}
+	if(direction == null) {
+		direction = 2;
+	}
+	if(width == null) {
+		width = 1;
+	}
+	this.map = map;
+	this.position = position;
+	this.width = width;
+	this.direction = direction;
+	this.lifeSpan = lifeSpan;
+};
+dropecho_dungen_generators__$TunnelerGenerator_Tunneler.__name__ = "dropecho.dungen.generators._TunnelerGenerator.Tunneler";
+dropecho_dungen_generators__$TunnelerGenerator_Tunneler.prototype = {
+	map: null
+	,position: null
+	,width: null
+	,direction: null
+	,lifeSpan: null
+	,run: function() {
+		var ticks = 0;
+		while(ticks < this.lifeSpan) {
+		}
+	}
+	,__class__: dropecho_dungen_generators__$TunnelerGenerator_Tunneler
+};
+var dropecho_dungen_map_Pattern = $hx_exports["dungen"]["Pattern"] = function(size,initTileData) {
 	if(initTileData == null) {
 		initTileData = 0;
 	}
-	this._height = 0;
-	this._width = 0;
-	this._width = width;
-	this._height = height;
-	this._mapData = [];
-	this.initializeData(initTileData);
+	this.hashes = [];
+	this.patterns = [];
+	dropecho_dungen_Map2d.call(this,size,size,initTileData);
 };
-dropecho_dungen_map_Map2d.__name__ = "dropecho.dungen.map.Map2d";
-dropecho_dungen_map_Map2d.prototype = {
-	_width: null
-	,_height: null
-	,_mapData: null
-	,initializeData: function(initTileData) {
-		if(initTileData == -1) {
-			return;
-		}
-		var _g = 0;
-		var _g1 = this._height * this._width;
-		while(_g < _g1) {
-			var i = _g++;
-			this._mapData[i] = initTileData;
-		}
+dropecho_dungen_map_Pattern.__name__ = "dropecho.dungen.map.Pattern";
+dropecho_dungen_map_Pattern.init = function(size,pattern,symmetry) {
+	if(symmetry == null) {
+		symmetry = 255;
 	}
-	,ensureEdgesAreWalls: function(tileType) {
-		if(tileType == null) {
-			tileType = 0;
+	var p = new dropecho_dungen_map_Pattern(size,0);
+	p._mapData = pattern;
+	p.buildVariations(symmetry);
+	return p;
+};
+dropecho_dungen_map_Pattern.__super__ = dropecho_dungen_Map2d;
+dropecho_dungen_map_Pattern.prototype = $extend(dropecho_dungen_Map2d.prototype,{
+	patterns: null
+	,hashes: null
+	,matchesIndex: function(map,x,y,tileToIgnore) {
+		if(tileToIgnore == null) {
+			tileToIgnore = -1;
 		}
+		var toMatch = map.getRect(x,y,x + this._width - 1,y + this._height - 1);
+		var match = false;
 		var _g = 0;
-		var _g1 = this._width - 1;
+		var _g1 = this.patterns.length;
 		while(_g < _g1) {
-			var x = _g++;
-			this._mapData[this.XYtoIndex(x,0)] = tileType;
-			this._mapData[this.XYtoIndex(x,this._height - 1)] = tileType;
-		}
-		var _g2 = 0;
-		var _g3 = this._height - 1;
-		while(_g2 < _g3) {
-			var y = _g2++;
-			this._mapData[this.XYtoIndex(0,y)] = tileType;
-			this._mapData[this.XYtoIndex(this._width - 1,y)] = tileType;
-		}
-	}
-	,getNeighborCount: function(x,y,neighborType,dist) {
-		if(dist == null) {
-			dist = 1;
-		}
-		var _gthis = this;
-		var isNeighborType = function(tile) {
-			if(_gthis._mapData[_gthis.XYtoIndex(tile.x,tile.y)] != neighborType) {
-				return tile.onMap == false;
-			} else {
-				return true;
+			var p = _g++;
+			var pattern = this.patterns[p];
+			var _g2 = 0;
+			var _g11 = pattern.length;
+			while(_g2 < _g11) {
+				var tile = _g2++;
+				match = toMatch[tile] == pattern[tile] || pattern[tile] == tileToIgnore;
+				if(!match) {
+					break;
+				}
 			}
-		};
+			if(match) {
+				return p;
+			}
+		}
+		return -1;
+	}
+	,matches: function(map,x,y) {
+		return this.matchesIndex(map,x,y) != -1;
+	}
+	,buildVariations: function(symmetry) {
+		if(symmetry == null) {
+			symmetry = 255;
+		}
+		var n = this._width;
+		var variations = [];
+		variations[0] = this._mapData;
+		var p = variations[0];
 		var _g = [];
 		var _g1 = 0;
-		var _g2 = this.getNeighbors(x,y,dist);
-		while(_g1 < _g2.length) {
-			var v = _g2[_g1];
-			++_g1;
-			if(isNeighborType(v)) {
-				_g.push(v);
-			}
-		}
-		return _g.length;
-	}
-	,getNeighbors: function(x,y,dist,diagonal) {
-		if(diagonal == null) {
-			diagonal = true;
-		}
-		if(dist == null) {
-			dist = 1;
-		}
-		var neighbors = [];
-		var isSelf = false;
-		var isNotOnMap = false;
-		var _g = -dist;
-		var _g1 = dist + 1;
-		while(_g < _g1) {
-			var i = _g++;
-			var _g2 = -dist;
-			var _g11 = dist + 1;
-			while(_g2 < _g11) {
-				var j = _g2++;
-				isSelf = i == 0 && j == 0;
-				isNotOnMap = x + i < 0 || x + i > this._width - 1 || y + j < 0 || y + j > this._height - 1;
-				if(isSelf || isNotOnMap) {
-					continue;
-				}
-				if(!diagonal && i == j) {
-					continue;
-				}
-				neighbors.push({ x : x + i, y : y + j, onMap : true});
-			}
-		}
-		return neighbors;
-	}
-	,XYtoIndex: function(x,y) {
-		return this._width * y + x;
-	}
-	,IndexToXY: function(index) {
-		var x = index % this._width | 0;
-		var y = index / this._width | 0;
-		return { x : x, y : y, onMap : x >= 0 && y >= 0 && x < this._width && y < this._height};
-	}
-	,set: function(x,y,data) {
-		this._mapData[this.XYtoIndex(x,y)] = data;
-	}
-	,setRect: function(x,y,x2,y2,data) {
-		var _g = x;
-		var _g1 = x2;
-		while(_g < _g1) {
-			var i = _g++;
-			var _g2 = y;
-			var _g11 = y2;
-			while(_g2 < _g11) {
-				var j = _g2++;
-				this.set(i,j,data);
-			}
-		}
-	}
-	,get: function(x,y) {
-		return this._mapData[this.XYtoIndex(x,y)];
-	}
-	,getRect: function(x,y,x2,y2) {
-		var _g = [];
-		var _g1 = x;
-		var _g2 = x2 + 1;
+		var _g2 = n;
 		while(_g1 < _g2) {
-			var i = _g1++;
-			var _g11 = y;
-			var _g21 = y2 + 1;
+			var y = _g1++;
+			var _g11 = 0;
+			var _g21 = n;
 			while(_g11 < _g21) {
-				var j = _g11++;
-				_g.push(this.get(i,j));
+				var x = _g11++;
+				_g.push(p[n - 1 - y + x * n]);
 			}
 		}
-		return _g;
-	}
-	,toString: function() {
-		var output = "\n MAP2d: \n\n";
-		var _g = 0;
-		var _g1 = this._height;
-		while(_g < _g1) {
-			var y = _g++;
-			var _g2 = 0;
-			var _g11 = this._width;
-			while(_g2 < _g11) {
-				var x = _g2++;
-				var val = this._mapData[this.XYtoIndex(x,y)];
-				if(val != 0 && val != 1) {
-					output += String.fromCodePoint(val);
-				} else {
-					output += val;
-				}
+		variations[1] = _g;
+		var p1 = variations[1];
+		var _g3 = [];
+		var _g12 = 0;
+		var _g22 = n;
+		while(_g12 < _g22) {
+			var y1 = _g12++;
+			var _g13 = 0;
+			var _g23 = n;
+			while(_g13 < _g23) {
+				var x1 = _g13++;
+				_g3.push(p1[n - 1 - y1 + x1 * n]);
 			}
-			output += "\n";
 		}
-		return output;
+		variations[2] = _g3;
+		var p2 = variations[2];
+		var _g4 = [];
+		var _g14 = 0;
+		var _g24 = n;
+		while(_g14 < _g24) {
+			var y2 = _g14++;
+			var _g15 = 0;
+			var _g25 = n;
+			while(_g15 < _g25) {
+				var x2 = _g15++;
+				_g4.push(p2[n - 1 - y2 + x2 * n]);
+			}
+		}
+		variations[3] = _g4;
+		var p3 = variations[0];
+		var _g5 = [];
+		var _g16 = 0;
+		var _g26 = n;
+		while(_g16 < _g26) {
+			var y3 = _g16++;
+			var _g17 = 0;
+			var _g27 = n;
+			while(_g17 < _g27) {
+				var x3 = _g17++;
+				_g5.push(p3[n - 1 - x3 + y3 * n]);
+			}
+		}
+		variations[4] = _g5;
+		var p4 = variations[1];
+		var _g6 = [];
+		var _g18 = 0;
+		var _g28 = n;
+		while(_g18 < _g28) {
+			var y4 = _g18++;
+			var _g19 = 0;
+			var _g29 = n;
+			while(_g19 < _g29) {
+				var x4 = _g19++;
+				_g6.push(p4[n - 1 - x4 + y4 * n]);
+			}
+		}
+		variations[5] = _g6;
+		var p5 = variations[2];
+		var _g7 = [];
+		var _g110 = 0;
+		var _g210 = n;
+		while(_g110 < _g210) {
+			var y5 = _g110++;
+			var _g111 = 0;
+			var _g211 = n;
+			while(_g111 < _g211) {
+				var x5 = _g111++;
+				_g7.push(p5[n - 1 - x5 + y5 * n]);
+			}
+		}
+		variations[6] = _g7;
+		var p6 = variations[3];
+		var _g8 = [];
+		var _g112 = 0;
+		var _g212 = n;
+		while(_g112 < _g212) {
+			var y6 = _g112++;
+			var _g113 = 0;
+			var _g213 = n;
+			while(_g113 < _g213) {
+				var x6 = _g113++;
+				_g8.push(p6[n - 1 - x6 + y6 * n]);
+			}
+		}
+		variations[7] = _g8;
+		var tmp = this.hashes;
+		var p7 = variations[0];
+		var result = 0;
+		var power = 1;
+		var _g9 = 0;
+		var _g114 = p7.length;
+		while(_g9 < _g114) {
+			var i = _g9++;
+			result += p7[p7.length - 1 - i] != 0 ? power : 0;
+			power *= 2;
+		}
+		tmp[0] = result;
+		this.patterns[0] = variations[0];
+		if((symmetry & 1) != 0) {
+			var tmp1 = this.hashes;
+			var p8 = variations[1];
+			var result1 = 0;
+			var power1 = 1;
+			var _g10 = 0;
+			var _g115 = p8.length;
+			while(_g10 < _g115) {
+				var i1 = _g10++;
+				result1 += p8[p8.length - 1 - i1] != 0 ? power1 : 0;
+				power1 *= 2;
+			}
+			tmp1[1] = result1;
+			this.patterns[1] = variations[1];
+		}
+		if((symmetry & 2) != 0) {
+			var tmp2 = this.hashes;
+			var p9 = variations[2];
+			var result2 = 0;
+			var power2 = 1;
+			var _g20 = 0;
+			var _g116 = p9.length;
+			while(_g20 < _g116) {
+				var i2 = _g20++;
+				result2 += p9[p9.length - 1 - i2] != 0 ? power2 : 0;
+				power2 *= 2;
+			}
+			tmp2[2] = result2;
+			this.patterns[2] = variations[2];
+		}
+		if((symmetry & 3) != 0) {
+			var tmp3 = this.hashes;
+			var p10 = variations[3];
+			var result3 = 0;
+			var power3 = 1;
+			var _g30 = 0;
+			var _g117 = p10.length;
+			while(_g30 < _g117) {
+				var i3 = _g30++;
+				result3 += p10[p10.length - 1 - i3] != 0 ? power3 : 0;
+				power3 *= 2;
+			}
+			tmp3[3] = result3;
+			this.patterns[3] = variations[3];
+		}
+		if((symmetry & 4) != 0) {
+			var tmp4 = this.hashes;
+			var p11 = variations[4];
+			var result4 = 0;
+			var power4 = 1;
+			var _g31 = 0;
+			var _g118 = p11.length;
+			while(_g31 < _g118) {
+				var i4 = _g31++;
+				result4 += p11[p11.length - 1 - i4] != 0 ? power4 : 0;
+				power4 *= 2;
+			}
+			tmp4[4] = result4;
+			this.patterns[4] = variations[4];
+		}
+		if((symmetry & 5) != 0) {
+			var tmp5 = this.hashes;
+			var p12 = variations[5];
+			var result5 = 0;
+			var power5 = 1;
+			var _g32 = 0;
+			var _g119 = p12.length;
+			while(_g32 < _g119) {
+				var i5 = _g32++;
+				result5 += p12[p12.length - 1 - i5] != 0 ? power5 : 0;
+				power5 *= 2;
+			}
+			tmp5[5] = result5;
+			this.patterns[5] = variations[5];
+		}
+		if((symmetry & 6) != 0) {
+			var tmp6 = this.hashes;
+			var p13 = variations[6];
+			var result6 = 0;
+			var power6 = 1;
+			var _g33 = 0;
+			var _g120 = p13.length;
+			while(_g33 < _g120) {
+				var i6 = _g33++;
+				result6 += p13[p13.length - 1 - i6] != 0 ? power6 : 0;
+				power6 *= 2;
+			}
+			tmp6[6] = result6;
+			this.patterns[6] = variations[6];
+		}
+		if((symmetry & 7) != 0) {
+			var tmp7 = this.hashes;
+			var p14 = variations[7];
+			var result7 = 0;
+			var power7 = 1;
+			var _g34 = 0;
+			var _g121 = p14.length;
+			while(_g34 < _g121) {
+				var i7 = _g34++;
+				result7 += p14[p14.length - 1 - i7] != 0 ? power7 : 0;
+				power7 *= 2;
+			}
+			tmp7[7] = result7;
+			this.patterns[7] = variations[7];
+		}
 	}
-	,__class__: dropecho_dungen_map_Map2d
-};
-var dropecho_dungen_map_MapHelper = function() { };
-dropecho_dungen_map_MapHelper.__name__ = "dropecho.dungen.map.MapHelper";
-dropecho_dungen_map_MapHelper.isMapConnected = function(map,tile,diagonal) {
+	,__class__: dropecho_dungen_map_Pattern
+});
+var dropecho_dungen_map_helpers_ConnectivityChecker = function() { };
+dropecho_dungen_map_helpers_ConnectivityChecker.__name__ = "dropecho.dungen.map.helpers.ConnectivityChecker";
+dropecho_dungen_map_helpers_ConnectivityChecker.run = function(map,tile,diagonal) {
 	if(diagonal == null) {
 		diagonal = true;
 	}
 	if(tile == null) {
 		tile = 0;
 	}
-	var start = dropecho_dungen_map_MapHelper.getFirstEmptyTile(map,tile);
-	var filled = dropecho_dungen_map_MapHelper.floodFill(map,start.x,start.y,tile,diagonal);
-	return dropecho_dungen_map_MapHelper.getFirstEmptyTile(map,tile,filled) == null;
+	var start = dropecho_dungen_map_helpers_GetFirstEmptyTile.getFirstEmptyTile(map,tile);
+	var filled = dropecho_dungen_map_helpers_FloodFill.floodFill(map,start.x,start.y,tile,diagonal);
+	return dropecho_dungen_map_helpers_GetFirstEmptyTile.getFirstEmptyTile(map,tile,filled) == null;
 };
-dropecho_dungen_map_MapHelper.getFirstEmptyTile = function(map,tile,ignore) {
+var dropecho_dungen_map_helpers_DistanceFill = function() { };
+dropecho_dungen_map_helpers_DistanceFill.__name__ = "dropecho.dungen.map.helpers.DistanceFill";
+dropecho_dungen_map_helpers_DistanceFill.distanceFill = function(map,tile,diagonal,maxDepth) {
+	if(maxDepth == null) {
+		maxDepth = 40;
+	}
+	if(diagonal == null) {
+		diagonal = true;
+	}
+	if(tile == null) {
+		tile = 0;
+	}
+	var distanceMap = new dropecho_dungen_Map2d(map._width,map._height);
+	var _g = 0;
+	var _g1 = map._mapData.length;
+	while(_g < _g1) {
+		var i = _g++;
+		distanceMap._mapData[i] = map._mapData[i] == tile ? 0 : 999;
+	}
+	var pass = 0;
+	var changes = 1;
+	while(changes > 0 && pass++ < maxDepth) {
+		changes = 0;
+		var _g2 = 0;
+		var _g3 = distanceMap._width;
+		while(_g2 < _g3) {
+			var x = _g2++;
+			var _g21 = 0;
+			var _g31 = distanceMap._height;
+			while(_g21 < _g31) {
+				var y = _g21++;
+				var neighbors = distanceMap.getNeighbors(x,y,1);
+				var _g22 = 0;
+				while(_g22 < neighbors.length) {
+					var n = neighbors[_g22];
+					++_g22;
+					var v = distanceMap._mapData[distanceMap._width * y + x];
+					var nval = distanceMap._mapData[distanceMap._width * n.y + n.x];
+					if(nval < v) {
+						distanceMap._mapData[distanceMap._width * y + x] = nval + 1;
+						++changes;
+					}
+				}
+			}
+		}
+	}
+	return distanceMap;
+};
+var dropecho_dungen_map_helpers_FindAndReplace = function() { };
+dropecho_dungen_map_helpers_FindAndReplace.__name__ = "dropecho.dungen.map.helpers.FindAndReplace";
+dropecho_dungen_map_helpers_FindAndReplace.findAndReplace = function(map,pattern1,pattern2,ignoreTile) {
+	if(ignoreTile == null) {
+		ignoreTile = -1;
+	}
+	var _g = 0;
+	var _g1 = map._width;
+	while(_g < _g1) {
+		var x = _g++;
+		var _g2 = 0;
+		var _g11 = map._height;
+		while(_g2 < _g11) {
+			var y = _g2++;
+			var matchesIndex = pattern1.matchesIndex(map,x,y);
+			if(matchesIndex != -1) {
+				var m = new dropecho_dungen_Map2d(pattern1._width,pattern1._height);
+				m._mapData = pattern1.patterns[matchesIndex];
+				var splat = new dropecho_dungen_Map2d(pattern2._width,pattern2._height);
+				splat._mapData = pattern2.patterns[matchesIndex];
+				map.splat(splat,x,y,ignoreTile);
+			}
+		}
+	}
+	return map;
+};
+var dropecho_dungen_map_helpers_FloodFill = function() { };
+dropecho_dungen_map_helpers_FloodFill.__name__ = "dropecho.dungen.map.helpers.FloodFill";
+dropecho_dungen_map_helpers_FloodFill.floodFill = function(map,startX,startY,tile,diagonal) {
+	if(diagonal == null) {
+		diagonal = true;
+	}
+	if(tile == null) {
+		tile = 0;
+	}
+	var closed = new haxe_ds_IntMap();
+	var open = [];
+	var neighbors = [];
+	var currentTile = map.IndexToXY(map._width * startY + startX);
+	open.push(currentTile);
+	var whereHasNotBeenVisited = function(tile1) {
+		return closed.h[map._width * tile1.y + tile1.x] == null;
+	};
+	var whereTileIsSameType = function(t) {
+		return map._mapData[map._width * t.y + t.x] == tile;
+	};
+	while(open.length > 0) {
+		currentTile = open.pop();
+		closed.h[map._width * currentTile.y + currentTile.x] = currentTile;
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = map.getNeighbors(currentTile.x,currentTile.y,1,diagonal);
+		while(_g1 < _g2.length) {
+			var v = _g2[_g1];
+			++_g1;
+			if(whereHasNotBeenVisited(v)) {
+				_g.push(v);
+			}
+		}
+		var _g3 = [];
+		var _g11 = 0;
+		var _g21 = _g;
+		while(_g11 < _g21.length) {
+			var v1 = _g21[_g11];
+			++_g11;
+			if(whereTileIsSameType(v1)) {
+				_g3.push(v1);
+			}
+		}
+		neighbors = _g3;
+		open = open.concat(neighbors);
+	}
+	return Lambda.array(closed);
+};
+var dropecho_dungen_map_helpers_GetFirstEmptyTile = function() { };
+dropecho_dungen_map_helpers_GetFirstEmptyTile.__name__ = "dropecho.dungen.map.helpers.GetFirstEmptyTile";
+dropecho_dungen_map_helpers_GetFirstEmptyTile.getFirstEmptyTile = function(map,tile,ignore) {
 	if(tile == null) {
 		tile = 0;
 	}
@@ -1235,431 +1826,6 @@ dropecho_dungen_map_MapHelper.getFirstEmptyTile = function(map,tile,ignore) {
 		}
 	}
 	return null;
-};
-dropecho_dungen_map_MapHelper.floodFill = function(map,startX,startY,tile,diagonal) {
-	if(diagonal == null) {
-		diagonal = true;
-	}
-	if(tile == null) {
-		tile = 0;
-	}
-	var closed = new haxe_ds_IntMap();
-	var open = [];
-	var neighbors = [];
-	var currentTile = map.XYtoIndex(startX,startY);
-	var currentTile1 = map.IndexToXY(currentTile);
-	open.push(currentTile1);
-	var whereHasNotBeenVisited = function(tile1) {
-		var key = map.XYtoIndex(tile1.x,tile1.y);
-		return closed.h[key] == null;
-	};
-	var whereTileIsSameType = function(t) {
-		return map.get(t.x,t.y) == tile;
-	};
-	while(open.length > 0) {
-		currentTile1 = open.pop();
-		var key1 = map.XYtoIndex(currentTile1.x,currentTile1.y);
-		closed.h[key1] = currentTile1;
-		var _g = [];
-		var _g1 = 0;
-		var _g2 = map.getNeighbors(currentTile1.x,currentTile1.y,1,diagonal);
-		while(_g1 < _g2.length) {
-			var v = _g2[_g1];
-			++_g1;
-			if(whereHasNotBeenVisited(v)) {
-				_g.push(v);
-			}
-		}
-		var _g3 = [];
-		var _g11 = 0;
-		var _g21 = _g;
-		while(_g11 < _g21.length) {
-			var v1 = _g21[_g11];
-			++_g11;
-			if(whereTileIsSameType(v1)) {
-				_g3.push(v1);
-			}
-		}
-		neighbors = _g3;
-		open = open.concat(neighbors);
-	}
-	return Lambda.array(closed);
-};
-dropecho_dungen_map_MapHelper.getHallwayTiles = function(map,tile) {
-	var hallwayTiles = [];
-	var _g = 0;
-	var _g1 = map._height;
-	while(_g < _g1) {
-		var i = _g++;
-		var _g2 = 0;
-		var _g11 = map._width;
-		while(_g2 < _g11) {
-			var j = _g2++;
-			if(map._mapData[map.XYtoIndex(i,j)] != tile) {
-				continue;
-			}
-			var c = map.getNeighborCount(i,j,tile,2);
-			var tmp = c < 8;
-		}
-	}
-	return hallwayTiles;
-};
-var dropecho_dungen_map_generators_DrunkWalkGenerator = $hx_exports["dungen"]["WalkGenerator"] = function() { };
-dropecho_dungen_map_generators_DrunkWalkGenerator.__name__ = "dropecho.dungen.map.generators.DrunkWalkGenerator";
-dropecho_dungen_map_generators_DrunkWalkGenerator.generate = function(params) {
-	var random = new seedyrng_Random();
-	var height = params.height;
-	var width = params.width;
-	var tile_floor = params.tile_floor;
-	var tile_wall = params.tile_wall;
-	var start_fill_percent = params.start_fill_percent;
-	var countOfFilled = 0;
-	var totalCount = height * width;
-	var map = new dropecho_dungen_map_Map2d(width,height,tile_wall);
-	var walkerPos_x = width / 2 | 0;
-	var walkerPos_y = height / 2 | 0;
-	map.set(walkerPos_x,walkerPos_y,0);
-	var counter = 0;
-	var direction = random.randomInt(0,3);
-	while(countOfFilled < totalCount * (start_fill_percent / 100)) {
-		direction = random.randomInt(0,3);
-		if(map.get(walkerPos_x,walkerPos_y) != tile_floor) {
-			map.set(walkerPos_x,walkerPos_y,tile_floor);
-			++countOfFilled;
-		}
-		walkerPos_y += direction == 0 ? -1 : 0;
-		walkerPos_y += direction == 2 ? 1 : 0;
-		walkerPos_x += direction == 1 ? -1 : 0;
-		walkerPos_x += direction == 3 ? 1 : 0;
-		if(walkerPos_x < 0 || walkerPos_x > width - 1) {
-			walkerPos_x = width / 2 | 0;
-			walkerPos_y = height / 2 | 0;
-		}
-		if(walkerPos_y < 0 || walkerPos_y > height - 1) {
-			walkerPos_x = width / 2 | 0;
-			walkerPos_y = height / 2 | 0;
-		}
-		if(counter >= 500000) {
-			break;
-		}
-		++counter;
-	}
-	return map;
-};
-var dropecho_dungen_map_generators_FloorPlanGenerator = $hx_exports["dungen"]["FloorPlanGenerator"] = function() { };
-dropecho_dungen_map_generators_FloorPlanGenerator.__name__ = "dropecho.dungen.map.generators.FloorPlanGenerator";
-dropecho_dungen_map_generators_FloorPlanGenerator.generate = function(params) {
-	var width = params.width;
-	var height = params.height;
-	var tile_floor = params.tile_floor;
-	var tile_wall = params.tile_wall;
-	var map = new dropecho_dungen_map_Map2d(width,height);
-	var rooms = [];
-	rooms.push({ width : 20, height : 20, x : -999999, y : -999999});
-	rooms.push({ width : 20, height : 20, x : -999999, y : -999999});
-	rooms.push({ width : 20, height : 30, x : -999999, y : -999999});
-	rooms.push({ width : 30, height : 20, x : -999999, y : -999999});
-	dropecho_dungen_map_generators_FloorPlanGenerator.arrangeRooms(map,rooms);
-	return map;
-};
-dropecho_dungen_map_generators_FloorPlanGenerator.scaleFloorPlan = function(map,rooms) {
-};
-dropecho_dungen_map_generators_FloorPlanGenerator.arrangeRooms = function(map,rooms) {
-	var random = new seedyrng_Random();
-	var mapMidX = map._width / 2;
-	var mapMidY = map._height / 2;
-	var randomRooms = rooms.slice();
-	random.shuffle(randomRooms);
-	var _g = 0;
-	while(_g < randomRooms.length) {
-		var r = randomRooms[_g];
-		++_g;
-		r.x = 500;
-		r.y = 500;
-		var isRight = r.x > mapMidX;
-		var isAbove = r.y > mapMidY;
-	}
-};
-var dropecho_dungen_map_generators_MixedGenerator = $hx_exports["dungen"]["MixedGenerator"] = function() { };
-dropecho_dungen_map_generators_MixedGenerator.__name__ = "dropecho.dungen.map.generators.MixedGenerator";
-dropecho_dungen_map_generators_MixedGenerator.buildRooms = function(tree,opts) {
-	var random = new seedyrng_Random();
-	var params = dropecho_interop_Extender.defaults({ tile_wall : 0, tile_floor : 1, cave_percent : 20},opts);
-	var rootvalue = tree.root.value;
-	var map = new dropecho_dungen_map_Map2d(rootvalue.width,rootvalue.height,params.tile_wall);
-	var makeRooms = function(node) {
-		if(node.hasLeft() || node.hasRight()) {
-			return true;
-		}
-		var roomStartX = node.value.x + 1;
-		var roomStartY = node.value.y + 1;
-		var roomEndX = node.value.x + node.value.width - 1;
-		var roomEndY = node.value.y + node.value.height - 1;
-		var _g = roomStartX;
-		var _g1 = roomEndX;
-		while(_g < _g1) {
-			var x = _g++;
-			var _g2 = roomStartY;
-			var _g11 = roomEndY;
-			while(_g2 < _g11) {
-				var y = _g2++;
-				map.set(x,y,params.tile_floor);
-			}
-		}
-		return true;
-	};
-	var makeCaveFromCA = function(node1) {
-		if((node1.hasLeft() || node1.hasRight()) && (node1.right.hasRight() || node1.right.hasLeft() || node1.left.hasRight() || node1.left.hasLeft())) {
-			return true;
-		}
-		var roomStartX1 = node1.value.x + 1;
-		var roomStartY1 = node1.value.y + 1;
-		var cave = dropecho_dungen_ca_Generator.generate({ height : node1.value.height, width : node1.value.width});
-		var _g3 = 0;
-		var _g12 = cave._width;
-		while(_g3 < _g12) {
-			var x1 = _g3++;
-			var _g4 = 0;
-			var _g13 = cave._height;
-			while(_g4 < _g13) {
-				var y1 = _g4++;
-				var makeCaveFromCA1 = cave.get(x1,y1);
-				map.set(x1 + roomStartX1,y1 + roomStartY1,makeCaveFromCA1);
-			}
-		}
-		return true;
-	};
-	var makeCorridors = function(node2) {
-		if(!node2.hasLeft() && !node2.hasRight()) {
-			return true;
-		}
-		var leftXcenter = node2.left.value.x + node2.left.value.width / 2 | 0;
-		var leftYcenter = node2.left.value.y + node2.left.value.height / 2 | 0;
-		var rightXcenter = node2.right.value.x + node2.right.value.width / 2 | 0;
-		var rightYcenter = node2.right.value.y + node2.right.value.height / 2 | 0;
-		var startX = leftXcenter <= rightXcenter ? leftXcenter : rightXcenter;
-		var endX = leftXcenter >= rightXcenter ? leftXcenter : rightXcenter;
-		var startY = leftYcenter <= rightYcenter ? leftYcenter : rightYcenter;
-		var endY = leftYcenter >= rightYcenter ? leftYcenter : rightYcenter;
-		var _g5 = startX;
-		var _g14 = endX;
-		while(_g5 < _g14) {
-			var x2 = _g5++;
-			map.set(x2,startY,params.tile_floor);
-		}
-		var _g21 = startY;
-		var _g31 = endY;
-		while(_g21 < _g31) {
-			var y2 = _g21++;
-			map.set(startX,y2,params.tile_floor);
-		}
-		return true;
-	};
-	var chooseRoomOrCave = function(node3) {
-		if(random.random() * 100 > params.cave_percent) {
-			return makeRooms(node3);
-		} else {
-			return makeCaveFromCA(node3);
-		}
-	};
-	var closeEdges = function(node4) {
-		if(!node4.isRoot()) {
-			return true;
-		}
-		var _g6 = 0;
-		var _g15 = node4.value.width;
-		while(_g6 < _g15) {
-			var x3 = _g6++;
-			map.set(x3,0,params.tile_wall);
-			map.set(x3,node4.value.height,params.tile_wall);
-		}
-		var _g22 = 0;
-		var _g32 = node4.value.height;
-		while(_g22 < _g32) {
-			var y3 = _g22++;
-			map.set(0,y3,params.tile_wall);
-			map.set(node4.value.width,y3,params.tile_wall);
-		}
-		return false;
-	};
-	var povisitor = new dropecho_ds_algos_PostOrderTraversal();
-	var invisitor = new dropecho_ds_algos_InOrderTraversal();
-	povisitor.run(tree.root,chooseRoomOrCave);
-	povisitor.visited.length = 0;
-	invisitor.run(tree.root,closeEdges);
-	povisitor.run(tree.root,makeCorridors);
-	return map;
-};
-var dropecho_dungen_map_generators_RandomParams = function() {
-	this.seed = "0";
-	this.start_fill_percent = 50;
-	this.tile_wall = 0;
-	this.tile_floor = 1;
-	this.width = 64;
-	this.height = 64;
-};
-dropecho_dungen_map_generators_RandomParams.__name__ = "dropecho.dungen.map.generators.RandomParams";
-dropecho_dungen_map_generators_RandomParams.prototype = {
-	height: null
-	,width: null
-	,tile_floor: null
-	,tile_wall: null
-	,start_fill_percent: null
-	,seed: null
-	,__class__: dropecho_dungen_map_generators_RandomParams
-};
-var dropecho_dungen_map_generators_RandomGenerator = $hx_exports["dungen"]["RandomGenerator"] = function() { };
-dropecho_dungen_map_generators_RandomGenerator.__name__ = "dropecho.dungen.map.generators.RandomGenerator";
-dropecho_dungen_map_generators_RandomGenerator.generate = function(opts) {
-	var params = dropecho_interop_Extender.defaults(new dropecho_dungen_map_generators_RandomParams(),opts);
-	var random = new seedyrng_Random();
-	random.setStringSeed(params.seed);
-	var map = new dropecho_dungen_map_Map2d(params.width,params.height,params.tile_wall);
-	var _g = 0;
-	var _g1 = params.width * params.height;
-	while(_g < _g1) {
-		var i = _g++;
-		map._mapData[i] = random.random() * 100 > params.start_fill_percent ? params.tile_floor : params.tile_wall;
-	}
-	return map;
-};
-var dropecho_dungen_map_generators_RoomParams = function() {
-	this.tileWall = 0;
-	this.tileFloor = 1;
-};
-dropecho_dungen_map_generators_RoomParams.__name__ = "dropecho.dungen.map.generators.RoomParams";
-dropecho_dungen_map_generators_RoomParams.prototype = {
-	tileFloor: null
-	,tileWall: null
-	,__class__: dropecho_dungen_map_generators_RoomParams
-};
-var dropecho_dungen_map_generators_RoomGenerator = $hx_exports["dungen"]["RoomGenerator"] = function() { };
-dropecho_dungen_map_generators_RoomGenerator.__name__ = "dropecho.dungen.map.generators.RoomGenerator";
-dropecho_dungen_map_generators_RoomGenerator.buildRooms = function(tree,opts) {
-	var params = dropecho_interop_Extender.defaults(new dropecho_dungen_map_generators_RoomParams(),opts);
-	var rootvalue = tree.getRoot().value;
-	var map = new dropecho_dungen_map_Map2d(rootvalue.width,rootvalue.height,params.tileWall);
-	var makeRoom = function(node) {
-		if(node.hasLeft() || node.hasRight()) {
-			return true;
-		}
-		var roomStartX = node.value.x + 1;
-		var roomStartY = node.value.y + 1;
-		var roomEndX = node.value.x + node.value.width - 1;
-		var roomEndY = node.value.y + node.value.height - 1;
-		var _g = roomStartX;
-		var _g1 = roomEndX;
-		while(_g < _g1) {
-			var x = _g++;
-			var _g2 = roomStartY;
-			var _g11 = roomEndY;
-			while(_g2 < _g11) {
-				var y = _g2++;
-				map.set(x,y,params.tileFloor);
-			}
-		}
-		return true;
-	};
-	var makeCorridors = function(node1) {
-		if(!node1.hasLeft() && !node1.hasRight()) {
-			return true;
-		}
-		var leftXcenter = node1.left.value.x + node1.left.value.width / 2 | 0;
-		var leftYcenter = node1.left.value.y + node1.left.value.height / 2 | 0;
-		var rightXcenter = node1.right.value.x + node1.right.value.width / 2 | 0;
-		var rightYcenter = node1.right.value.y + node1.right.value.height / 2 | 0;
-		var startX = leftXcenter <= rightXcenter ? leftXcenter : rightXcenter;
-		var endX = leftXcenter >= rightXcenter ? leftXcenter : rightXcenter;
-		var startY = leftYcenter <= rightYcenter ? leftYcenter : rightYcenter;
-		var endY = leftYcenter >= rightYcenter ? leftYcenter : rightYcenter;
-		var _g3 = startX;
-		var _g12 = endX;
-		while(_g3 < _g12) {
-			var x1 = _g3++;
-			map.set(x1,startY,params.tileFloor);
-		}
-		var _g21 = startY;
-		var _g31 = endY;
-		while(_g21 < _g31) {
-			var y1 = _g21++;
-			map.set(startX,y1,params.tileFloor);
-		}
-		return true;
-	};
-	var visitor = new dropecho_ds_algos_PostOrderTraversal();
-	visitor.run(tree.root,makeRoom);
-	visitor.visited.length = 0;
-	visitor.run(tree.root,makeCorridors);
-	return map;
-};
-var dropecho_dungen_map_generators_TunnelerGenerator = $hx_exports["dungen"]["TunnelerGenerator"] = function() { };
-dropecho_dungen_map_generators_TunnelerGenerator.__name__ = "dropecho.dungen.map.generators.TunnelerGenerator";
-dropecho_dungen_map_generators_TunnelerGenerator.generate = function(params) {
-	var height = params.height;
-	var width = params.width;
-	var tile_floor = params.tile_floor;
-	var tile_wall = params.tile_wall;
-	var start_fill_percent = params.start_fill_percent;
-	var countOfFilled = 0;
-	var totalCount = height * width;
-	var map = new dropecho_dungen_map_Map2d(width,height,tile_wall);
-	var walkerPos_x = width / 2 | 0;
-	var walkerPos_y = height / 2 | 0;
-	map.set(walkerPos_x,walkerPos_y,0);
-	return map;
-};
-dropecho_dungen_map_generators_TunnelerGenerator.getEntrancePosition = function(map) {
-	var random = new seedyrng_Random();
-	var top = random.randomInt(0,1) == 1;
-	var right = random.randomInt(0,1) == 1;
-	return null;
-};
-var dropecho_dungen_map_generators__$TunnelerGenerator_Tunneler = function(map,position,width,direction,lifeSpan) {
-	if(lifeSpan == null) {
-		lifeSpan = 5;
-	}
-	if(direction == null) {
-		direction = 2;
-	}
-	if(width == null) {
-		width = 1;
-	}
-	this.map = map;
-	this.position = position;
-	this.width = width;
-	this.direction = direction;
-	this.lifeSpan = lifeSpan;
-};
-dropecho_dungen_map_generators__$TunnelerGenerator_Tunneler.__name__ = "dropecho.dungen.map.generators._TunnelerGenerator.Tunneler";
-dropecho_dungen_map_generators__$TunnelerGenerator_Tunneler.prototype = {
-	map: null
-	,position: null
-	,width: null
-	,direction: null
-	,lifeSpan: null
-	,run: function() {
-		var ticks = 0;
-		while(ticks < this.lifeSpan) {
-		}
-	}
-	,__class__: dropecho_dungen_map_generators__$TunnelerGenerator_Tunneler
-};
-var dropecho_dungen_map_helpers_ConnectivityChecker = function() { };
-dropecho_dungen_map_helpers_ConnectivityChecker.__name__ = "dropecho.dungen.map.helpers.ConnectivityChecker";
-dropecho_dungen_map_helpers_ConnectivityChecker.prototype = {
-	check: function(map,tile) {
-		if(tile == null) {
-			tile = 0;
-		}
-		var firstEmpty = dropecho_dungen_map_MapHelper.getFirstEmptyTile(map,tile);
-		if(firstEmpty == null) {
-			return false;
-		}
-		var filledTiles = dropecho_dungen_map_MapHelper.floodFill(map,tile,firstEmpty.x,firstEmpty.y);
-		firstEmpty = dropecho_dungen_map_MapHelper.getFirstEmptyTile(map,tile);
-		return firstEmpty != null;
-	}
-	,__class__: dropecho_dungen_map_helpers_ConnectivityChecker
 };
 var dropecho_dungen_map_helpers_Utils = function() { };
 dropecho_dungen_map_helpers_Utils.__name__ = "dropecho.dungen.map.helpers.Utils";

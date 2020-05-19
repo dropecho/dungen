@@ -1,6 +1,15 @@
+## <small>0.6.4 (2020-05-19)</small>
+
+* Add auto-copy of new version of js bin to docs folder ([40ab510](https://github.com/dropecho/dungen/commit/40ab510))
+* Fix autocopy command ([3ca8d27](https://github.com/dropecho/dungen/commit/3ca8d27))
+
+
+
 ## <small>0.6.2 (2020-05-19)</small>
 
 * Cleanup build, setup to build before version/push occurs ([3097861](https://github.com/dropecho/dungen/commit/3097861))
+* Release 0.6.2 ([b70f833](https://github.com/dropecho/dungen/commit/b70f833))
+* version ([32b6f43](https://github.com/dropecho/dungen/commit/32b6f43))
 
 
 
