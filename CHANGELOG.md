@@ -1,7 +1,15 @@
+## <small>0.6.2 (2020-05-19)</small>
+
+* Cleanup build, setup to build before version/push occurs ([3097861](https://github.com/dropecho/dungen/commit/3097861))
+
+
+
 ## <small>0.6.1 (2020-05-19)</small>
 
 * Fix issue with utils duplicate code ([2b4cf8f](https://github.com/dropecho/dungen/commit/2b4cf8f))
 * Fix release:cs script ref ([80b7fe6](https://github.com/dropecho/dungen/commit/80b7fe6))
+* Release 0.6.1 ([0343aab](https://github.com/dropecho/dungen/commit/0343aab))
+* version ([7ca6105](https://github.com/dropecho/dungen/commit/7ca6105))
 
 
 
