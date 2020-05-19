@@ -11,8 +11,8 @@
 	"contributors": [
 		"vantreeseba"
 	],
-	"version": "0.6.4",
-	"releasenote": "Add auto-copy of new version of js bin to docs folder",
+	"version": "0.7.0",
+	"releasenote": "First version of region manager/detection.",
 	"tags": [
 		"game",
 		"procedural",
