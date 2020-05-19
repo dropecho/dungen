@@ -1663,7 +1663,7 @@ dropecho_dungen_map_Pattern.prototype = $extend(dropecho_dungen_Map2d.prototype,
 	}
 	,__class__: dropecho_dungen_map_Pattern
 });
-var dropecho_dungen_map_helpers_CheckConnectivity = function() { };
+var dropecho_dungen_map_helpers_CheckConnectivity = $hx_exports["dungen"]["CheckConnectivity"] = function() { };
 dropecho_dungen_map_helpers_CheckConnectivity.__name__ = "dropecho.dungen.map.helpers.CheckConnectivity";
 dropecho_dungen_map_helpers_CheckConnectivity.checkConnectivity = function(map,tile,diagonal) {
 	if(diagonal == null) {
@@ -1680,7 +1680,7 @@ dropecho_dungen_map_helpers_CheckConnectivity.checkConnectivity = function(map,t
 	firstTile = dropecho_dungen_map_helpers_GetFirstTileOfType.getFirstTileOfType(map,tile,filledTiles);
 	return firstTile == null;
 };
-var dropecho_dungen_map_helpers_DistanceFill = function() { };
+var dropecho_dungen_map_helpers_DistanceFill = $hx_exports["dungen"]["DistanceFill"] = function() { };
 dropecho_dungen_map_helpers_DistanceFill.__name__ = "dropecho.dungen.map.helpers.DistanceFill";
 dropecho_dungen_map_helpers_DistanceFill.distanceFill = function(map,tile,diagonal,maxDepth) {
 	if(maxDepth == null) {
@@ -1728,7 +1728,7 @@ dropecho_dungen_map_helpers_DistanceFill.distanceFill = function(map,tile,diagon
 	}
 	return distanceMap;
 };
-var dropecho_dungen_map_helpers_FindAndReplace = function() { };
+var dropecho_dungen_map_helpers_FindAndReplace = $hx_exports["dungen"]["FindAndReplace"] = function() { };
 dropecho_dungen_map_helpers_FindAndReplace.__name__ = "dropecho.dungen.map.helpers.FindAndReplace";
 dropecho_dungen_map_helpers_FindAndReplace.findAndReplace = function(map,pattern1,pattern2,ignoreTile) {
 	if(ignoreTile == null) {
@@ -1754,7 +1754,7 @@ dropecho_dungen_map_helpers_FindAndReplace.findAndReplace = function(map,pattern
 	}
 	return map;
 };
-var dropecho_dungen_map_helpers_FloodFill = function() { };
+var dropecho_dungen_map_helpers_FloodFill = $hx_exports["dungen"]["FloodFill"] = function() { };
 dropecho_dungen_map_helpers_FloodFill.__name__ = "dropecho.dungen.map.helpers.FloodFill";
 dropecho_dungen_map_helpers_FloodFill.floodFill = function(map,startX,startY,tile,diagonal) {
 	if(diagonal == null) {
@@ -1802,7 +1802,7 @@ dropecho_dungen_map_helpers_FloodFill.floodFill = function(map,startX,startY,til
 	}
 	return Lambda.array(closed);
 };
-var dropecho_dungen_map_helpers_GetFirstTileOfType = function() { };
+var dropecho_dungen_map_helpers_GetFirstTileOfType = $hx_exports["dungen"]["GetFirstTileOfType"] = function() { };
 dropecho_dungen_map_helpers_GetFirstTileOfType.__name__ = "dropecho.dungen.map.helpers.GetFirstTileOfType";
 dropecho_dungen_map_helpers_GetFirstTileOfType.getFirstTileOfType = function(map,tile,ignore) {
 	if(tile == null) {
@@ -1833,7 +1833,7 @@ dropecho_dungen_map_helpers_GetFirstTileOfType.getFirstTileOfType = function(map
 	}
 	return null;
 };
-var dropecho_dungen_map_helpers_RegionManager = function() { };
+var dropecho_dungen_map_helpers_RegionManager = $hx_exports["dungen"]["RegionManager"] = function() { };
 dropecho_dungen_map_helpers_RegionManager.__name__ = "dropecho.dungen.map.helpers.RegionManager";
 dropecho_dungen_map_helpers_RegionManager.findAndTagRegions = function(map,depth) {
 	if(depth == null) {

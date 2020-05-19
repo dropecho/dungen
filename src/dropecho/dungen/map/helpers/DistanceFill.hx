@@ -2,6 +2,7 @@ package dropecho.dungen.map.helpers;
 
 import dropecho.dungen.Map2d;
 
+@:expose("dungen.DistanceFill")
 class DistanceFill {
 	public static function distanceFill(map:Map2d, tile:Int = 0, diagonal:Bool = true, maxDepth:Int = 40) {
 		var distanceMap = new Map2d(map._width, map._height);

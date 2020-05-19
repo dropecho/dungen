@@ -4,6 +4,7 @@ import dropecho.dungen.Map2d;
 
 using Lambda;
 
+@:expose("dungen.GetFirstTileOfType")
 class GetFirstTileOfType {
 	public static function getFirstTileOfType(map:Map2d, tile:Int = 0, ignore:Array<Tile2d> = null):Tile2d {
 		for (i in 0...map._height * map._width) {

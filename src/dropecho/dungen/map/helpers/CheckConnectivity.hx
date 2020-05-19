@@ -3,6 +3,7 @@ package dropecho.dungen.map.helpers;
 using dropecho.dungen.map.helpers.FloodFill;
 using dropecho.dungen.map.helpers.GetFirstTileOfType;
 
+@:expose("dungen.CheckConnectivity")
 class CheckConnectivity {
 	public static function checkConnectivity(map:Map2d, tile:Int = 0, diagonal:Bool = true):Bool {
 		// get random non-filled tile

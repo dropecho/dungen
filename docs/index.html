@@ -127,6 +127,24 @@
         ctx.fillRect(pos.x*mapScale,pos.y*mapScale,mapScale,mapScale);
       });
     },
+
+    generateRegions: function() {
+      var distanceMap = dungen.DistanceFill.distanceFill(map);
+      var regionmap = dungen.RegionManager.findAndTagRegions(distanceMap);
+      regionmap = dungen.RegionManager.expandRegions(regionmap);
+
+      var colors = ['#222', '#fff'];
+      for(var i = 0; i < 256; i++) {
+        colors.push('#' + Math.random().toString(16).substr(2,6)); 
+      }
+
+      regionmap._mapData.forEach(function(tile,i){
+        var pos = map.IndexToXY(i);
+        ctx.fillStyle = colors[tile]; 
+        ctx.fillRect(pos.x*mapScale,pos.y*mapScale,mapScale,mapScale);
+      });
+
+    },
     generateJson: function(){
       var json = dungen.TiledExporter.export(map);
       document.querySelector('#json').value = json;
@@ -176,6 +194,7 @@
   gui.add(opts, 'generateNewSeed');
   gui.add(opts, 'generateConvChain');
   gui.add(opts, 'generateConvChainNewSeed');
+  gui.add(opts, 'generateRegions');
   gui.add(opts, 'generateJson');
 
 

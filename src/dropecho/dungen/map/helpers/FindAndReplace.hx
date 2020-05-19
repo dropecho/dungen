@@ -3,6 +3,7 @@ package dropecho.dungen.map.helpers;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.map.Pattern;
 
+@:expose("dungen.FindAndReplace")
 class FindAndReplace {
 	public static function findAndReplace(map:Map2d, pattern1:Pattern, pattern2:Pattern, ignoreTile:Int = -1):Map2d {
 		for (x in 0...map._width) {

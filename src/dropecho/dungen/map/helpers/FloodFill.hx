@@ -5,6 +5,7 @@ using Lambda;
 import haxe.ds.IntMap;
 import dropecho.dungen.Map2d;
 
+@:expose("dungen.FloodFill")
 class FloodFill {
 	public static function floodFill(map:Map2d, startX:Int, startY:Int, tile:Int = 0, diagonal:Bool = true):Array<Tile2d> {
 		var closed = new IntMap<Tile2d>();
