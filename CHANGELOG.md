@@ -1,5 +1,15 @@
+## <small>0.6.1 (2020-05-19)</small>
+
+* Fix issue with utils duplicate code ([2b4cf8f](https://github.com/dropecho/dungen/commit/2b4cf8f))
+* Fix release:cs script ref ([80b7fe6](https://github.com/dropecho/dungen/commit/80b7fe6))
+
+
+
 ## 0.6.0 (2020-05-19)
 
+* More work on find and replace ([0f3d53f](https://github.com/dropecho/dungen/commit/0f3d53f))
+* Release 0.6.0 ([65c6975](https://github.com/dropecho/dungen/commit/65c6975))
+* version ([9116a20](https://github.com/dropecho/dungen/commit/9116a20))
 * REFACTOR: Clean up map2d code. ([30d8f62](https://github.com/dropecho/dungen/commit/30d8f62))
 * REFACTOR: Cleanup cellular automata generator. ([f3afcaa](https://github.com/dropecho/dungen/commit/f3afcaa))
 * REFACTOR: Cleanup map extension functions. ([1ceb815](https://github.com/dropecho/dungen/commit/1ceb815))
@@ -11,7 +21,6 @@
 * FEAT: add auto release attachment c# dll to last tag ([ea6edc5](https://github.com/dropecho/dungen/commit/ea6edc5))
 * FEAT: Add new pattern class to ease convchain. ([df34370](https://github.com/dropecho/dungen/commit/df34370))
 * FEAT: Add padding options to room generator. ([610347e](https://github.com/dropecho/dungen/commit/610347e))
-* More work on find and replace ([0f3d53f](https://github.com/dropecho/dungen/commit/0f3d53f))
 * CHORE: Update examples, expose mixed gen. ([dde8700](https://github.com/dropecho/dungen/commit/dde8700))
 
 
