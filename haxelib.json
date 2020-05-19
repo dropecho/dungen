@@ -11,8 +11,8 @@
 	"contributors": [
 		"vantreeseba"
 	],
-	"version": "0.6.0",
-	"releasenote": "Lots of refactoring and cleaup.",
+	"version": "0.6.1",
+	"releasenote": "Fix issue with broken utils / duplicate code.",
 	"tags": [
 		"game",
 		"procedural",
