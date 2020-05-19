@@ -11,8 +11,8 @@
 	"contributors": [
 		"vantreeseba"
 	],
-	"version": "0.5.0",
-	"releasenote": "FEAT: Add convchain generator. REFACTOR: Move random stuff from map to generator. TEST: Add tests for conv chain and etc.",
+	"version": "0.6.4",
+	"releasenote": "Add auto-copy of new version of js bin to docs folder",
 	"tags": [
 		"game",
 		"procedural",

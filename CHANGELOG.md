@@ -1,5 +1,51 @@
+## <small>0.6.4 (2020-05-19)</small>
+
+* Add auto-copy of new version of js bin to docs folder ([40ab510](https://github.com/dropecho/dungen/commit/40ab510))
+* Fix autocopy command ([3ca8d27](https://github.com/dropecho/dungen/commit/3ca8d27))
+
+
+
+## <small>0.6.2 (2020-05-19)</small>
+
+* Cleanup build, setup to build before version/push occurs ([3097861](https://github.com/dropecho/dungen/commit/3097861))
+* Release 0.6.2 ([b70f833](https://github.com/dropecho/dungen/commit/b70f833))
+* version ([32b6f43](https://github.com/dropecho/dungen/commit/32b6f43))
+
+
+
+## <small>0.6.1 (2020-05-19)</small>
+
+* Fix issue with utils duplicate code ([2b4cf8f](https://github.com/dropecho/dungen/commit/2b4cf8f))
+* Fix release:cs script ref ([80b7fe6](https://github.com/dropecho/dungen/commit/80b7fe6))
+* Release 0.6.1 ([0343aab](https://github.com/dropecho/dungen/commit/0343aab))
+* version ([7ca6105](https://github.com/dropecho/dungen/commit/7ca6105))
+
+
+
+## 0.6.0 (2020-05-19)
+
+* More work on find and replace ([0f3d53f](https://github.com/dropecho/dungen/commit/0f3d53f))
+* Release 0.6.0 ([65c6975](https://github.com/dropecho/dungen/commit/65c6975))
+* version ([9116a20](https://github.com/dropecho/dungen/commit/9116a20))
+* REFACTOR: Clean up map2d code. ([30d8f62](https://github.com/dropecho/dungen/commit/30d8f62))
+* REFACTOR: Cleanup cellular automata generator. ([f3afcaa](https://github.com/dropecho/dungen/commit/f3afcaa))
+* REFACTOR: Cleanup map extension functions. ([1ceb815](https://github.com/dropecho/dungen/commit/1ceb815))
+* REFACTOR: Cleanup more helpers, add test for distance fill. ([6e05e3b](https://github.com/dropecho/dungen/commit/6e05e3b))
+* REFACTOR: Cleanup namespaces, move all generators to same folder ([b710330](https://github.com/dropecho/dungen/commit/b710330))
+* REFACTOR: Fix find and replace test with ignore tile to add wildcard to matcher. ([9db596e](https://github.com/dropecho/dungen/commit/9db596e))
+* REFACTOR: More cleanup in find and replace test. ([3efe156](https://github.com/dropecho/dungen/commit/3efe156))
+* FEAT: Add ability to ignore parts of a splat when finding and replacing. ([1ba32f8](https://github.com/dropecho/dungen/commit/1ba32f8))
+* FEAT: add auto release attachment c# dll to last tag ([ea6edc5](https://github.com/dropecho/dungen/commit/ea6edc5))
+* FEAT: Add new pattern class to ease convchain. ([df34370](https://github.com/dropecho/dungen/commit/df34370))
+* FEAT: Add padding options to room generator. ([610347e](https://github.com/dropecho/dungen/commit/610347e))
+* CHORE: Update examples, expose mixed gen. ([dde8700](https://github.com/dropecho/dungen/commit/dde8700))
+
+
+
 ## 0.5.0 (2020-05-07)
 
+* Release 0.5.0 ([ce05b42](https://github.com/dropecho/dungen/commit/ce05b42))
+* version ([cf5b01e](https://github.com/dropecho/dungen/commit/cf5b01e))
 * CHORE: get started on moving to seedyrng ([e6e9811](https://github.com/dropecho/dungen/commit/e6e9811))
 * CHORE: More tests and examples ([7e59302](https://github.com/dropecho/dungen/commit/7e59302))
 * CHORE: Move everything to use seedyrng for allowed seeds ([b213624](https://github.com/dropecho/dungen/commit/b213624))

@@ -1,3 +1,4 @@
+## JS BUILD
 -cp src
 
 -lib seedyrng
@@ -7,3 +8,14 @@
 
 --macro include('', true, null, ['src'])
 -js dist/js/dropecho.dungen.js
+
+## CS BUILD
+--next
+-cp src
+
+-D no-root
+-lib seedyrng
+-lib dropecho.ds 
+-lib dropecho.interop 
+--macro include('', true, null, ['src'])
+-cs dist/cs/dropecho.dungen
