@@ -1,6 +1,17 @@
+## <small>0.7.1 (2020-05-19)</small>
+
+* Add expose to more classes, add more examples to docs ([30edeeb](https://github.com/dropecho/dungen/commit/30edeeb))
+* Add more examples to docs, add conv chain to docs ([feee48a](https://github.com/dropecho/dungen/commit/feee48a))
+* Expose start fill percent param ([bbb9ece](https://github.com/dropecho/dungen/commit/bbb9ece))
+* More cleanup on docs ([9a3b7af](https://github.com/dropecho/dungen/commit/9a3b7af))
+
+
+
 ## 0.7.0 (2020-05-19)
 
+* Release 0.7.0 ([bb0678f](https://github.com/dropecho/dungen/commit/bb0678f))
 * Shrink test map ([4418a8a](https://github.com/dropecho/dungen/commit/4418a8a))
+* version ([56f1baa](https://github.com/dropecho/dungen/commit/56f1baa))
 
 
 
