@@ -18,7 +18,7 @@
     "build-changelog": "conventional-changelog -i CHANGELOG.md -s -r 0",
     "bump": "npm version --no-git-tag-version",
     "haxe:submit": "haxelib run submit",
-    "version": "npm run build-changelog",
+    "version": "npm run build-changelog && npm run build",
     "postversion": "git add . && git commit -m 'version' && npm run haxe:submit && npm publish && npm run release:cs",
     "release:cs": "hub release create -a dist/cs/dropecho.dungen/bin/dropecho.dungen.dll -m \"DLL for unity.\" `git tag | tail -n1`"
   }
