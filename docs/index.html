@@ -152,6 +152,7 @@
     var caveGui = gui.addFolder('cave');
     caveGui.add(caveGenParams, 'width', 16, 128);
     caveGui.add(caveGenParams, 'height', 16, 128);
+    caveGui.add(caveGenParams, 'start_fill_percent', 0,100).step(1);
 
     var step1 = caveGui.addFolder('step1') 
     step1.add(caveGenParams.steps[0], 'reps', 1, 10).step(1);
