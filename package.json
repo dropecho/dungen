@@ -1,6 +1,6 @@
 {
   "name": "@dropecho/dungen",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "A dungeon generator.",
   "author": "vantreeseba <vantreeseba@gmail.com>",
   "repository": "github:dropecho/dungen",
@@ -19,7 +19,7 @@
     "build:docs": "cp dist/js/dropecho.dungen.js docs/dropecho.dungen.js",
     "bump": "npm version --no-git-tag-version",
     "haxe:submit": "haxelib run submit",
-    "version": "npm run build:changelog && npm run build && build:docs",
+    "version": "npm run build:changelog && npm run build && npm run build:docs",
     "postversion": "git add . && git commit -m 'version' && npm run haxe:submit && npm publish && npm run release:cs",
     "release:cs": "hub release create -a dist/cs/dropecho.dungen/bin/dropecho.dungen.dll -m \"DLL for unity.\" `git tag | tail -n1`"
   }
