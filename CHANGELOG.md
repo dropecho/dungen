@@ -1,7 +1,15 @@
+## 0.7.0 (2020-05-19)
+
+* Shrink test map ([4418a8a](https://github.com/dropecho/dungen/commit/4418a8a))
+
+
+
 ## <small>0.6.4 (2020-05-19)</small>
 
 * Add auto-copy of new version of js bin to docs folder ([40ab510](https://github.com/dropecho/dungen/commit/40ab510))
 * Fix autocopy command ([3ca8d27](https://github.com/dropecho/dungen/commit/3ca8d27))
+* Release 0.6.4 ([ae0d701](https://github.com/dropecho/dungen/commit/ae0d701))
+* version ([ae46d35](https://github.com/dropecho/dungen/commit/ae46d35))
 
 
 
@@ -38,6 +46,7 @@
 * FEAT: add auto release attachment c# dll to last tag ([ea6edc5](https://github.com/dropecho/dungen/commit/ea6edc5))
 * FEAT: Add new pattern class to ease convchain. ([df34370](https://github.com/dropecho/dungen/commit/df34370))
 * FEAT: Add padding options to room generator. ([610347e](https://github.com/dropecho/dungen/commit/610347e))
+* FEAT: Start on refactor of region manager ([1509ef8](https://github.com/dropecho/dungen/commit/1509ef8))
 * CHORE: Update examples, expose mixed gen. ([dde8700](https://github.com/dropecho/dungen/commit/dde8700))
 
 

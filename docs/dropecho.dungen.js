@@ -524,7 +524,8 @@ dropecho_dungen_Map2d.prototype = {
 				if(!diagonal && (i == j || i == -dist && j == dist || j == -dist && i == dist)) {
 					continue;
 				}
-				neighbors.push({ x : x + i, y : y + j, onMap : true});
+				var val = this._mapData[this._width * (y + j) + (x + i)];
+				neighbors.push({ x : x + i, y : y + j, onMap : true, val : val});
 			}
 		}
 		return neighbors;
@@ -839,7 +840,7 @@ var dropecho_dungen_generators_CA_$PARAMS = $hx_exports["dungen"]["CA_PARAMS"] =
 	this.width = 64;
 	this.height = 64;
 	this.steps = [];
-	this.steps = [{ reps : 4, r1_cutoff : 5, r2_cutoff : 2},{ reps : 3, r1_cutoff : 5, r2_cutoff : 0}];
+	this.steps = [{ reps : 4, r1_cutoff : 5, r2_cutoff : 2, invert : true},{ reps : 3, r1_cutoff : 5, r2_cutoff : 0, invert : true}];
 };
 dropecho_dungen_generators_CA_$PARAMS.__name__ = "dropecho.dungen.generators.CA_PARAMS";
 dropecho_dungen_generators_CA_$PARAMS.prototype = {
@@ -881,8 +882,9 @@ dropecho_dungen_generators_CAGenerator.buildFromCA = function(map,params,step) {
 		var _g11 = params.height;
 		while(_g2 < _g11) {
 			var y = _g2++;
-			var nCount = map.getNeighborCount(x,y,params.tile_wall);
-			var nCount2 = map.getNeighborCount(x,y,params.tile_wall,2);
+			var tile_to_count = step.invert ? params.tile_floor : params.tile_wall;
+			var nCount = map.getNeighborCount(x,y,tile_to_count);
+			var nCount2 = map.getNeighborCount(x,y,tile_to_count,2);
 			var pos = map._width * y + x;
 			if(nCount >= step.r1_cutoff || nCount2 <= step.r2_cutoff) {
 				temp.h[pos] = params.tile_wall;
@@ -1661,18 +1663,22 @@ dropecho_dungen_map_Pattern.prototype = $extend(dropecho_dungen_Map2d.prototype,
 	}
 	,__class__: dropecho_dungen_map_Pattern
 });
-var dropecho_dungen_map_helpers_ConnectivityChecker = function() { };
-dropecho_dungen_map_helpers_ConnectivityChecker.__name__ = "dropecho.dungen.map.helpers.ConnectivityChecker";
-dropecho_dungen_map_helpers_ConnectivityChecker.run = function(map,tile,diagonal) {
+var dropecho_dungen_map_helpers_CheckConnectivity = function() { };
+dropecho_dungen_map_helpers_CheckConnectivity.__name__ = "dropecho.dungen.map.helpers.CheckConnectivity";
+dropecho_dungen_map_helpers_CheckConnectivity.checkConnectivity = function(map,tile,diagonal) {
 	if(diagonal == null) {
 		diagonal = true;
 	}
 	if(tile == null) {
 		tile = 0;
 	}
-	var start = dropecho_dungen_map_helpers_GetFirstEmptyTile.getFirstEmptyTile(map,tile);
-	var filled = dropecho_dungen_map_helpers_FloodFill.floodFill(map,start.x,start.y,tile,diagonal);
-	return dropecho_dungen_map_helpers_GetFirstEmptyTile.getFirstEmptyTile(map,tile,filled) == null;
+	var firstTile = dropecho_dungen_map_helpers_GetFirstTileOfType.getFirstTileOfType(map,tile);
+	if(firstTile == null) {
+		return false;
+	}
+	var filledTiles = dropecho_dungen_map_helpers_FloodFill.floodFill(map,firstTile.x,firstTile.y,tile,diagonal);
+	firstTile = dropecho_dungen_map_helpers_GetFirstTileOfType.getFirstTileOfType(map,tile,filledTiles);
+	return firstTile == null;
 };
 var dropecho_dungen_map_helpers_DistanceFill = function() { };
 dropecho_dungen_map_helpers_DistanceFill.__name__ = "dropecho.dungen.map.helpers.DistanceFill";
@@ -1796,9 +1802,9 @@ dropecho_dungen_map_helpers_FloodFill.floodFill = function(map,startX,startY,til
 	}
 	return Lambda.array(closed);
 };
-var dropecho_dungen_map_helpers_GetFirstEmptyTile = function() { };
-dropecho_dungen_map_helpers_GetFirstEmptyTile.__name__ = "dropecho.dungen.map.helpers.GetFirstEmptyTile";
-dropecho_dungen_map_helpers_GetFirstEmptyTile.getFirstEmptyTile = function(map,tile,ignore) {
+var dropecho_dungen_map_helpers_GetFirstTileOfType = function() { };
+dropecho_dungen_map_helpers_GetFirstTileOfType.__name__ = "dropecho.dungen.map.helpers.GetFirstTileOfType";
+dropecho_dungen_map_helpers_GetFirstTileOfType.getFirstTileOfType = function(map,tile,ignore) {
 	if(tile == null) {
 		tile = 0;
 	}
@@ -1826,6 +1832,106 @@ dropecho_dungen_map_helpers_GetFirstEmptyTile.getFirstEmptyTile = function(map,t
 		}
 	}
 	return null;
+};
+var dropecho_dungen_map_helpers_RegionManager = function() { };
+dropecho_dungen_map_helpers_RegionManager.__name__ = "dropecho.dungen.map.helpers.RegionManager";
+dropecho_dungen_map_helpers_RegionManager.findAndTagRegions = function(map,depth) {
+	if(depth == null) {
+		depth = 2;
+	}
+	var regionmap = new dropecho_dungen_Map2d(map._width,map._height,0);
+	var _g = 0;
+	var _g1 = map._mapData.length;
+	while(_g < _g1) {
+		var i = _g++;
+		regionmap._mapData[i] = map._mapData[i] > depth ? depth : map._mapData[i];
+	}
+	var nextRegion;
+	var nextTag = 3;
+	while(true) {
+		nextRegion = dropecho_dungen_map_helpers_GetFirstTileOfType.getFirstTileOfType(regionmap,2);
+		if(!(nextRegion != null)) {
+			break;
+		}
+		var tilesToFill = dropecho_dungen_map_helpers_FloodFill.floodFill(regionmap,nextRegion.x,nextRegion.y,depth);
+		var _g2 = 0;
+		while(_g2 < tilesToFill.length) {
+			var t = tilesToFill[_g2];
+			++_g2;
+			regionmap._mapData[regionmap._width * t.y + t.x] = nextTag;
+		}
+		if(tilesToFill.length == 1) {
+			regionmap._mapData[regionmap._width * nextRegion.y + nextRegion.x] = 1;
+		}
+		++nextTag;
+	}
+	var _g21 = 0;
+	var _g3 = map._width;
+	while(_g21 < _g3) {
+		var x = _g21++;
+		var _g22 = 0;
+		var _g31 = map._width;
+		while(_g22 < _g31) {
+			var y = _g22++;
+			if(regionmap._mapData[regionmap._width * y + x] == 1) {
+				var openCount = regionmap.getNeighborCount(x,y,1,1);
+				var wallCount2 = regionmap.getNeighborCount(x,y,0,2);
+				var openCount2 = regionmap.getNeighborCount(x,y,1,2);
+				if(openCount == 7 && openCount2 + wallCount2 == 24) {
+					regionmap._mapData[regionmap._width * y + x] = nextTag++;
+				}
+			}
+		}
+	}
+	return regionmap;
+};
+dropecho_dungen_map_helpers_RegionManager.expandRegions = function(map,startTag) {
+	if(startTag == null) {
+		startTag = 3;
+	}
+	var _g = 0;
+	while(_g < 100) {
+		var _ = _g++;
+		var _g1 = startTag;
+		var _g11 = startTag + 500;
+		while(_g1 < _g11) {
+			var currentTag = _g1++;
+			var tilesToPaint = [];
+			var _g2 = 0;
+			var _g12 = map._width;
+			while(_g2 < _g12) {
+				var x = _g2++;
+				var _g3 = 0;
+				var _g13 = map._height;
+				while(_g3 < _g13) {
+					var y = _g3++;
+					if(map._mapData[map._width * y + x] == currentTag) {
+						var neighbors = map.getNeighbors(x,y,1,true);
+						var _g4 = 0;
+						while(_g4 < neighbors.length) {
+							var n = neighbors[_g4];
+							++_g4;
+							if(n.val == 1) {
+								var nWalls = map.getNeighborCount(n.x,n.y,0,1,true);
+								var nOpen = map.getNeighborCount(n.x,n.y,1,1,true);
+								var nTag = map.getNeighborCount(n.x,n.y,currentTag,1,true);
+								if(nWalls + nOpen + nTag == 8) {
+									tilesToPaint.push(map._width * n.y + n.x);
+								}
+							}
+						}
+					}
+				}
+			}
+			var _g21 = 0;
+			while(_g21 < tilesToPaint.length) {
+				var c = tilesToPaint[_g21];
+				++_g21;
+				map._mapData[c] = currentTag;
+			}
+		}
+	}
+	return map;
 };
 var dropecho_dungen_map_helpers_Utils = function() { };
 dropecho_dungen_map_helpers_Utils.__name__ = "dropecho.dungen.map.helpers.Utils";
