@@ -1,11 +1,7 @@
 package map.helpers;
 
 import massive.munit.Assert;
-import dropecho.dungen.generators.ConvChain;
-import dropecho.dungen.generators.CAGenerator;
 import dropecho.dungen.Map2d;
-import dropecho.dungen.bsp.Generator;
-import dropecho.dungen.generators.RoomGenerator;
 
 using dropecho.dungen.map.helpers.GetFirstTileOfType;
 

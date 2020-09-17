@@ -59,6 +59,11 @@
     iterations:20
   };
 
+  var regionParams = {
+    depth: 2,
+    eatWalls: false
+  }
+
   var mapScale = 4;
 
   var opts = {
@@ -130,8 +135,8 @@
 
     generateRegions: function() {
       var distanceMap = dungen.DistanceFill.distanceFill(map);
-      var regionmap = dungen.RegionManager.findAndTagRegions(distanceMap);
-      regionmap = dungen.RegionManager.expandRegions(regionmap);
+      var regionmap = dungen.RegionManager.findAndTagRegions(distanceMap, regionParams.depth);
+      regionmap = dungen.RegionManager.expandRegions(regionmap, regionParams.depth + 1, regionParams.eatWalls);
 
       var colors = ['#222', '#fff'];
       for(var i = 0; i < 256; i++) {
@@ -184,16 +189,20 @@
     step2.add(caveGenParams.steps[1], 'r2_cutoff', 0, 10).step(1);
     step2.add(caveGenParams.steps[1], 'invert')
   })();
+  gui.add(opts, 'generate');
+  gui.add(opts, 'generateNewSeed');
 
   var convchaingui = gui.addFolder('ConvChain');
   convchaingui.add(convChainParams, 'width', 16, 128);
   convchaingui.add(convChainParams, 'height', 16, 128);
   convchaingui.add(convChainParams, 'n', 2, 8).step(1);
 
-  gui.add(opts, 'generate');
-  gui.add(opts, 'generateNewSeed');
   gui.add(opts, 'generateConvChain');
   gui.add(opts, 'generateConvChainNewSeed');
+
+  var regiongui = gui.addFolder('Regions');
+  regiongui.add(regionParams, 'depth', 1, 10).step(1);
+  regiongui.add(regionParams, 'eatWalls');
   gui.add(opts, 'generateRegions');
   gui.add(opts, 'generateJson');
 

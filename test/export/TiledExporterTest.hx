@@ -2,7 +2,6 @@ package export;
 
 import massive.munit.Assert;
 import dropecho.dungen.bsp.Generator;
-import dropecho.dungen.bsp.BspData;
 import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.generators.CAGenerator;

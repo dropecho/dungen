@@ -135,8 +135,6 @@ class Map2d {
 	}
 
 	public function getRect(x:Int, y:Int, x2:Int, y2:Int, wrap:Bool = false):Array<Int> {
-		var arr = new Array<Int>();
-
 		return [
 			for (j in y...y2 + 1) {
 				for (i in x...x2 + 1) {

@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+#   pull_request:
+#     branches:
+#       - master
+jobs:
+  unit_tests:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        haxe: [4.0.5, 3.4.7]
+      fail-fast: true
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: ${{ matrix.haxe }}
+      - run: haxe -version
+      - run: haxelib install test.hxml --always
+      - name: Compile test code
+        run: haxelib run munit t
+  semantic_release:
+    needs: unit_tests
+    name: semantic_release
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Set up Node.js
+      uses: actions/setup-node@v1
+    - name: Setup haxe
+      uses: krdlab/setup-haxe@v1
+    - name: Run semantic release
+      env: # Or as an environment variable
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        HAXELIB_PASS: ${{secrets.HAXELIB_PASS}} 
+        NPM_TOKEN: ${{secrets.NPM_TOKEN}} 
+      run: |
+        npm ci
+        npx semantic-release

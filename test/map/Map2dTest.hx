@@ -9,6 +9,7 @@ import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.generators.MixedGenerator;
 import dropecho.dungen.generators.RandomGenerator;
 import dropecho.dungen.generators.CAGenerator;
+import dropecho.dungen.generators.WalkGenerator;
 
 class Map2dTest {
 	public function ArraysEqual(expected:Array<Int>, value:Array<Int>) {
@@ -22,14 +23,15 @@ class Map2dTest {
 
 	@Test
 	public function bspMapTest() {
-		var sample = CAGenerator.generate({
+		var opts = {
 			width: 24,
 			height: 12,
 			start_fill_percent: 64,
-			tile_floor: 1,
-			tile_wall: 0,
+      // tile_floor: 1,
+      // tile_wall: 0,
 			seed: "0"
-		});
+		};
+		var sample = WalkGenerator.generate(opts);
 
 		// var bsp = new Generator({
 		//   width: 12,
@@ -62,7 +64,7 @@ class Map2dTest {
 		//   0, 0, 1, 0, 0
 		// ];
 
-		// trace(sample.toPrettyString());
+    trace(sample.toPrettyString());
 		var gen = new ConvChain(sample);
 		var map = gen.generate(80, 40, 3, 0.1, 4);
 

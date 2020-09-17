@@ -10,9 +10,15 @@ import dropecho.ds.algos.PostOrderTraversal;
 
 @:expose("dungen.MixedGenerator")
 class MixedGenerator {
-	public static function buildRooms(tree:BSPTree, opts:Dynamic):Map2d { // tile_floor:Int = 1, tile_wall:Int = 0) : Map2d {
+	public static function buildRooms(tree:BSPTree, opts:Dynamic):Map2d {
 		var random = new Random();
-		var params = Extender.defaults({tile_wall: 0, tile_floor: 1, cave_percent: 20}, opts);
+		var params = Extender.defaults({
+			tile_wall: 0,
+			tile_floor: 1,
+			cave_percent: 20,
+			seed: "0"
+		}, opts);
+		random.setStringSeed(params.seed);
 
 		var rootvalue = tree.root.value;
 		var map = new Map2d(rootvalue.width, rootvalue.height, params.tile_wall);

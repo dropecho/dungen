@@ -1,21 +1,44 @@
-## JS BUILD
+## FOR COMPLETION
 -cp src
-
+-cp test
 -lib seedyrng
--lib dropecho.ds 
--lib dropecho.interop 
-#-dce std
-
+-lib dropecho.ds
+-lib dropecho.interop
 --macro include('', true, null, ['src'])
+--each
+
+## JS BUILD
 -js dist/js/dropecho.dungen.js
 
 ## CS BUILD
+# --next
+# -cp src
+#
+# -D doc-gen
+# -D no-root
+# -lib seedyrng
+# -lib dropecho.ds
+# -lib dropecho.interop
+# --macro include('', true, null, ['src'])
+# -cs dist/cs/dropecho.dungen
+
+## PYTHON
+# --next
+# -cp src
+#
+# -lib seedyrng
+# -lib dropecho.ds
+# -lib dropecho.interop
+# --macro include('', true, null, ['src'])
+# -python dist/python/dropecho_dungen.py
+
+
+## BUILD DOCS
 --next
 -cp src
-
--D no-root
 -lib seedyrng
--lib dropecho.ds 
--lib dropecho.interop 
+-lib dropecho.ds
+-lib dropecho.interop
 --macro include('', true, null, ['src'])
--cs dist/cs/dropecho.dungen
+-D doc-gen
+-xml artifacts/docs.xml

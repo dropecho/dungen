@@ -12,6 +12,7 @@
 -main TestMain
 
 # -cs artifacts/cs_test/
+# -python artifacts/python_test/
 
 # -neko artifacts/test/neko_test.n
 -lib hxnodejs

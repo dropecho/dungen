@@ -14,13 +14,20 @@
   "license": "MIT",
   "scripts": {
     "test": "haxelib run munit t",
-    "build": "haxe build.hxml",
-    "build:changelog": "conventional-changelog -i CHANGELOG.md -s -r 0",
-    "build:docs": "cp dist/js/dropecho.dungen.js docs/dropecho.dungen.js",
-    "bump": "npm version --no-git-tag-version",
-    "haxe:submit": "haxelib run submit",
-    "version": "npm run build:changelog && npm run build && npm run build:docs",
-    "postversion": "git add . && git commit -m 'version' && npm run haxe:submit && npm publish && npm run release:cs",
-    "release:cs": "hub release create -a dist/cs/dropecho.dungen/bin/dropecho.dungen.dll -m \"DLL for unity.\" `git tag | tail -n1`"
+    "build": "npm run build:haxe && npm run build:docs && npm run build:example",
+    "build:haxe": "haxe build.hxml",
+    "build:docs": "haxelib run dox -i artifacts/docs.xml -o docs/docs",
+    "build:example": "cp dist/js/dropecho.dungen.js docs/dropecho.dungen.js"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/exec": "^5.0.0",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/github": "^7.0.7",
+    "@semantic-release/npm": "^7.0.5",
+    "@semantic-release/release-notes-generator": "^9.0.1",
+    "semantic-release": "^17.1.1",
+    "semantic-release-haxelib": "^0.4.0"
   }
 }

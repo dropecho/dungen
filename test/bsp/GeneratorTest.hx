@@ -2,7 +2,6 @@ package bsp;
 
 import massive.munit.Assert;
 import dropecho.dungen.bsp.Generator;
-import dropecho.dungen.bsp.BspData;
 import dropecho.ds.BSPNode;
 import dropecho.ds.algos.InOrderTraversal;
 
@@ -76,7 +75,7 @@ class GeneratorTest {
 
 	@Test
 	public function given_a_tree_every_set_of_child_nodes_should_add_up_to_the_height_and_width_of_their_parents() {
-		for (i in 0...testCount) {
+		for (_ in 0...testCount) {
 			generator.depth = 4;
 			var tree = generator.generate();
 
@@ -103,7 +102,7 @@ class GeneratorTest {
 
 	@Test
 	public function given_a_tree_every_leafs_area_should_add_up_to_root_area() {
-		for (i in 0...testCount) {
+		for (_ in 0...testCount) {
 			generator.depth = 4;
 			var tree = generator.generate();
 			var rootArea = tree.root.value.height * tree.root.value.width;
@@ -122,7 +121,7 @@ class GeneratorTest {
 
 	@Test
 	public function given_a_tree_every_non_leaf_should_have_2_children() {
-		for (i in 0...testCount) {
+		for (_ in 0...testCount) {
 			generator.depth = 4;
 			var tree = generator.generate();
 
