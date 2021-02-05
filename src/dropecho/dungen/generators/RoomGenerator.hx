@@ -6,6 +6,7 @@ import dropecho.ds.BSPNode;
 import dropecho.ds.algos.PostOrderTraversal;
 
 class RoomParams {
+	public var tileCorridor:Int = 1;
 	public var tileFloor:Int = 1;
 	public var tileWall:Int = 0;
 	public var padding:Int = 0;
@@ -67,12 +68,16 @@ class RoomGenerator {
 
 			// draw a corridor from the center x to the center x
 			for (x in startX...endX) {
-				map.set(x, startY, params.tileFloor);
+				if (map.get(x, startY) != params.tileFloor) {
+					map.set(x, startY, params.tileCorridor);
+				}
 			}
 
 			// draw a corridor from the center y to the center y
 			for (y in startY...endY) {
-				map.set(startX, y, params.tileFloor);
+				if (map.get(startX, y) != params.tileFloor) {
+					map.set(startX, y, params.tileCorridor);
+				}
 			}
 			return true;
 		}

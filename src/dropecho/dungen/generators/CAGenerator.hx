@@ -60,14 +60,15 @@ class CAGenerator {
 		for (x in 0...params.width) {
 			for (y in 0...params.height) {
 				var tile_to_count = step.invert ? params.tile_floor : params.tile_wall;
+				var tile_to_place = step.invert ? params.tile_wall : params.tile_floor;
 				var nCount = map.getNeighborCount(x, y, tile_to_count);
 				var nCount2 = map.getNeighborCount(x, y, tile_to_count, 2);
 				var pos = map.XYtoIndex(x, y);
 
 				if (nCount >= step.r1_cutoff || nCount2 <= step.r2_cutoff) {
-					temp.set(pos, params.tile_wall);
+					temp.set(pos, tile_to_place);
 				} else {
-					temp.set(pos, params.tile_floor);
+					temp.set(pos, tile_to_count);
 				}
 			}
 		}

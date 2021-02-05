@@ -16,7 +16,7 @@
     "test": "haxelib run munit t",
     "build": "npm run build:haxe && npm run build:docs && npm run build:example",
     "build:haxe": "haxe build.hxml",
-    "build:docs": "haxelib run dox -i artifacts/docs.xml -o docs/docs",
+    "build:docs": "haxelib run dox -i artifacts/docs.xml -o docs/docs --toplevel-package dropecho",
     "build:example": "cp dist/js/dropecho.dungen.js docs/dropecho.dungen.js"
   },
   "devDependencies": {

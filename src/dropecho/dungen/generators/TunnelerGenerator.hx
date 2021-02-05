@@ -1,8 +1,6 @@
 package dropecho.dungen.generators;
 
 import seedyrng.Random;
-import dropecho.dungen.generators.CAGenerator;
-import dropecho.interop.Extender;
 import dropecho.dungen.Map2d;
 
 @:expose("dungen.TunnelerGenerator")

@@ -1,0 +1,10 @@
+-cp src
+--macro include('', true, null, ['src'])
+
+-D no-root
+
+-lib seedyrng
+-lib dropecho.ds
+-lib dropecho.interop
+
+-cs dist/cs/dropecho.dungen

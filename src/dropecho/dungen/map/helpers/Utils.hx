@@ -1,10 +1,10 @@
 package dropecho.dungen.map.helpers;
 
 typedef Rect = {
-	var width:Int;
-	var height:Int;
 	var x:Int;
 	var y:Int;
+	var width:Int;
+	var height:Int;
 };
 
 class Utils {

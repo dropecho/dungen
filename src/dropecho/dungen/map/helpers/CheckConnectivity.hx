@@ -15,8 +15,8 @@ class CheckConnectivity {
 		// floodfill from tile
 		var filledTiles = map.floodFill(firstTile.x, firstTile.y, tile, diagonal);
 
-    // Get another tile of the same type, ignoring the ones we just filled. 
-    // If found, this means map is not connected.
+		// Get another tile of the same type, ignoring the ones we just filled.
+		// If found, this means map is not connected.
 		firstTile = map.getFirstTileOfType(tile, filledTiles);
 
 		return firstTile == null;

@@ -1,6 +1,7 @@
 package dropecho.dungen;
 
 using Lambda;
+using dropecho.dungen.map.MapExtender;
 
 typedef Tile2d = {
 	x:Int,

@@ -7,7 +7,7 @@ using dropecho.dungen.map.helpers.FloodFill;
 
 @:expose("dungen.RegionManager")
 class RegionManager {
-	public static function findAndTagRegions(map:Map2d, depth:Int = 2) {
+	public static function findAndTagRegions(map:Map2d, ?depth:Int = 2) {
 		var regionmap = new Map2d(map._width, map._height, 0);
 		for (i in 0...map._mapData.length) {
 			var val = map._mapData[i] > depth ? depth : map._mapData[i];
