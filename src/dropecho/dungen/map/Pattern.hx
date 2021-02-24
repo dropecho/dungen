@@ -1,5 +1,8 @@
 package dropecho.dungen.map;
 
+using dropecho.dungen.map.extensions.Utils;
+using dropecho.dungen.map.Map2dExtensions;
+
 @:expose("dungen.Pattern")
 class Pattern extends Map2d {
 	public var patterns:Array<Array<Int>> = new Array<Array<Int>>();
@@ -16,8 +19,17 @@ class Pattern extends Map2d {
 		return p;
 	}
 
+	public function indexToMap(index:Int = 0):Map2d {
+		return this.clone(this.patterns[index]);
+	}
+
 	public function matchesIndex(map:Map2d, x:Int, y:Int, tileToIgnore:Int = -1):Int {
-		var toMatch:Array<Int> = map.getRect(x, y, x + _width - 1, y + _height - 1);
+		var toMatch:Array<Int> = map.getRect({
+			x: x,
+			y: y,
+			width: _width,
+			height: _height
+		});
 		var match = false;
 
 		for (p in 0...patterns.length) {

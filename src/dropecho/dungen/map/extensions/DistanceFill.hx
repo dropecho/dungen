@@ -1,6 +1,8 @@
-package dropecho.dungen.map.helpers;
+package dropecho.dungen.map.extensions;
 
 import dropecho.dungen.Map2d;
+
+using dropecho.dungen.map.extensions.Neighbors;
 
 @:expose("dungen.DistanceFill")
 class DistanceFill {

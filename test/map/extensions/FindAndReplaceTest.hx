@@ -1,4 +1,4 @@
-package map.helpers;
+package map.extensions;
 
 import massive.munit.Assert;
 import dropecho.dungen.bsp.Generator;
@@ -6,7 +6,7 @@ import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.map.Pattern;
 
-using dropecho.dungen.map.helpers.FindAndReplace;
+using dropecho.dungen.map.extensions.FindAndReplace;
 
 class FindAndReplaceTest {
 	@Test
@@ -14,21 +14,22 @@ class FindAndReplaceTest {
 		var map = new Map2d(2, 2);
 		map._mapData = [
 			0, 0,
-			1, 0,
+			1, 0
 		];
 		var matcher = Pattern.init(2, [
 			0, 0,
-			1, 0,
-
+			1, 0
 		]);
 		var splat = Pattern.init(2, [
 			0, 0,
-			2, 0,
+			2, 0
 		]);
 
 		map.findAndReplace(matcher, splat);
 		for (i in 0...map._mapData.length) {
-			Assert.areEqual(splat._mapData[i], map._mapData[i]);
+			var splatTile = splat._mapData[i];
+			var mapTile = map._mapData[i];
+			Assert.areEqual(splatTile, mapTile);
 		}
 	}
 
@@ -50,10 +51,10 @@ class FindAndReplaceTest {
 
 		map.findAndReplace(matcher, splat);
 
-    Assert.areEqual(0, map._mapData[0]);
-    Assert.areEqual(0, map._mapData[1]);
-    Assert.areEqual(2, map._mapData[2]);
-    Assert.areEqual(2, map._mapData[3]);
+		Assert.areEqual(0, map._mapData[0]);
+		Assert.areEqual(0, map._mapData[1]);
+		Assert.areEqual(2, map._mapData[2]);
+		Assert.areEqual(2, map._mapData[3]);
 	}
 
 	@Test

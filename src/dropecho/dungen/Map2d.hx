@@ -1,12 +1,11 @@
 package dropecho.dungen;
 
-using Lambda;
-using dropecho.dungen.map.MapExtender;
+using dropecho.dungen.map.Map2dExtensions;
 
+@:expose("dungen.Tile2d")
 typedef Tile2d = {
 	x:Int,
 	y:Int,
-	onMap:Bool,
 	?val:Int
 }
 
@@ -28,130 +27,65 @@ class Map2d {
 			return;
 		}
 
-		for (i in 0..._height * _width) {
+		var length:Int = _height * _width;
+
+		for (i in 0...length) {
 			_mapData[i] = initTileData;
 		}
 	}
 
-	public function ensureEdgesAreWalls(tileType:Int = 0) {
-		for (x in 0..._width) {
-			_mapData[XYtoIndex(x, 0)] = tileType;
-			_mapData[XYtoIndex(x, _height - 1)] = tileType;
-		}
-
-		for (y in 0..._height) {
-			_mapData[XYtoIndex(0, y)] = tileType;
-			_mapData[XYtoIndex(_width - 1, y)] = tileType;
-		}
-	}
-
 	/**
-	 * Get count of neighbors within distance matching neighborType.
+	 * Returns the array index representing the x,y coord of a tile.
 	 *
-	 * @param {Int} x - The x position of the tile.
-	 * @param {Int} y - The y position of the tile.
-	 * @param {Int} neighborType - The integer representing the type of tile to find.
-	 * @param {Int} [dist] - The distance to search within.
-	 * @return {Int} The count of matching neighbors.
+	 * @param x - The x coord to get the index for.
+	 * @param y - The y coord to get the index for.
+	 * @return The index of the x,y coord.
 	 */
-	public function getNeighborCount(x:Int, y:Int, neighborType:Int, dist:Int = 1, diagonal:Bool = true):Int {
-		function isNeighborType(tile) {
-			return get(tile.x, tile.y) == neighborType;
-		}
-
-		return getNeighbors(x, y, dist, diagonal).count(isNeighborType);
-	}
-
-	public function getNeighbors(x:Int, y:Int, dist:Int = 1, diagonal:Bool = true):Array<Tile2d> {
-		var neighbors = new Array<Tile2d>(),
-			isSelf = false,
-			isNotOnMap = false;
-
-		for (i in -dist...dist + 1) {
-			for (j in -dist...dist + 1) {
-				isSelf = (i == 0 && j == 0);
-				isNotOnMap = x + i < 0 || x + i >= (_width) || y + j < 0 || y + j >= (_height);
-
-				if (isSelf || isNotOnMap) {
-					continue;
-				}
-
-				if (!diagonal && ((i == j) || (i == -dist && j == dist) || (j == -dist && i == dist))) {
-					continue;
-				}
-
-				var val = get(x + i, y + j);
-
-				neighbors.push({
-					x: x + i,
-					y: y + j,
-					onMap: true,
-					val: val
-				});
-			}
-		}
-
-		return neighbors;
-	}
-
 	inline public function XYtoIndex(x:Int, y:Int):Int {
 		return (_width * y) + x;
 	}
 
+	/**
+	 * Return a Tile2d ({x,y} object), for the given array index.
+	 * @param index - The index to change into an x,y position.
+	 * @return The object with the x,y coords.
+	 */
 	public function IndexToXY(index:Int):Tile2d {
 		var x = Std.int(index % _width), y = Std.int(index / _width);
-
-		return {
-			x: x,
-			y: y,
-			onMap: x >= 0 && y >= 0 && x < _width && y < _height
-		}
+		return {x: x, y: y};
 	}
 
+	/**
+	 * Set an individual tile, by the x,y coord.
+	 * @param x - The x coord of the tile to set.
+	 * @param y - The y coord of the tile to set.
+	 * @param data - The value to set as the tile.
+	 */
 	inline public function set(x:Int, y:Int, data:Int):Void {
-		_mapData[XYtoIndex(x, y)] = data;
+		var index = XYtoIndex(x, y);
+		// if (index < _mapData.length) {
+			_mapData[index] = data;
+		// }
 	}
 
-	public function setRect(x:Int, y:Int, x2:Int, y2:Int, data:Int):Void {
-		for (i in x...x2) {
-			for (j in y...y2) {
-				this.set(i, j, data);
-			}
-		}
-	}
-
-	public function splat(other:Map2d, x:Int, y:Int, ignoreTile:Int = -1) {
-		for (i in 0...other._width) {
-			for (j in 0...other._height) {
-				var otherTile = other.get(i, j);
-				if (otherTile != ignoreTile) {
-					this.set(i + x, j + y, otherTile);
-				}
-			}
-		}
-	}
-
+	/**
+	 * Get the value of a tile by the x,y coord.
+	 * @param x - The x coord of the tile to get.
+	 * @param y - The y coord of the tile to get.
+	 * @return The value of the tile at x,y.
+	 */
 	inline public function get(x:Int, y:Int):Int {
 		return _mapData[XYtoIndex(x, y)];
 	}
 
-	public function getRect(x:Int, y:Int, x2:Int, y2:Int, wrap:Bool = false):Array<Int> {
-		return [
-			for (j in y...y2 + 1) {
-				for (i in x...x2 + 1) {
-					if (wrap) {
-						this.get(i % _width, j % _height);
-					} else {
-						this.get(i, j);
-					}
-				}
-			}
-		];
-	}
-
+	/**
+	 * Outputs the map as an ascii string (i.e. 0=#, 1=.)
+	 * @param [char] - The characters to use for each tile type by index. 
+	 * @return A string representing the map. 
+	 */
 	public function toPrettyString(char:Array<String> = null) {
 		if (char == null) {
-			char = ["#", "."];
+			char = [" ", ".", ",", "`"];
 		}
 		var output = "\n MAP2d: \n\n";
 
@@ -166,7 +100,11 @@ class Map2d {
 		return output;
 	}
 
-	public function toString(ascii:Bool = false):String {
+	/**
+	 * Returns the map as a string.
+	 * @return a string representing the map. 
+	 */
+	public function toString():String {
 		var output = "\n MAP2d: \n\n";
 
 		for (y in 0..._height) {

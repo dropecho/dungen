@@ -1,7 +1,7 @@
-package dropecho.dungen.map.helpers;
+package dropecho.dungen.map.extensions;
 
-using dropecho.dungen.map.helpers.FloodFill;
-using dropecho.dungen.map.helpers.GetFirstTileOfType;
+using dropecho.dungen.map.extensions.FloodFill;
+using dropecho.dungen.map.extensions.GetFirstTileOfType;
 
 @:expose("dungen.CheckConnectivity")
 class CheckConnectivity {

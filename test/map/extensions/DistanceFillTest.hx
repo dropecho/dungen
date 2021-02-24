@@ -1,4 +1,4 @@
-package map.helpers;
+package map.extensions;
 
 import massive.munit.Assert;
 import dropecho.dungen.bsp.Generator;
@@ -6,7 +6,7 @@ import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.map.Pattern;
 
-using dropecho.dungen.map.helpers.DistanceFill;
+using dropecho.dungen.map.extensions.DistanceFill;
 
 class DistanceFillTest {
 	var map:Map2d;
@@ -34,7 +34,7 @@ class DistanceFillTest {
 
 		var distanceMap = map.distanceFill(1);
 
-    // trace(distanceMap);
+		// trace(distanceMap);
 
 		for (i in 0...distanceMap._mapData.length) {
 			Assert.areEqual(expected[i], distanceMap._mapData[i]);

@@ -1,11 +1,13 @@
-package map.helpers;
+package map.extensions;
 
 import massive.munit.Assert;
 import dropecho.dungen.bsp.Generator;
 import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.generators.CAGenerator;
-import dropecho.dungen.map.helpers.RegionManager;
-using dropecho.dungen.map.helpers.DistanceFill;
+import dropecho.dungen.map.extensions.RegionManager;
+
+using dropecho.dungen.map.extensions.DistanceFill;
+using dropecho.dungen.map.Map2dExtensions;
 
 class RegionManagerTest {
 	@Test
@@ -19,7 +21,7 @@ class RegionManagerTest {
 			seed: "0",
 		});
 
-		map.ensureEdgesAreWalls();
+		map.setAllEdgesTo();
 
 		var distanceMap = map.distanceFill();
 		var regionmap = RegionManager.findAndTagRegions(distanceMap);
@@ -66,7 +68,7 @@ class RegionManagerTest {
 			seed: "1",
 		});
 
-		map.ensureEdgesAreWalls();
+		map.setAllEdgesTo();
 
 		// trace(map.toPrettyString());
 
@@ -85,6 +87,6 @@ class RegionManagerTest {
 			}
 		}
 
-    trace(regionmap.toPrettyString(["#","+","."]));
+		// trace(regionmap.toPrettyString(["#", "+", "."]));
 	}
 }

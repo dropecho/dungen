@@ -1,8 +1,8 @@
-package map.helpers;
+package map.extensions;
 
 import massive.munit.Assert;
 import dropecho.dungen.Map2d;
-import dropecho.dungen.map.helpers.CheckConnectivity;
+import dropecho.dungen.map.extensions.CheckConnectivity;
 
 class CheckConnectivityTest {
 	var map:Map2d;

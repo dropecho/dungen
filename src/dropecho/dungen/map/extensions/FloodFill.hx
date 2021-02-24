@@ -1,9 +1,11 @@
-package dropecho.dungen.map.helpers;
+package dropecho.dungen.map.extensions;
 
 using Lambda;
 
 import haxe.ds.IntMap;
 import dropecho.dungen.Map2d;
+
+using dropecho.dungen.map.extensions.Neighbors;
 
 @:expose("dungen.FloodFill")
 class FloodFill {

@@ -11,6 +11,9 @@ import dropecho.dungen.generators.RandomGenerator;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.map.Pattern;
 
+using dropecho.dungen.map.Map2dExtensions;
+using dropecho.dungen.map.extensions.Utils;
+
 @:expose("dungen.ConvChain")
 class ConvChain {
 	public var sample:Map2d;
@@ -33,7 +36,12 @@ class ConvChain {
 
 		for (x in 0...sample._height) {
 			for (y in 0...sample._width) {
-				var rect = sample.getRect(x, y, x + n - 1, y + n - 1, true);
+				var rect = sample.getRect({
+					x: x,
+					y: y,
+					width: n,
+					height: n
+				}, true);
 				var p = Pattern.init(n, rect);
 				for (h in 0...p.hashes.length) {
 					weights[p.hashes[h]] += 1;

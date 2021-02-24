@@ -4,6 +4,8 @@ import dropecho.dungen.generators.RandomGenerator;
 import dropecho.interop.Extender;
 import dropecho.dungen.Map2d;
 
+using dropecho.dungen.map.extensions.Neighbors;
+
 typedef CA_PARAM_STEP = {
 	reps:Int,
 	r1_cutoff:Int,
@@ -20,6 +22,7 @@ class CA_PARAMS {
 	public var tile_wall:Int = 0;
 	public var start_fill_percent:Int = 65;
 	public var seed:String = "0";
+	public var useOtherType = false;
 
 	public function new() {
 		steps = [
@@ -57,18 +60,32 @@ class CAGenerator {
 	private static function buildFromCA(map:Map2d, params:CA_PARAMS, step:CA_PARAM_STEP):Void {
 		var temp = new Map<Int, Int>();
 
+		var alive_tile_type = step.invert ? params.tile_floor : params.tile_wall;
+		var dead_tile_type = step.invert ? params.tile_wall : params.tile_floor;
+
 		for (x in 0...params.width) {
 			for (y in 0...params.height) {
-				var tile_to_count = step.invert ? params.tile_floor : params.tile_wall;
-				var tile_to_place = step.invert ? params.tile_wall : params.tile_floor;
-				var nCount = map.getNeighborCount(x, y, tile_to_count);
-				var nCount2 = map.getNeighborCount(x, y, tile_to_count, 2);
+				var nCount = map.getNeighborCount(x, y, alive_tile_type);
+				var nCount2 = map.getNeighborCount(x, y, alive_tile_type, 2);
 				var pos = map.XYtoIndex(x, y);
+				if (!params.useOtherType) {
+					var is_alive = map.get(x, y) == alive_tile_type;
 
-				if (nCount >= step.r1_cutoff || nCount2 <= step.r2_cutoff) {
-					temp.set(pos, tile_to_place);
+					if (!is_alive && nCount >= step.r1_cutoff) {
+						is_alive = true;
+					} else if (is_alive && nCount >= step.r2_cutoff) {
+						is_alive = true;
+					} else {
+						is_alive = false;
+					}
+
+					temp.set(pos, is_alive ? alive_tile_type : dead_tile_type);
 				} else {
-					temp.set(pos, tile_to_count);
+					if (nCount >= step.r1_cutoff || nCount2 <= step.r2_cutoff) {
+						temp.set(pos, dead_tile_type);
+					} else {
+						temp.set(pos, alive_tile_type);
+					}
 				}
 			}
 		}

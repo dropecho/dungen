@@ -1,10 +1,10 @@
-package map.helpers;
+package map.extensions;
 
 import massive.munit.Assert;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.generators.RoomGenerator;
 
-using dropecho.dungen.map.helpers.FloodFill;
+using dropecho.dungen.map.extensions.FloodFill;
 
 class FloodFillTest {
 	var map:Map2d;

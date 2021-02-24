@@ -11,6 +11,11 @@ import dropecho.dungen.generators.RandomGenerator;
 import dropecho.dungen.generators.CAGenerator;
 import dropecho.dungen.generators.WalkGenerator;
 
+using dropecho.dungen.map.Map2dExtensions;
+using dropecho.dungen.map.extensions.Neighbors;
+using dropecho.dungen.map.extensions.Splat;
+using dropecho.dungen.map.extensions.Utils;
+
 class Map2dTest {
 	public function ArraysEqual(expected:Array<Int>, value:Array<Int>) {
 		var equal = false;
@@ -19,57 +24,6 @@ class Map2dTest {
 		}
 
 		return equal;
-	}
-
-	@Test
-	public function bspMapTest() {
-		var opts = {
-			width: 24,
-			height: 12,
-			start_fill_percent: 64,
-      // tile_floor: 1,
-      // tile_wall: 0,
-			seed: "0"
-		};
-		var sample = WalkGenerator.generate(opts);
-
-		// var bsp = new Generator({
-		//   width: 12,
-		//   height: 8,
-		//   minWidth: 3,
-		//   minHeight: 3,
-		//   depth: 1,
-		//   ratio: .95
-		// }).generate();
-
-		// var sample = RoomGenerator.buildRooms(bsp);
-
-		// var sample = new Map2d(4, 4);
-		// sample._mapData = [
-		//   1, 1, 1, 1,
-		//   1, 0, 0, 0,
-		//   1, 0, 1, 0,
-		//   1, 0, 0, 0,
-		// ];
-
-		// var sample = new Map2d(3, 3);
-		// sample._mapData = [0, 1, 1, 1, 1, 1, 1, 1, 1];
-		// sample._mapData = [1, 1, 1, 0, 0, 0, 0, 0, 0];
-		// var sample = new Map2d(5, 5);
-		// sample._mapData = [
-		//   0, 0, 1, 0, 0,
-		//   0, 1, 1, 1, 0,
-		//   1, 1, 1, 1, 1,
-		//   0, 1, 1, 1, 0,
-		//   0, 0, 1, 0, 0
-		// ];
-
-    trace(sample.toPrettyString());
-		var gen = new ConvChain(sample);
-		var map = gen.generate(80, 40, 3, 0.1, 4);
-
-		// trace(map.toPrettyString());
-		Assert.isTrue(true);
 	}
 
 	@Test
@@ -118,7 +72,12 @@ class Map2dTest {
 			0, 0, 0, 0, 0, 0, 0, 0
 		];
 
-		var tiles = sample.getRect(0, 1, 1, 2);
+		var tiles = sample.getRect({
+			x: 0,
+			y: 1,
+			width: 2,
+			height: 2
+		});
 
 		Assert.areEqual(4, tiles.length);
 	}
@@ -131,9 +90,24 @@ class Map2dTest {
 			0, 1
 		];
 
-		var tiles = sample.getRect(0, 0, 1, 1, true);
-		var tiles2 = sample.getRect(0, 1, 1, 2, true);
-		var tiles3 = sample.getRect(1, 1, 2, 2, true);
+		var tiles = sample.getRect({
+			x: 0,
+			y: 0,
+			width: 2,
+			height: 2
+		}, true);
+		var tiles2 = sample.getRect({
+			x: 0,
+			y: 1,
+			width: 2,
+			height: 2
+		}, true);
+		var tiles3 = sample.getRect({
+			x: 1,
+			y: 1,
+			width: 2,
+			height: 2
+		}, true);
 
 		Assert.areEqual(4, tiles.length);
 		Assert.areEqual(4, tiles2.length);
@@ -161,7 +135,12 @@ class Map2dTest {
 			0, 0, 0, 3,
 		];
 
-		var tiles = sample.getRect(0, 0, 3, 3, true);
+		var tiles = sample.getRect({
+			x: 0,
+			y: 0,
+			width: 4,
+			height: 4
+		}, true);
 		// var tiles = sample.getRect(1, 1, 3, 3, true);
 
 		var tiles_expected = [
@@ -198,3 +177,56 @@ class Map2dTest {
 		// trace(map);
 	}
 }
+
+	// @Test
+	// public function bspMapTest() {
+	//   var opts = {
+	//     width: 24,
+	//     height: 12,
+	//     start_fill_percent: 64,
+	//     // tile_floor: 1,
+	//     // tile_wall: 0,
+	//     seed: "0"
+	//   };
+	//   var sample = WalkGenerator.generate(opts);
+  //
+	//   // var bsp = new Generator({
+	//   //   width: 12,
+	//   //   height: 8,
+	//   //   minWidth: 3,
+	//   //   minHeight: 3,
+	//   //   depth: 1,
+	//   //   ratio: .95
+	//   // }).generate();
+  //
+	//   // var sample = RoomGenerator.buildRooms(bsp);
+  //
+	//   // var sample = new Map2d(4, 4);
+	//   // sample._mapData = [
+	//   //   1, 1, 1, 1,
+	//   //   1, 0, 0, 0,
+	//   //   1, 0, 1, 0,
+	//   //   1, 0, 0, 0,
+	//   // ];
+  //
+	//   // var sample = new Map2d(3, 3);
+	//   // sample._mapData = [0, 1, 1, 1, 1, 1, 1, 1, 1];
+	//   // sample._mapData = [1, 1, 1, 0, 0, 0, 0, 0, 0];
+	//   // var sample = new Map2d(5, 5);
+	//   // sample._mapData = [
+	//   //   0, 0, 1, 0, 0,
+	//   //   0, 1, 1, 1, 0,
+	//   //   1, 1, 1, 1, 1,
+	//   //   0, 1, 1, 1, 0,
+	//   //   0, 0, 1, 0, 0
+	//   // ];
+  //
+	//   trace(sample.toPrettyString());
+	//   var gen = new ConvChain(sample);
+	//   var map = gen.generate(80, 40, 3, 0.1, 4);
+  //
+	//   // trace(map.toPrettyString());
+	//   Assert.isTrue(true);
+	// }
+  //
+  //
