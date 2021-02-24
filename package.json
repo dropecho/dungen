@@ -13,6 +13,7 @@
   },
   "license": "MIT",
   "scripts": {
+    "ci": "npm run build",
     "test": "haxelib run munit t",
     "build": "npm run build:haxe && npm run build:docs && npm run build:example",
     "build:haxe": "haxe build.hxml",
