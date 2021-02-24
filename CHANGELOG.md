@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/dropecho/dungen/compare/v1.1.0...1.2.0) (2021-02-24)
+
+
+### Features
+
+* Setup releaserc ([eb0af93](https://github.com/dropecho/dungen/commit/eb0af938de1fb70c39e6bff78340de5682d44604))
+
 ## <small>0.7.1 (2020-05-19)</small>
 
 * Add expose to more classes, add more examples to docs ([30edeeb](https://github.com/dropecho/dungen/commit/30edeeb))
@@ -157,6 +164,3 @@
 * Working on drunk walk method ([e33fb94](https://github.com/dropecho/dungen/commit/e33fb94))
 * Working on fixing ([1473cb0](https://github.com/dropecho/dungen/commit/1473cb0))
 * zoom in on demo map a little, fix some other random stuff ([bf45a87](https://github.com/dropecho/dungen/commit/bf45a87))
-
-
-
