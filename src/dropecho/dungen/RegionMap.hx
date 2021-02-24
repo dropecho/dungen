@@ -61,7 +61,7 @@ class RegionMap extends Map2d {
 				for (n in neighbors) {
 					if (regions.exists(n.val)) {
 						var region = regions.get(n.val);
-						if (!borderRegions.contains(region)) {
+						if (!borderRegions.has(region)) {
 							borderRegions.push(region);
 						}
 					}
