@@ -33,6 +33,16 @@ Lambda.array = function(it) {
 	}
 	return a;
 };
+Lambda.has = function(it,elt) {
+	var x = $getIterator(it);
+	while(x.hasNext()) {
+		var x1 = x.next();
+		if(x1 == elt) {
+			return true;
+		}
+	}
+	return false;
+};
 Lambda.count = function(it,pred) {
 	var n = 0;
 	if(pred == null) {
@@ -578,7 +588,7 @@ var dropecho_dungen_RegionMap = $hx_exports["dungen"]["RegionMap"] = function(ma
 	regionmap = dropecho_dungen_map_extensions_RegionManager.findAndTagRegions(regionmap,depth);
 	if(expand) {
 		regionmap = dropecho_dungen_map_extensions_RegionManager.expandRegions(regionmap,depth + 1);
-	} else {
+	} else if(depth > 1) {
 		regionmap = dropecho_dungen_map_extensions_RegionManager.expandRegionsByOne(regionmap,depth);
 	}
 	this.buildRegions(regionmap,depth);
@@ -613,7 +623,7 @@ dropecho_dungen_RegionMap.prototype = $extend(dropecho_dungen_Map2d.prototype,{
 					++_g2;
 					if(this.regions.h.hasOwnProperty(n.val)) {
 						var region = this.regions.h[n.val];
-						if(borderRegions.indexOf(region) == -1) {
+						if(!Lambda.has(borderRegions,region)) {
 							borderRegions.push(region);
 						}
 					}
@@ -2171,9 +2181,6 @@ dropecho_dungen_map_extensions_RegionManager.expandRegionsByOne = function(map,s
 		startTag = 3;
 	}
 	var tilesToPaint = new haxe_ds_IntMap();
-	if(startTag <= 0) {
-		startTag = 1;
-	}
 	var _g = 0;
 	var _g1 = map._width;
 	while(_g < _g1) {

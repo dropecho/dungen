@@ -42,4 +42,5 @@ jobs:
         NPM_TOKEN: ${{secrets.NPM_TOKEN}} 
       run: |
         npm ci
+        npm run build
         npx semantic-release
