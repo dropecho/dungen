@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/dropecho/dungen/compare/1.2.0...1.2.1) (2021-02-24)
+
+
+### Bug Fixes
+
+* Setup npm ci script. ([bd55b5e](https://github.com/dropecho/dungen/commit/bd55b5eff91551f1fe7a077eb8c39b4c1b720b48))
+
 # [1.2.0](https://github.com/dropecho/dungen/compare/v1.1.0...1.2.0) (2021-02-24)
 
 
