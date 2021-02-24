@@ -1,3 +1,12 @@
+## [1.2.2](https://github.com/dropecho/dungen/compare/1.2.1...1.2.2) (2021-02-24)
+
+
+### Bug Fixes
+
+* Actually fix npm build on semantic release to attach bins to release. ([fb3bb04](https://github.com/dropecho/dungen/commit/fb3bb04009392e6d8184242b6b0c60795b9561fc))
+* Add haxelib install step to semantic release action. ([e17e11e](https://github.com/dropecho/dungen/commit/e17e11e23050353593f03beac0fe2251facdb658))
+* update docs, update targets, add dox as required lib for doc gen. ([5acf103](https://github.com/dropecho/dungen/commit/5acf103c8173d68e40c65f729f24813a3e786612))
+
 ## [1.2.1](https://github.com/dropecho/dungen/compare/1.2.0...1.2.1) (2021-02-24)
 
 
