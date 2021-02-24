@@ -482,6 +482,18 @@ dropecho_ds_algos_PostOrderTraversal.prototype = {
 	}
 	,__class__: dropecho_ds_algos_PostOrderTraversal
 };
+var dropecho_dungen_Tile2d = $hx_exports["dungen"]["Tile2d"] = function(x,y,val) {
+	this.x = x;
+	this.y = y;
+	this.val = val;
+};
+dropecho_dungen_Tile2d.__name__ = "dropecho.dungen.Tile2d";
+dropecho_dungen_Tile2d.prototype = {
+	x: null
+	,y: null
+	,val: null
+	,__class__: dropecho_dungen_Tile2d
+};
 var dropecho_dungen_Map2d = $hx_exports["dungen"]["Map2d"] = function(width,height,initTileData) {
 	if(initTileData == null) {
 		initTileData = 0;
@@ -516,7 +528,7 @@ dropecho_dungen_Map2d.prototype = {
 	,IndexToXY: function(index) {
 		var x = index % this._width | 0;
 		var y = index / this._width | 0;
-		return { x : x, y : y};
+		return new dropecho_dungen_Tile2d(x,y);
 	}
 	,set: function(x,y,data) {
 		var index = this._width * y + x;
@@ -563,7 +575,9 @@ dropecho_dungen_Map2d.prototype = {
 	}
 	,__class__: dropecho_dungen_Map2d
 };
-var dropecho_dungen_Region = function() {
+var dropecho_dungen_Region = $hx_exports["dungen"]["Region"] = function(id) {
+	this.tiles = [];
+	this.id = id;
 	this.tiles = [];
 };
 dropecho_dungen_Region.__name__ = "dropecho.dungen.Region";
@@ -659,8 +673,7 @@ dropecho_dungen_RegionMap.prototype = $extend(dropecho_dungen_Map2d.prototype,{
 			if(isRegion) {
 				var region;
 				if(this.regions.h.hasOwnProperty(regionTileId) == false) {
-					region = new dropecho_dungen_Region();
-					region.id = regionTileId;
+					region = new dropecho_dungen_Region(regionTileId);
 					this.regions.h[region.id] = region;
 				} else {
 					region = this.regions.h[regionTileId];
@@ -680,8 +693,7 @@ dropecho_dungen_RegionMap.prototype = $extend(dropecho_dungen_Map2d.prototype,{
 			if(isBorder) {
 				var border;
 				if(this.borders.h.hasOwnProperty(borderTile) == false) {
-					border = new dropecho_dungen_Region();
-					border.id = borderTile;
+					border = new dropecho_dungen_Region(borderTile);
 					this.borders.h[border.id] = border;
 				} else {
 					border = this.borders.h[borderTile];
@@ -2023,7 +2035,7 @@ dropecho_dungen_map_extensions_Neighbors.getNeighbors = function(map,x,y,dist,di
 				continue;
 			}
 			var val = map._mapData[map._width * (y + j) + (x + i)];
-			neighbors.push({ x : x + i, y : y + j, val : val});
+			neighbors.push(new dropecho_dungen_Tile2d(x + i,y + j,val));
 		}
 	}
 	return neighbors;
@@ -2413,6 +2425,9 @@ dropecho_interop_AbstractMap.fromMap = function(map) {
 		abs.set(k,v);
 	}
 	return abs;
+};
+dropecho_interop_AbstractMap.exists = function(this1,key) {
+	return this1.has(key);
 };
 dropecho_interop_AbstractMap.get = function(this1,key) {
 	return this1[key];

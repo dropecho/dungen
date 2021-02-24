@@ -3,13 +3,21 @@ package dropecho.dungen;
 using dropecho.dungen.map.Map2dExtensions;
 
 @:expose("dungen.Tile2d")
-typedef Tile2d = {
-	x:Int,
-	y:Int,
-	?val:Int
+@:struct
+class Tile2d {
+	public var x:Int;
+	public var y:Int;
+	public var val:Int;
+
+	public function new(x:Int, y:Int, ?val:Int) {
+		this.x = x;
+		this.y = y;
+		this.val = val;
+	};
 }
 
 @:expose("dungen.Map2d")
+@:nativeGen
 class Map2d {
 	public var _width:Int = 0;
 	public var _height:Int = 0;
@@ -52,7 +60,7 @@ class Map2d {
 	 */
 	public function IndexToXY(index:Int):Tile2d {
 		var x = Std.int(index % _width), y = Std.int(index / _width);
-		return {x: x, y: y};
+		return new Tile2d(x,y);
 	}
 
 	/**
@@ -64,7 +72,7 @@ class Map2d {
 	inline public function set(x:Int, y:Int, data:Int):Void {
 		var index = XYtoIndex(x, y);
 		// if (index < _mapData.length) {
-			_mapData[index] = data;
+		_mapData[index] = data;
 		// }
 	}
 

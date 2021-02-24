@@ -3,6 +3,7 @@ package dropecho.dungen;
 import dropecho.ds.GraphNode;
 import dropecho.ds.Graph;
 import dropecho.dungen.Map2d.Tile2d;
+import dropecho.interop.AbstractMap;
 
 using Lambda;
 using dropecho.dungen.map.Map2dExtensions;
@@ -10,17 +11,29 @@ using dropecho.dungen.map.extensions.DistanceFill;
 using dropecho.dungen.map.extensions.RegionManager;
 using dropecho.dungen.map.extensions.Neighbors;
 
+@:expose("dungen.Region")
+@:struct
+@:nativeGen
 class Region {
 	public var id:Int;
 	public var tiles:Array<Tile2d> = new Array<Tile2d>();
 
-	public function new() {}
+	public function new(id:Int) {
+		this.id = id;
+		this.tiles = new Array<Tile2d>();
+	}
 }
 
 @:expose("dungen.RegionMap")
+@:nativeGen
 class RegionMap extends Map2d {
+	#if cs
+	public var regions:AbstractMap<Int, Region> = new AbstractMap<Int, Region>();
+	public var borders:AbstractMap<Int, Region> = new AbstractMap<Int, Region>();
+	#else
 	public var regions:Map<Int, Region> = new Map<Int, Region>();
 	public var borders:Map<Int, Region> = new Map<Int, Region>();
+	#end
 
 	public var graph:Graph<Region, Region> = new Graph<Region, Region>();
 
@@ -36,7 +49,7 @@ class RegionMap extends Map2d {
 		if (expand) {
 			regionmap = regionmap.expandRegions(depth + 1);
 		} else {
-			if(depth > 1) {
+			if (depth > 1) {
 				regionmap = regionmap.expandRegionsByOne(depth);
 			}
 		}
@@ -89,8 +102,7 @@ class RegionMap extends Map2d {
 				var region;
 
 				if (regions.exists(regionTileId) == false) {
-					region = new Region();
-					region.id = regionTileId;
+					region = new Region(regionTileId);
 					regions.set(region.id, region);
 				} else {
 					region = regions.get(regionTileId);
@@ -111,8 +123,7 @@ class RegionMap extends Map2d {
 				var border;
 
 				if (borders.exists(borderTile) == false) {
-					border = new Region();
-					border.id = borderTile;
+					border = new Region(borderTile);
 					borders.set(border.id, border);
 				} else {
 					border = borders.get(borderTile);

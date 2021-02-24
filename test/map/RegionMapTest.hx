@@ -30,7 +30,7 @@ class RegionMapTest {
 			tileFloor: 2,
 			padding: 1
 		});
-		// trace(map.toPrettyString());
+		trace(map.toPrettyString());
 
 		var regionMap = new RegionMap(map, 2, false);
 
@@ -41,7 +41,7 @@ class RegionMapTest {
 		// trace(borderMap.toPrettyString([' ', '.', '1', '2', '3', '4','5', '6', '7', '8', '9']));
 		// trace(borderMap);
 
-		// trace(regionMap.toRegionBorderIdString());
+		trace(regionMap.toRegionBorderIdString());
 		// trace(regionMap.graph);
 
 		Assert.isTrue(true);

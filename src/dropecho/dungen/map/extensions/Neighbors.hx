@@ -1,6 +1,7 @@
 package dropecho.dungen.map.extensions;
 
 import dropecho.dungen.Map2d;
+
 using Lambda;
 
 @:expose("dungen.Neighbors")
@@ -50,11 +51,7 @@ class Neighbors {
 
 				var val = map.get(x + i, y + j);
 
-				neighbors.push({
-					x: x + i,
-					y: y + j,
-					val: val
-				});
+				neighbors.push(new Tile2d(x + i, y + j, val));
 			}
 		}
 
