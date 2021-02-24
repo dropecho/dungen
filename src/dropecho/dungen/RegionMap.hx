@@ -24,16 +24,21 @@ class RegionMap extends Map2d {
 
 	public var graph:Graph<Region, Region> = new Graph<Region, Region>();
 
-	public function new(map:Map2d, depth:Int = 2, expand:Bool = true, calculateDepth:Bool = true) {
+	public function new(map:Map2d, depth:Int = 2, expand:Bool = true) {
 		super(map._width, map._height, 0);
 
 		var regionmap = map.clone();
 		// TODO: Allow options passed for island size min/max/removal?
 		// regionmap = regionmap.removeIslandsBySize(256);
-		regionmap = calculateDepth ? regionmap.distanceFill(0, false) : regionmap;
+
+		regionmap = regionmap.distanceFill(0, false);
 		regionmap = regionmap.findAndTagRegions(depth);
 		if (expand) {
 			regionmap = regionmap.expandRegions(depth + 1);
+		} else {
+			if(depth > 1) {
+				regionmap = regionmap.expandRegionsByOne(depth);
+			}
 		}
 
 		buildRegions(regionmap, depth);

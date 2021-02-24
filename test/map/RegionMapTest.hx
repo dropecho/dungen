@@ -32,7 +32,7 @@ class RegionMapTest {
 		});
 		// trace(map.toPrettyString());
 
-		var regionMap = new RegionMap(map, 2, false, false);
+		var regionMap = new RegionMap(map, 2, false);
 
 		// var borderMap = RegionManager.findAndTagBorders(map, 1);
 

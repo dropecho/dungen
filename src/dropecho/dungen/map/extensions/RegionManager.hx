@@ -134,6 +134,30 @@ class RegionManager {
 		return regionmap;
 	}
 
+	public static function expandRegionsByOne(map:Map2d, startTag:Int = 3) {
+		var tilesToPaint = new Map<Int, Int>();
+
+		for (x in 0...map._width) {
+			for (y in 0...map._height) {
+				var tileVal = map.get(x, y);
+				if (tileVal < startTag) {
+					var neighbors = map.getNeighbors(x, y);
+					for (n in neighbors) {
+						if (n.val >= startTag) {
+							tilesToPaint.set(map.XYtoIndex(x, y), n.val);
+						}
+					}
+				}
+			}
+		}
+
+		for (index => value in tilesToPaint) {
+			map._mapData[index] = value;
+		}
+
+		return map;
+	}
+
 	public static function expandRegions(map:Map2d, startTag:Int = 3, eatWalls = false) {
 		for (_ in 0...100) {
 			for (currentTag in startTag...startTag + 500) {

@@ -165,16 +165,6 @@ dropecho_ds_GraphNode.prototype = {
 	id: null
 	,value: null
 	,graph: null
-	,neighborIds: function() {
-		return this.graph.neighborIds(this);
-	}
-	,neighbors: function(filter) {
-		var n = this.graph.neighbors(this,filter);
-		return n;
-	}
-	,edgeData: function(toId) {
-		return this.graph.edgeData(this.id,toId);
-	}
 	,__class__: dropecho_ds_GraphNode
 };
 var dropecho_ds_BSPNode = $hx_exports["BSPNode"] = function(value) {
@@ -246,10 +236,10 @@ dropecho_ds_Graph.prototype = {
 		if(Object.prototype.hasOwnProperty.call(this.edges.h,nodeId)) {
 			this.edges.h[nodeId].h[otherId] = data;
 		} else {
-			var this1 = this.edges;
+			var _this = this.edges;
 			var _g = new haxe_ds_StringMap();
 			_g.h[otherId] = data;
-			this1.h[nodeId] = _g;
+			_this.h[nodeId] = _g;
 		}
 	}
 	,addBiEdge: function(nodeId,otherId,data) {
@@ -257,14 +247,28 @@ dropecho_ds_Graph.prototype = {
 		this.addUniEdge(otherId,nodeId,data);
 	}
 	,remove: function(id) {
+		var _g = 0;
+		var _g1 = this.inNeighborIds(this.nodes.h[id]);
+		while(_g < _g1.length) {
+			var n = _g1[_g];
+			++_g;
+			var _this = this.edges.h[n];
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+		}
+		var _this = this.edges;
+		if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+			delete(_this.h[id]);
+		}
 		var _this = this.nodes;
 		if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
 			delete(_this.h[id]);
 		}
 	}
-	,neighbors: function(node,filter) {
+	,inNeighbors: function(node,filter) {
 		var _gthis = this;
-		var _this = this.neighborIds(node,filter);
+		var _this = this.inNeighborIds(node,filter);
 		var result = new Array(_this.length);
 		var _g = 0;
 		var _g1 = _this.length;
@@ -274,32 +278,101 @@ dropecho_ds_Graph.prototype = {
 		}
 		return result;
 	}
-	,neighborIds: function(node,filter) {
-		var edges = this.edges.h[node.id];
-		if(edges == null) {
+	,inNeighborIds: function(node,filter) {
+		var _g = [];
+		var _g1 = haxe_ds_StringMap.kvIterator(this.edges.h);
+		while(_g1.hasNext()) {
+			var _g2 = _g1.next();
+			var id = _g2.key;
+			var edge = _g2.value;
+			if(Object.prototype.hasOwnProperty.call(edge.h,node.id) && (filter == null || filter(id,edge.h[node.id]))) {
+				_g.push(id);
+			}
+		}
+		var ids = _g;
+		return ids;
+	}
+	,outNeighbors: function(node,filter) {
+		var _gthis = this;
+		var _this = this.outNeighborIds(node,filter);
+		var result = new Array(_this.length);
+		var _g = 0;
+		var _g1 = _this.length;
+		while(_g < _g1) {
+			var i = _g++;
+			result[i] = _gthis.nodes.h[_this[i]];
+		}
+		return result;
+	}
+	,outNeighborIds: function(node,filter) {
+		if(!Object.prototype.hasOwnProperty.call(this.edges.h,node.id)) {
 			return [];
 		}
 		var _g = [];
-		var _g1 = haxe_ds_StringMap.kvIterator(edges.h);
+		var _g1 = haxe_ds_StringMap.kvIterator(this.edges.h[node.id].h);
 		while(_g1.hasNext()) {
 			var _g2 = _g1.next();
 			var id = _g2.key;
 			var data = _g2.value;
 			if(filter == null || filter(id,data)) {
 				_g.push(id);
-			} else {
-				continue;
 			}
 		}
 		var ids = _g;
 		haxe_ds_ArraySort.sort(ids,Reflect.compare);
 		return ids;
 	}
+	,neighborIds: function(node,filter) {
+		return this.outNeighborIds(node,filter).concat(this.inNeighborIds(node,filter));
+	}
+	,neighbors: function(node,filter) {
+		return this.outNeighbors(node,filter).concat(this.inNeighbors(node,filter));
+	}
 	,edgeData: function(fromId,toId) {
 		if(Object.prototype.hasOwnProperty.call(this.edges.h,fromId)) {
 			return this.edges.h[fromId].h[toId];
 		}
 		return null;
+	}
+	,toString: function() {
+		var adjList = "\nGraph:\n";
+		adjList += "out-Neighbors:\n";
+		var node = haxe_ds_StringMap.valueIterator(this.nodes.h);
+		while(node.hasNext()) {
+			var node1 = node.next();
+			adjList += node1.id;
+			adjList += "\t-> ";
+			var neighbors = this.outNeighbors(node1);
+			var _g = 0;
+			while(_g < neighbors.length) {
+				var node2 = neighbors[_g];
+				++_g;
+				adjList += node2.id;
+				if(neighbors.indexOf(node2) != neighbors.length - 1) {
+					adjList += ",";
+				}
+			}
+			adjList += "\n";
+		}
+		adjList += "in-Neighbors:\n";
+		var node = haxe_ds_StringMap.valueIterator(this.nodes.h);
+		while(node.hasNext()) {
+			var node1 = node.next();
+			adjList += node1.id;
+			adjList += "\t-> ";
+			var neighbors = this.inNeighbors(node1);
+			var _g = 0;
+			while(_g < neighbors.length) {
+				var node2 = neighbors[_g];
+				++_g;
+				adjList += node2.id;
+				if(neighbors.indexOf(node2) != neighbors.length - 1) {
+					adjList += ",";
+				}
+			}
+			adjList += "\n";
+		}
+		return adjList;
 	}
 	,__class__: dropecho_ds_Graph
 };
@@ -314,12 +387,12 @@ dropecho_ds_BSPTree.__super__ = dropecho_ds_Graph;
 dropecho_ds_BSPTree.prototype = $extend(dropecho_ds_Graph.prototype,{
 	root: null
 	,getParent: function(node) {
-		return this.neighbors(node,function(id,data) {
+		return this.outNeighbors(node,function(id,data) {
 			return data == "parent";
 		})[0];
 	}
 	,getChildren: function(node) {
-		return this.neighbors(node,function(id,data) {
+		return this.outNeighbors(node,function(id,data) {
 			if(data != "left") {
 				return data == "right";
 			} else {
@@ -444,7 +517,7 @@ dropecho_dungen_Map2d.prototype = {
 	}
 	,toPrettyString: function(char) {
 		if(char == null) {
-			char = ["#","."];
+			char = [" ",".",",","`"];
 		}
 		var output = "\n MAP2d: \n\n";
 		var _g = 0;
@@ -480,27 +553,223 @@ dropecho_dungen_Map2d.prototype = {
 	}
 	,__class__: dropecho_dungen_Map2d
 };
-var dropecho_dungen_Region = function() { };
+var dropecho_dungen_Region = function() {
+	this.tiles = [];
+};
 dropecho_dungen_Region.__name__ = "dropecho.dungen.Region";
 dropecho_dungen_Region.prototype = {
-	regionId: null
+	id: null
 	,tiles: null
 	,__class__: dropecho_dungen_Region
 };
-var dropecho_dungen_RegionMap = $hx_exports["dungen"]["RegionMap"] = function(map) {
-	dropecho_dungen_Map2d.call(this,map._width,map._height,0);
-	var regionmap = dropecho_dungen_map_extensions_RegionManager.findAndTagRegions(map);
-	var _g = 0;
-	var _g1 = regionmap._width * regionmap._height;
-	while(_g < _g1) {
-		var tile = _g++;
-		this._mapData[tile] = regionmap._mapData[tile];
+var dropecho_dungen_RegionMap = $hx_exports["dungen"]["RegionMap"] = function(map,depth,expand) {
+	if(expand == null) {
+		expand = true;
 	}
+	if(depth == null) {
+		depth = 2;
+	}
+	this.graph = new dropecho_ds_Graph();
+	this.borders = new haxe_ds_IntMap();
+	this.regions = new haxe_ds_IntMap();
+	dropecho_dungen_Map2d.call(this,map._width,map._height,0);
+	var regionmap = dropecho_dungen_map_Map2dExtensions.clone(map);
+	regionmap = dropecho_dungen_map_extensions_DistanceFill.distanceFill(regionmap,0,false);
+	regionmap = dropecho_dungen_map_extensions_RegionManager.findAndTagRegions(regionmap,depth);
+	if(expand) {
+		regionmap = dropecho_dungen_map_extensions_RegionManager.expandRegions(regionmap,depth + 1);
+	} else {
+		regionmap = dropecho_dungen_map_extensions_RegionManager.expandRegionsByOne(regionmap,depth);
+	}
+	this.buildRegions(regionmap,depth);
+	this.buildBorders(dropecho_dungen_map_extensions_RegionManager.findAndTagBorders(regionmap,1,128));
+	this.buildGraph();
 };
 dropecho_dungen_RegionMap.__name__ = "dropecho.dungen.RegionMap";
 dropecho_dungen_RegionMap.__super__ = dropecho_dungen_Map2d;
 dropecho_dungen_RegionMap.prototype = $extend(dropecho_dungen_Map2d.prototype,{
 	regions: null
+	,borders: null
+	,graph: null
+	,buildGraph: function() {
+		var region = this.regions.iterator();
+		while(region.hasNext()) {
+			var region1 = region.next();
+			this.graph.addNode(new dropecho_ds_GraphNode(region1,region1.id));
+		}
+		var border = this.borders.iterator();
+		while(border.hasNext()) {
+			var border1 = border.next();
+			var borderRegions = [];
+			var _g = 0;
+			var _g1 = border1.tiles;
+			while(_g < _g1.length) {
+				var tile = _g1[_g];
+				++_g;
+				var neighbors = dropecho_dungen_map_extensions_Neighbors.getNeighbors(this,tile.x,tile.y);
+				var _g2 = 0;
+				while(_g2 < neighbors.length) {
+					var n = neighbors[_g2];
+					++_g2;
+					if(this.regions.h.hasOwnProperty(n.val)) {
+						var region = this.regions.h[n.val];
+						if(borderRegions.indexOf(region) == -1) {
+							borderRegions.push(region);
+						}
+					}
+				}
+			}
+			var _g3 = 0;
+			while(_g3 < borderRegions.length) {
+				var region1 = borderRegions[_g3];
+				++_g3;
+				var _g4 = 0;
+				while(_g4 < borderRegions.length) {
+					var region2 = borderRegions[_g4];
+					++_g4;
+					if(region1.id == region2.id) {
+						continue;
+					}
+					this.graph.addUniEdge(region1.id,region2.id,border1);
+				}
+			}
+		}
+	}
+	,buildRegions: function(regionmap,depth) {
+		if(depth == null) {
+			depth = 2;
+		}
+		var _g = 0;
+		var _g1 = regionmap._mapData.length;
+		while(_g < _g1) {
+			var tile = _g++;
+			var regionTileId = regionmap._mapData[tile];
+			var isRegion = regionTileId > depth;
+			this._mapData[tile] = regionmap._mapData[tile];
+			if(isRegion) {
+				var region;
+				if(this.regions.h.hasOwnProperty(regionTileId) == false) {
+					region = new dropecho_dungen_Region();
+					region.id = regionTileId;
+					this.regions.h[region.id] = region;
+				} else {
+					region = this.regions.h[regionTileId];
+				}
+				region.tiles.push(regionmap.IndexToXY(tile));
+			}
+		}
+	}
+	,buildBorders: function(bordermap) {
+		var _g = 0;
+		var _g1 = bordermap._mapData.length;
+		while(_g < _g1) {
+			var tile = _g++;
+			var borderTile = bordermap._mapData[tile];
+			var isBorder = borderTile != 0;
+			this._mapData[tile] = isBorder ? borderTile : this._mapData[tile];
+			if(isBorder) {
+				var border;
+				if(this.borders.h.hasOwnProperty(borderTile) == false) {
+					border = new dropecho_dungen_Region();
+					border.id = borderTile;
+					this.borders.h[border.id] = border;
+				} else {
+					border = this.borders.h[borderTile];
+				}
+				var tileData = bordermap.IndexToXY(tile);
+				border.tiles.push(tileData);
+			}
+		}
+	}
+	,toStringSingleRegion: function(regionId) {
+		var chars = [];
+		var _g = 0;
+		while(_g < 255) {
+			var i = _g++;
+			chars[i] = i - 1 == regionId ? "." : " ";
+		}
+		return this.toPrettyString(chars);
+	}
+	,toRegionBorderIdString: function() {
+		var output = "\n MAP2d: \n\n";
+		var _g = 0;
+		var _g1 = this._height;
+		while(_g < _g1) {
+			var y = _g++;
+			var _g2 = 0;
+			var _g3 = this._width;
+			while(_g2 < _g3) {
+				var x = _g2++;
+				var val = this._mapData[this._width * y + x];
+				if(this.regions.h.hasOwnProperty(val)) {
+					var tiles = this.regions.h[val].tiles;
+					var _g4 = 0;
+					var _g5 = tiles.length;
+					while(_g4 < _g5) {
+						var i = _g4++;
+						if(tiles[i].x == x && tiles[i].y == y) {
+							output += val;
+						}
+					}
+				} else if(this.borders.h.hasOwnProperty(val)) {
+					var _g6 = 0;
+					var _g7 = this.borders.h[val].tiles;
+					while(_g6 < _g7.length) {
+						var tile = _g7[_g6];
+						++_g6;
+						if(tile.x == x && tile.y == y) {
+							output += val - 127;
+						}
+					}
+				} else {
+					output += val == 0 ? " " : val;
+				}
+			}
+			output += "\n";
+		}
+		return output;
+	}
+	,toRegionBorderString: function() {
+		var output = "\n MAP2d: \n\n";
+		var _g = 0;
+		var _g1 = this._height;
+		while(_g < _g1) {
+			var y = _g++;
+			var _g2 = 0;
+			var _g3 = this._width;
+			while(_g2 < _g3) {
+				var x = _g2++;
+				var isBorder = false;
+				var isRegion = false;
+				var val = this._mapData[this._width * y + x];
+				if(this.regions.h.hasOwnProperty(val)) {
+					var tiles = this.regions.h[val].tiles;
+					var _g4 = 0;
+					var _g5 = tiles.length;
+					while(_g4 < _g5) {
+						var i = _g4++;
+						if(tiles[i].x == x && tiles[i].y == y) {
+							isRegion = true;
+						}
+					}
+				}
+				if(this.borders.h.hasOwnProperty(val)) {
+					var _g6 = 0;
+					var _g7 = this.borders.h[val].tiles;
+					while(_g6 < _g7.length) {
+						var tile = _g7[_g6];
+						++_g6;
+						if(tile.x == x && tile.y == y) {
+							isBorder = true;
+						}
+					}
+				}
+				output += isBorder ? "b" : isRegion ? "r" : " ";
+			}
+			output += "\n";
+		}
+		return output;
+	}
 	,__class__: dropecho_dungen_RegionMap
 });
 var dropecho_dungen_bsp_BspData = $hx_exports["dungen"]["BSPData"] = function(ops) {
@@ -1238,6 +1507,20 @@ dropecho_dungen_map_Map2dExtensions.setAllEdgesTo = function(map,tileType) {
 		map._mapData[index1] = tileType;
 	}
 };
+dropecho_dungen_map_Map2dExtensions.clone = function(map,mapData) {
+	var clone = new dropecho_dungen_Map2d(map._width,map._height);
+	if(mapData != null) {
+		clone._mapData = mapData;
+	} else {
+		var _g = 0;
+		var _g1 = map._mapData.length;
+		while(_g < _g1) {
+			var i = _g++;
+			clone._mapData[i] = map._mapData[i];
+		}
+	}
+	return clone;
+};
 var dropecho_dungen_map_Pattern = $hx_exports["dungen"]["Pattern"] = function(size,initTileData) {
 	if(initTileData == null) {
 		initTileData = 0;
@@ -1260,6 +1543,12 @@ dropecho_dungen_map_Pattern.__super__ = dropecho_dungen_Map2d;
 dropecho_dungen_map_Pattern.prototype = $extend(dropecho_dungen_Map2d.prototype,{
 	patterns: null
 	,hashes: null
+	,indexToMap: function(index) {
+		if(index == null) {
+			index = 0;
+		}
+		return dropecho_dungen_map_Map2dExtensions.clone(this,this.patterns[index]);
+	}
 	,matchesIndex: function(map,x,y,tileToIgnore) {
 		if(tileToIgnore == null) {
 			tileToIgnore = -1;
@@ -1595,12 +1884,9 @@ dropecho_dungen_map_extensions_FindAndReplace.findAndReplace = function(map,patt
 		var _g3 = map._height;
 		while(_g2 < _g3) {
 			var y = _g2++;
-			var matchesIndex = pattern1.matchesIndex(map,x,y);
-			if(matchesIndex != -1) {
-				var m = new dropecho_dungen_Map2d(pattern1._width,pattern1._height);
-				m._mapData = pattern1.patterns[matchesIndex];
-				var splat = new dropecho_dungen_Map2d(pattern2._width,pattern2._height);
-				splat._mapData = pattern2.patterns[matchesIndex];
+			var patternIndex = pattern1.matchesIndex(map,x,y);
+			if(patternIndex != -1) {
+				var splat = pattern2.indexToMap(patternIndex);
 				dropecho_dungen_map_extensions_Splat.splat(map,splat,x,y,ignoreTile);
 			}
 		}
@@ -1734,6 +2020,121 @@ dropecho_dungen_map_extensions_Neighbors.getNeighbors = function(map,x,y,dist,di
 };
 var dropecho_dungen_map_extensions_RegionManager = $hx_exports["dungen"]["RegionManager"] = function() { };
 dropecho_dungen_map_extensions_RegionManager.__name__ = "dropecho.dungen.map.extensions.RegionManager";
+dropecho_dungen_map_extensions_RegionManager.removeIslandsBySize = function(map,size,tileType) {
+	if(tileType == null) {
+		tileType = 1;
+	}
+	if(size == null) {
+		size = 4;
+	}
+	var cleanedMap = new dropecho_dungen_Map2d(map._width,map._height);
+	var nextTile;
+	var visited = [];
+	var _g = 0;
+	var _g1 = map._mapData.length;
+	while(_g < _g1) {
+		var i = _g++;
+		cleanedMap._mapData[i] = map._mapData[i];
+	}
+	while(true) {
+		nextTile = dropecho_dungen_map_extensions_GetFirstTileOfType.getFirstTileOfType(cleanedMap,tileType,visited);
+		if(!(nextTile != null)) {
+			break;
+		}
+		var tiles = dropecho_dungen_map_extensions_FloodFill.floodFill(cleanedMap,nextTile.x,nextTile.y,tileType);
+		var isIsland = tiles.length <= size;
+		if(isIsland) {
+			visited.push(nextTile);
+		}
+		var _g = 0;
+		while(_g < tiles.length) {
+			var t = tiles[_g];
+			++_g;
+			if(isIsland) {
+				var index = cleanedMap._width * t.y + t.x;
+				cleanedMap._mapData[index] = 0;
+			} else {
+				visited.push(t);
+			}
+		}
+	}
+	return cleanedMap;
+};
+dropecho_dungen_map_extensions_RegionManager.removeIslands = function(map,tileType) {
+	if(tileType == null) {
+		tileType = 1;
+	}
+	var nextTile;
+	var visited = [];
+	var cleanedMap = new dropecho_dungen_Map2d(map._width,map._height);
+	var _g = 0;
+	var _g1 = map._mapData.length;
+	while(_g < _g1) {
+		var i = _g++;
+		cleanedMap._mapData[i] = map._mapData[i];
+	}
+	while(true) {
+		nextTile = dropecho_dungen_map_extensions_GetFirstTileOfType.getFirstTileOfType(cleanedMap,tileType,visited);
+		if(!(nextTile != null)) {
+			break;
+		}
+		visited.push(nextTile);
+		var tiles = dropecho_dungen_map_extensions_FloodFill.floodFill(cleanedMap,nextTile.x,nextTile.y,tileType);
+		var isIsland = true;
+		var _g = 0;
+		while(_g < tiles.length) {
+			var t = tiles[_g];
+			++_g;
+			if(dropecho_dungen_map_extensions_Neighbors.getNeighborCount(map,t.x,t.y,tileType) + dropecho_dungen_map_extensions_Neighbors.getNeighborCount(map,t.x,t.y,0) != 8) {
+				isIsland = false;
+				break;
+			}
+		}
+		if(isIsland) {
+			var _g1 = 0;
+			while(_g1 < tiles.length) {
+				var t1 = tiles[_g1];
+				++_g1;
+				var index = cleanedMap._width * t1.y + t1.x;
+				cleanedMap._mapData[index] = 0;
+			}
+		}
+	}
+	return cleanedMap;
+};
+dropecho_dungen_map_extensions_RegionManager.findAndTagBorders = function(map,borderType,startTag) {
+	if(startTag == null) {
+		startTag = 2;
+	}
+	if(borderType == null) {
+		borderType = 1;
+	}
+	var borderMap = new dropecho_dungen_Map2d(map._width,map._height);
+	var _g = 0;
+	var _g1 = map._mapData.length;
+	while(_g < _g1) {
+		var i = _g++;
+		borderMap._mapData[i] = map._mapData[i] != borderType ? 0 : 1;
+	}
+	var nextBorder;
+	var nextTag = startTag;
+	while(true) {
+		nextBorder = dropecho_dungen_map_extensions_GetFirstTileOfType.getFirstTileOfType(borderMap,borderType);
+		if(!(nextBorder != null)) {
+			break;
+		}
+		var _g = 0;
+		var _g1 = dropecho_dungen_map_extensions_FloodFill.floodFill(borderMap,nextBorder.x,nextBorder.y,borderType);
+		while(_g < _g1.length) {
+			var t = _g1[_g];
+			++_g;
+			var index = borderMap._width * t.y + t.x;
+			borderMap._mapData[index] = nextTag;
+		}
+		++nextTag;
+	}
+	return borderMap;
+};
 dropecho_dungen_map_extensions_RegionManager.findAndTagRegions = function(map,depth) {
 	if(depth == null) {
 		depth = 2;
@@ -1753,21 +2154,56 @@ dropecho_dungen_map_extensions_RegionManager.findAndTagRegions = function(map,de
 		if(!(nextRegion != null)) {
 			break;
 		}
-		var tilesToFill = dropecho_dungen_map_extensions_FloodFill.floodFill(regionmap,nextRegion.x,nextRegion.y,depth);
 		var _g = 0;
-		while(_g < tilesToFill.length) {
-			var t = tilesToFill[_g];
+		var _g1 = dropecho_dungen_map_extensions_FloodFill.floodFill(regionmap,nextRegion.x,nextRegion.y,depth);
+		while(_g < _g1.length) {
+			var t = _g1[_g];
 			++_g;
 			var index = regionmap._width * t.y + t.x;
 			regionmap._mapData[index] = nextTag;
 		}
-		if(tilesToFill.length == 1) {
-			var index1 = regionmap._width * nextRegion.y + nextRegion.x;
-			regionmap._mapData[index1] = 1;
-		}
 		++nextTag;
 	}
 	return regionmap;
+};
+dropecho_dungen_map_extensions_RegionManager.expandRegionsByOne = function(map,startTag) {
+	if(startTag == null) {
+		startTag = 3;
+	}
+	var tilesToPaint = new haxe_ds_IntMap();
+	if(startTag <= 0) {
+		startTag = 1;
+	}
+	var _g = 0;
+	var _g1 = map._width;
+	while(_g < _g1) {
+		var x = _g++;
+		var _g2 = 0;
+		var _g3 = map._height;
+		while(_g2 < _g3) {
+			var y = _g2++;
+			var tileVal = map._mapData[map._width * y + x];
+			if(tileVal < startTag) {
+				var neighbors = dropecho_dungen_map_extensions_Neighbors.getNeighbors(map,x,y);
+				var _g4 = 0;
+				while(_g4 < neighbors.length) {
+					var n = neighbors[_g4];
+					++_g4;
+					if(n.val >= startTag) {
+						tilesToPaint.h[map._width * y + x] = n.val;
+					}
+				}
+			}
+		}
+	}
+	var _g = new haxe_iterators_MapKeyValueIterator(tilesToPaint);
+	while(_g.hasNext()) {
+		var _g1 = _g.next();
+		var index = _g1.key;
+		var value = _g1.value;
+		map._mapData[index] = value;
+	}
+	return map;
 };
 dropecho_dungen_map_extensions_RegionManager.expandRegions = function(map,startTag,eatWalls) {
 	if(eatWalls == null) {
@@ -1859,11 +2295,11 @@ dropecho_dungen_map_extensions_Utils.getRect = function(map,rect,wrap) {
 	}
 	var _g = [];
 	var _g1 = rect.y;
-	var _g2 = rect.y + rect.height + 1;
+	var _g2 = rect.y + rect.height;
 	while(_g1 < _g2) {
 		var j = _g1++;
 		var _g3 = rect.x;
-		var _g4 = rect.x + rect.width + 1;
+		var _g4 = rect.x + rect.width;
 		while(_g3 < _g4) {
 			var i = _g3++;
 			if(wrap) {

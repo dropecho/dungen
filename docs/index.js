@@ -27,7 +27,7 @@ var caveGenParams = {
   width: 64,
   tile_floor: 1,
   tile_wall: 0,
-  start_fill_percent: 40,
+  start_fill_percent: 62,
   useOtherType: false
 };
 
@@ -41,13 +41,13 @@ var convChainParams = {
 
 var regionParams = {
   depth: 2,
-  eatWalls: false
+  expand: false
 };
 
 var opts = {
   type: 'room',
   seed: '0',
-  mapScale: 4,
+  mapScale: 10,
   generateNewSeed: function() {
     opts.seed = Math.round(Math.random() * 99999999).toString();
     this.generate();
@@ -113,9 +113,7 @@ var opts = {
   },
 
   generateRegions: function() {
-    var distanceMap = dungen.DistanceFill.distanceFill(map);
-    var regionmap = dungen.RegionManager.findAndTagRegions(distanceMap, regionParams.depth);
-    regionmap = dungen.RegionManager.expandRegions(regionmap, regionParams.depth + 1, regionParams.eatWalls);
+    var regionmap = new dungen.RegionMap(map, regionParams.depth, regionParams.expand);
 
     var colors = ['#222', '#fff'];
     for (var i = 0; i < 256; i++) {
@@ -183,7 +181,7 @@ gui.add(opts, 'generateConvChainNewSeed');
 
 var regiongui = gui.addFolder('Regions');
 regiongui.add(regionParams, 'depth', 1, 10).step(1);
-regiongui.add(regionParams, 'eatWalls');
+regiongui.add(regionParams, 'expand');
 gui.add(opts, 'generateRegions');
 gui.add(opts, 'generateJson');
 
