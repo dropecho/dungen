@@ -1,10 +1,12 @@
+## BUILD DOCS
 -cp src
-
 --macro include('', true, null, ['src'])
 
 -lib seedyrng
 -lib dropecho.ds
 -lib dropecho.interop
+-lib dox
 
+-D doc-gen
 
--js dist/js/dropecho.dungen.js
+-xml artifacts/docs.xml

@@ -1,20 +1,15 @@
 ## JS BUILD
+--next
 targets/js.hxml
 
 ## CS BUILD
 --next
 targets/cs.hxml
 
+## CS BUILD
+--next
+targets/docs.hxml
+
 ## PYTHON
 # --next
 # targets/py.hxml
-
-## BUILD DOCS
-# --next
-# -cp src
-# -lib seedyrng
-# -lib dropecho.ds
-# -lib dropecho.interop
-# --macro include('', true, null, ['src'])
-# -D doc-gen
-# -xml artifacts/docs.xml
