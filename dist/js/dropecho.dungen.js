@@ -506,6 +506,18 @@ dropecho_ds_algos_PostOrderTraversal.prototype = {
 	}
 	,__class__: dropecho_ds_algos_PostOrderTraversal
 };
+var dropecho_dungen_Tile2d = $hx_exports["dungen"]["Tile2d"] = function(x,y,val) {
+	this.x = x;
+	this.y = y;
+	this.val = val;
+};
+dropecho_dungen_Tile2d.__name__ = "dropecho.dungen.Tile2d";
+dropecho_dungen_Tile2d.prototype = {
+	x: null
+	,y: null
+	,val: null
+	,__class__: dropecho_dungen_Tile2d
+};
 var dropecho_dungen_Map2d = $hx_exports["dungen"]["Map2d"] = function(width,height,initTileData) {
 	if(initTileData == null) {
 		initTileData = 0;
@@ -540,7 +552,7 @@ dropecho_dungen_Map2d.prototype = {
 	,IndexToXY: function(index) {
 		var x = index % this._width | 0;
 		var y = index / this._width | 0;
-		return { x : x, y : y};
+		return new dropecho_dungen_Tile2d(x,y);
 	}
 	,set: function(x,y,data) {
 		var index = this._width * y + x;
@@ -587,7 +599,9 @@ dropecho_dungen_Map2d.prototype = {
 	}
 	,__class__: dropecho_dungen_Map2d
 };
-var dropecho_dungen_Region = function() {
+var dropecho_dungen_Region = $hx_exports["dungen"]["Region"] = function(id) {
+	this.tiles = [];
+	this.id = id;
 	this.tiles = [];
 };
 dropecho_dungen_Region.__name__ = "dropecho.dungen.Region";
@@ -683,8 +697,7 @@ dropecho_dungen_RegionMap.prototype = $extend(dropecho_dungen_Map2d.prototype,{
 			if(isRegion) {
 				var region;
 				if(this.regions.h.hasOwnProperty(regionTileId) == false) {
-					region = new dropecho_dungen_Region();
-					region.id = regionTileId;
+					region = new dropecho_dungen_Region(regionTileId);
 					this.regions.h[region.id] = region;
 				} else {
 					region = this.regions.h[regionTileId];
@@ -704,8 +717,7 @@ dropecho_dungen_RegionMap.prototype = $extend(dropecho_dungen_Map2d.prototype,{
 			if(isBorder) {
 				var border;
 				if(this.borders.h.hasOwnProperty(borderTile) == false) {
-					border = new dropecho_dungen_Region();
-					border.id = borderTile;
+					border = new dropecho_dungen_Region(borderTile);
 					this.borders.h[border.id] = border;
 				} else {
 					border = this.borders.h[borderTile];
@@ -2050,7 +2062,7 @@ dropecho_dungen_map_extensions_Neighbors.getNeighbors = function(map,x,y,dist,di
 				continue;
 			}
 			var val = map._mapData[map._width * (y + j) + (x + i)];
-			neighbors.push({ x : x + i, y : y + j, val : val});
+			neighbors.push(new dropecho_dungen_Tile2d(x + i,y + j,val));
 		}
 	}
 	return neighbors;
@@ -2426,33 +2438,30 @@ dropecho_interop_AbstractArray.fromAny = function(d) {
 };
 var dropecho_interop_AbstractMap = {};
 dropecho_interop_AbstractMap._new = function(s) {
-	var this1 = s;
+	var this1;
+	if(s != null) {
+		this1 = s;
+	} else {
+		this1 = new Map();
+	}
 	return this1;
 };
-dropecho_interop_AbstractMap.jsMap = function(d) {
-	var map = new haxe_ds_StringMap();
-	d.forEach(function(v,k,m) {
-		map.h[k] = v;
-	});
-	return dropecho_interop_AbstractMap._new(map);
-};
-dropecho_interop_AbstractMap.fromAny = function(d) {
-	if(dropecho_interop_AbstractMap.isJsMap(d)) {
-		return dropecho_interop_AbstractMap.jsMap(d);
+dropecho_interop_AbstractMap.fromMap = function(map) {
+	var abs = dropecho_interop_AbstractMap._new();
+	var _g = map.keyValueIterator();
+	while(_g.hasNext()) {
+		var _g1 = _g.next();
+		var k = _g1.key;
+		var v = _g1.value;
+		abs.set(k,v);
 	}
-	var fields = Reflect.fields(d);
-	var _g = new haxe_ds_StringMap();
-	var _g1 = 0;
-	while(_g1 < fields.length) {
-		var f = fields[_g1];
-		++_g1;
-		_g.h[f] = Reflect.field(d,f);
-	}
-	var map = _g;
-	return dropecho_interop_AbstractMap._new(map);
+	return abs;
 };
-dropecho_interop_AbstractMap.isJsMap = function(value) {
-	return ((value) instanceof Map);
+dropecho_interop_AbstractMap.exists = function(this1,key) {
+	return this1.has(key);
+};
+dropecho_interop_AbstractMap.get = function(this1,key) {
+	return this1[key];
 };
 var dropecho_interop_Extender = $hx_exports["Extender"] = function() { };
 dropecho_interop_Extender.__name__ = "dropecho.interop.Extender";
@@ -2472,6 +2481,7 @@ dropecho_interop_Extender.extendThis = function(base,extension) {
 };
 dropecho_interop_Extender.defaults = function(base,extension) {
 	if(base == null) {
+		haxe_Log.trace("extender base is null",{ fileName : "dropecho/interop/Extender.hx", lineNumber : 21, className : "dropecho.interop.Extender", methodName : "defaults", customParams : [base == null]});
 		throw haxe_Exception.thrown("Base cannot be null.");
 	}
 	if(extension == null) {
@@ -2541,28 +2551,26 @@ dropecho_interop_Extender.defaults = function(base,extension) {
 					baseField.push(v);
 				}
 			} else if(bfIsMap) {
-				var copy1 = dropecho_interop_AbstractMap.fromAny(exField);
-				var h = copy1.h;
-				var _g_h = h;
-				var _g_keys = Object.keys(h);
-				var _g_length = _g_keys.length;
-				var _g_current = 0;
-				while(_g_current < _g_length) {
-					var key = _g_keys[_g_current++];
-					var _g1_key = key;
-					var _g1_value = _g_h[key];
-					var k = _g1_key;
-					var v1 = _g1_value;
-					baseField.set(k,v1);
+				var copy1 = dropecho_interop_AbstractMap.fromMap(exField);
+				var jsIterator = copy1.entries();
+				var _g_jsIterator = jsIterator;
+				var _g_lastStep = jsIterator.next();
+				while(!_g_lastStep.done) {
+					var v1 = _g_lastStep.value;
+					_g_lastStep = _g_jsIterator.next();
+					var _g6 = v1;
+					var k = _g6[0];
+					var v2 = _g6[1];
+					baseField.set(k,v2);
 				}
 			} else if(bfIsObject) {
 				dropecho_interop_Extender.defaults(baseField,exField);
 			} else {
 				try {
 					base[ff] = exField;
-				} catch( _g6 ) {
-					var ex1 = haxe_Exception.caught(_g6).unwrap();
-					console.log("dropecho/interop/Extender.hx:87:","FAILED SETTING PROP: " + ff + " error: " + Std.string(ex1));
+				} catch( _g7 ) {
+					var ex1 = haxe_Exception.caught(_g7).unwrap();
+					haxe_Log.trace("FAILED SETTING PROP: " + ff + " error: " + Std.string(ex1),{ fileName : "dropecho/interop/Extender.hx", lineNumber : 86, className : "dropecho.interop.Extender", methodName : "defaults"});
 				}
 			}
 		}
@@ -2601,6 +2609,7 @@ haxe_IMap.__isInterface__ = true;
 haxe_IMap.prototype = {
 	get: null
 	,keys: null
+	,keyValueIterator: null
 	,__class__: haxe_IMap
 };
 var haxe_Exception = function(message,previous,native) {
@@ -2666,6 +2675,31 @@ haxe__$Int64__$_$_$Int64.prototype = {
 	high: null
 	,low: null
 	,__class__: haxe__$Int64__$_$_$Int64
+};
+var haxe_Log = function() { };
+haxe_Log.__name__ = "haxe.Log";
+haxe_Log.formatOutput = function(v,infos) {
+	var str = Std.string(v);
+	if(infos == null) {
+		return str;
+	}
+	var pstr = infos.fileName + ":" + infos.lineNumber;
+	if(infos.customParams != null) {
+		var _g = 0;
+		var _g1 = infos.customParams;
+		while(_g < _g1.length) {
+			var v = _g1[_g];
+			++_g;
+			str += ", " + Std.string(v);
+		}
+	}
+	return pstr + ": " + str;
+};
+haxe_Log.trace = function(v,infos) {
+	var str = haxe_Log.formatOutput(v,infos);
+	if(typeof(console) != "undefined" && console.log != null) {
+		console.log(str);
+	}
 };
 var haxe_ValueException = function(value,previous,native) {
 	haxe_Exception.call(this,String(value),previous,native);
@@ -2948,6 +2982,9 @@ haxe_ds_IntMap.prototype = {
 			return this.ref[i];
 		}};
 	}
+	,keyValueIterator: function() {
+		return new haxe_iterators_MapKeyValueIterator(this);
+	}
 	,__class__: haxe_ds_IntMap
 };
 var haxe_ds_StringMap = function() {
@@ -2962,6 +2999,9 @@ haxe_ds_StringMap.prototype = {
 	}
 	,keys: function() {
 		return new haxe_ds__$StringMap_StringMapKeyIterator(this.h);
+	}
+	,keyValueIterator: function() {
+		return new haxe_ds__$StringMap_StringMapKeyValueIterator(this.h);
 	}
 	,__class__: haxe_ds_StringMap
 };
@@ -2984,6 +3024,27 @@ haxe_ds__$StringMap_StringMapKeyIterator.prototype = {
 		return this.keys[this.current++];
 	}
 	,__class__: haxe_ds__$StringMap_StringMapKeyIterator
+};
+var haxe_ds__$StringMap_StringMapKeyValueIterator = function(h) {
+	this.h = h;
+	this.keys = Object.keys(h);
+	this.length = this.keys.length;
+	this.current = 0;
+};
+haxe_ds__$StringMap_StringMapKeyValueIterator.__name__ = "haxe.ds._StringMap.StringMapKeyValueIterator";
+haxe_ds__$StringMap_StringMapKeyValueIterator.prototype = {
+	h: null
+	,keys: null
+	,length: null
+	,current: null
+	,hasNext: function() {
+		return this.current < this.length;
+	}
+	,next: function() {
+		var key = this.keys[this.current++];
+		return { key : key, value : this.h[key]};
+	}
+	,__class__: haxe_ds__$StringMap_StringMapKeyValueIterator
 };
 var haxe_io_Bytes = function(data) {
 	this.length = data.byteLength;
@@ -3132,6 +3193,23 @@ haxe_iterators_ArrayIterator.prototype = {
 		return this.array[this.current++];
 	}
 	,__class__: haxe_iterators_ArrayIterator
+};
+var haxe_iterators_MapKeyValueIterator = function(map) {
+	this.map = map;
+	this.keys = map.keys();
+};
+haxe_iterators_MapKeyValueIterator.__name__ = "haxe.iterators.MapKeyValueIterator";
+haxe_iterators_MapKeyValueIterator.prototype = {
+	map: null
+	,keys: null
+	,hasNext: function() {
+		return this.keys.hasNext();
+	}
+	,next: function() {
+		var key = this.keys.next();
+		return { value : this.map.get(key), key : key};
+	}
+	,__class__: haxe_iterators_MapKeyValueIterator
 };
 var js_Boot = function() { };
 js_Boot.__name__ = "js.Boot";
