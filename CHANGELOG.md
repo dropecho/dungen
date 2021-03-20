@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/dropecho/dungen/compare/1.2.2...1.3.0) (2021-02-25)
+
+
+### Features
+
+* Upgrade version of haxe in CI. ([d880623](https://github.com/dropecho/dungen/commit/d8806239d430995d64e5fd1d0361fca7f8ffae05))
+
 ## [1.2.2](https://github.com/dropecho/dungen/compare/1.2.1...1.2.2) (2021-02-24)
 
 
