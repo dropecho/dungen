@@ -3,6 +3,7 @@ package dropecho.dungen.generators;
 import dropecho.interop.Extender;
 import dropecho.ds.BSPTree;
 import dropecho.ds.BSPNode;
+import dropecho.dungen.bsp.BSPData;
 import dropecho.ds.algos.PostOrderTraversal;
 
 class RoomParams {
@@ -16,13 +17,13 @@ class RoomParams {
 
 @:expose("dungen.RoomGenerator")
 class RoomGenerator {
-	public static function buildRooms(tree:BSPTree, ?opts:Dynamic = null):Map2d {
+	public static function buildRooms(tree:BSPTree<BSPData>, ?opts:Dynamic = null):Map2d {
 		var params = Extender.defaults(new RoomParams(), opts);
 
 		var rootvalue = tree.getRoot().value;
 		var map = new Map2d(rootvalue.width, rootvalue.height, params.tileWall);
 
-		function makeRoom(node:BSPNode):Bool {
+		function makeRoom(node:BSPNode<BSPData>):Bool {
 			if (node.hasLeft() || node.hasRight()) {
 				return true;
 			}
@@ -51,7 +52,7 @@ class RoomGenerator {
 			return true;
 		}
 
-		function makeCorridors(node:BSPNode):Bool {
+		function makeCorridors(node:BSPNode<BSPData>):Bool {
 			if (!node.hasLeft() && !node.hasRight()) {
 				return true;
 			}

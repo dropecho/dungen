@@ -4,7 +4,7 @@ import massive.munit.Assert;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.bsp.Generator;
 import dropecho.dungen.generators.ConvChain;
-import dropecho.dungen.bsp.BspData;
+import dropecho.dungen.bsp.BSPData;
 import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.generators.MixedGenerator;
 import dropecho.dungen.generators.RandomGenerator;

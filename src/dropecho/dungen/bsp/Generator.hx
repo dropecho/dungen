@@ -1,5 +1,6 @@
 package dropecho.dungen.bsp;
 
+import dropecho.dungen.bsp.BSPData;
 import seedyrng.Random;
 import dropecho.ds.BSPNode;
 import dropecho.ds.BSPTree;
@@ -27,14 +28,14 @@ class Generator extends BSPGeneratorConfig {
 		random.setStringSeed(this.seed);
 	}
 
-	public function generate():BSPTree {
+	public function generate():BSPTree<BSPData> {
 		random.setStringSeed(this.seed);
-		var rootData = {
+		var rootData = new BSPData({
 			height: height,
 			width: width,
 			x: x,
 			y: y
-		};
+		});
 
 		var tree = new BSPTree(rootData);
 
@@ -43,7 +44,7 @@ class Generator extends BSPGeneratorConfig {
 		return tree;
 	}
 
-	private function buildTree(node:BSPNode, ?level:Int = 0):Void {
+	private function buildTree(node:BSPNode<BSPData>, ?level:Int = 0):Void {
 		if (node == null || level >= depth) {
 			return;
 		}
@@ -53,10 +54,10 @@ class Generator extends BSPGeneratorConfig {
 		buildTree(node.right, level + 1);
 	}
 
-	private function makeSplit(node:BSPNode):Void {
+	private function makeSplit(node:BSPNode<BSPData>):Void {
 		var val = node.value;
-		var lData:BspData;
-		var rData:BspData;
+		var lData:BSPData;
+		var rData:BSPData;
 
 		// Times two because you need to fit two child nodes into this one.
 		if (val.width < minWidth * 2 && val.height < minHeight * 2) {
@@ -79,13 +80,13 @@ class Generator extends BSPGeneratorConfig {
 			splitAt = random.randomInt(0, val.height - (minHeight * 2)) + minHeight;
 			var rHeight = val.height - splitAt;
 
-			lData = new BspData({
+			lData = new BSPData({
 				height: splitAt,
 				width: val.width,
 				x: val.x,
 				y: val.y
 			});
-			rData = new BspData({
+			rData = new BSPData({
 				height: rHeight,
 				width: val.width,
 				x: val.x,
@@ -95,13 +96,13 @@ class Generator extends BSPGeneratorConfig {
 			splitAt = random.randomInt(0, val.width - (minWidth * 2)) + minWidth;
 			var rWidth = val.width - splitAt;
 
-			lData = new BspData({
+			lData = new BSPData({
 				height: val.height,
 				width: splitAt,
 				x: val.x,
 				y: val.y
 			});
-			rData = new BspData({
+			rData = new BSPData({
 				height: val.height,
 				width: rWidth,
 				x: val.x + splitAt,

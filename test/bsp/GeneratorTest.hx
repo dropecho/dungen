@@ -2,6 +2,7 @@ package bsp;
 
 import massive.munit.Assert;
 import dropecho.dungen.bsp.Generator;
+import dropecho.dungen.bsp.BSPData;
 import dropecho.ds.BSPNode;
 import dropecho.ds.algos.InOrderTraversal;
 
@@ -42,7 +43,7 @@ class GeneratorTest {
 		generator.ratio = 1;
 		var root = generator.generate().root;
 
-		visitor.run(root, (node:BSPNode) -> {
+		visitor.run(root, (node:BSPNode<BSPData>) -> {
 			Assert.isTrue(node.value.height >= 10);
 			return true;
 		});
@@ -55,7 +56,7 @@ class GeneratorTest {
 		generator.ratio = 1;
 		var tree = generator.generate();
 
-		visitor.run(tree.root, function(node:BSPNode) {
+		visitor.run(tree.root, function(node:BSPNode<BSPData>) {
 			Assert.isTrue(node.value.width >= 10);
 			return true;
 		});
@@ -66,7 +67,7 @@ class GeneratorTest {
 		generator.depth = 4;
 		var root = generator.generate().root;
 
-		visitor.run(root, function(node:BSPNode) {
+		visitor.run(root, function(node:BSPNode<BSPData>) {
 			Assert.isTrue(node.value.width / node.value.height >= generator.ratio
 				|| node.value.height / node.value.width >= generator.ratio);
 			return true;
@@ -79,7 +80,7 @@ class GeneratorTest {
 			generator.depth = 4;
 			var tree = generator.generate();
 
-			visitor.run(tree.root, function(node:BSPNode) {
+			visitor.run(tree.root, function(node:BSPNode<BSPData>) {
 				if (node.hasLeft() && node.hasRight()) {
 					// vertical split
 					if (node.left.value.height == node.value.height) {
@@ -108,7 +109,7 @@ class GeneratorTest {
 			var rootArea = tree.root.value.height * tree.root.value.width;
 			var leafArea:Float = 0;
 
-			visitor.run(tree.root, function(node:BSPNode) {
+			visitor.run(tree.root, function(node:BSPNode<BSPData>) {
 				if (node.isLeaf()) {
 					var foo = node.value.height * node.value.width;
 					leafArea += foo;
@@ -125,7 +126,7 @@ class GeneratorTest {
 			generator.depth = 4;
 			var tree = generator.generate();
 
-			visitor.run(tree.root, function(node:BSPNode) {
+			visitor.run(tree.root, function(node:BSPNode<BSPData>) {
 				if (node.hasLeft() && node.hasRight()) {
 					Assert.isTrue(node.right != null);
 					Assert.isTrue(node.left != null);

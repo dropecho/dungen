@@ -1,6 +1,8 @@
 -cp src
 --macro include('', true, null, ['src'])
 
+-D dce=no
+
 -D no-root
 
 -lib seedyrng

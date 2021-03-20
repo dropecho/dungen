@@ -5,12 +5,13 @@ import dropecho.dungen.generators.CAGenerator;
 import dropecho.interop.Extender;
 import dropecho.ds.BSPNode;
 import dropecho.ds.BSPTree;
+import dropecho.dungen.bsp.BSPData;
 import dropecho.ds.algos.InOrderTraversal;
 import dropecho.ds.algos.PostOrderTraversal;
 
 @:expose("dungen.MixedGenerator")
 class MixedGenerator {
-	public static function buildRooms(tree:BSPTree, opts:Dynamic):Map2d {
+	public static function buildRooms(tree:BSPTree<BSPData>, opts:Dynamic):Map2d {
 		var random = new Random();
 		var params = Extender.defaults({
 			tile_wall: 0,
@@ -23,7 +24,7 @@ class MixedGenerator {
 		var rootvalue = tree.root.value;
 		var map = new Map2d(rootvalue.width, rootvalue.height, params.tile_wall);
 
-		function makeRooms(node:BSPNode):Bool {
+		function makeRooms(node:BSPNode<BSPData>):Bool {
 			if (node.hasLeft() || node.hasRight()) {
 				return true;
 			}
@@ -42,7 +43,7 @@ class MixedGenerator {
 			return true;
 		}
 
-		function makeCaveFromCA(node:BSPNode):Bool {
+		function makeCaveFromCA(node:BSPNode<BSPData>):Bool {
 			if ((node.hasLeft() || node.hasRight())
 				&& (node.right.hasRight() || node.right.hasLeft() || node.left.hasRight() || node.left.hasLeft())) {
 				return true;
@@ -62,7 +63,7 @@ class MixedGenerator {
 			return true;
 		}
 
-		function makeCorridors(node:BSPNode):Bool {
+		function makeCorridors(node:BSPNode<BSPData>):Bool {
 			if (!node.hasLeft() && !node.hasRight()) {
 				return true;
 			}
@@ -89,7 +90,7 @@ class MixedGenerator {
 			return true;
 		}
 
-		function chooseRoomOrCave(node:BSPNode):Bool {
+		function chooseRoomOrCave(node:BSPNode<BSPData>):Bool {
 			if ((random.random() * 100) > params.cave_percent) {
 				return makeRooms(node);
 			} else {
@@ -97,7 +98,7 @@ class MixedGenerator {
 			}
 		}
 
-		function closeEdges(node:BSPNode):Bool {
+		function closeEdges(node:BSPNode<BSPData>):Bool {
 			if (!node.isRoot()) {
 				return true;
 			}

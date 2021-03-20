@@ -5,6 +5,9 @@ import dropecho.ds.Graph;
 import dropecho.dungen.Map2d.Tile2d;
 import dropecho.interop.AbstractMap;
 
+import dropecho.ds.graph.Traversal;
+import dropecho.ds.graph.Search;
+
 using Lambda;
 using dropecho.dungen.map.Map2dExtensions;
 using dropecho.dungen.map.extensions.DistanceFill;
