@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/dropecho/dungen/compare/1.3.0...1.4.0) (2021-03-20)
+
+
+### Features
+
+* Cleanup and interop updates, fixes found in real use for icebreakers. ([4aabe76](https://github.com/dropecho/dungen/commit/4aabe76b58ba72597a2d49d704c4c8fb9de24286))
+
 # [1.3.0](https://github.com/dropecho/dungen/compare/1.2.2...1.3.0) (2021-02-25)
 
 
