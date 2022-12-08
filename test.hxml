@@ -16,4 +16,4 @@
 
 # -neko artifacts/test/neko_test.n
 -lib hxnodejs
--js artifacts/test/js_test.js
+-js artifacts/test/js_test.cjs
