@@ -1,18 +1,12 @@
 package dropecho.dungen;
 
+import dropecho.dungen.map.extensions.RegionManager;
 import dropecho.ds.GraphNode;
 import dropecho.ds.Graph;
 import dropecho.dungen.Map2d.Tile2d;
 import dropecho.interop.AbstractMap;
 
-import dropecho.ds.graph.Traversal;
-import dropecho.ds.graph.Search;
-
 using Lambda;
-using dropecho.dungen.map.Map2dExtensions;
-using dropecho.dungen.map.extensions.DistanceFill;
-using dropecho.dungen.map.extensions.RegionManager;
-using dropecho.dungen.map.extensions.Neighbors;
 
 @:expose("dungen.Region")
 @:struct
@@ -30,13 +24,8 @@ class Region {
 @:expose("dungen.RegionMap")
 @:nativeGen
 class RegionMap extends Map2d {
-	#if cs
 	public var regions:AbstractMap<Int, Region> = new AbstractMap<Int, Region>();
 	public var borders:AbstractMap<Int, Region> = new AbstractMap<Int, Region>();
-	#else
-	public var regions:Map<Int, Region> = new Map<Int, Region>();
-	public var borders:Map<Int, Region> = new Map<Int, Region>();
-	#end
 
 	public var graph:Graph<Region, Region> = new Graph<Region, Region>();
 

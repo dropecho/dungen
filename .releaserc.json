@@ -1,6 +1,6 @@
 {
   "branches": [
-    "master"
+    "main"
   ],
   "tagFormat": "${version}",
   "plugins": [
@@ -45,16 +45,22 @@
         "additionalFiles": []
       }
     ],
-    ["@semantic-release/github", {
-      "assets": [
-        {"path": "dist/cs/dropecho.dungen/bin/dropecho.dungen.dll", "label": "C# DLL"}
-      ]
-    }],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "dist/cs/dropecho.langgen/bin/dropecho.dungen.dll",
+            "name": "dropecho.dungen-${nextRelease.gitTag}.dll",
+            "label": "C# DLL"
+          }
+        ]
+      }
+    ],
     [
       "@semantic-release/git",
       {
         "assets": [
-          "dist/**/*.{js,css}",
           "*.md",
           "package.json",
           "haxelib.json"

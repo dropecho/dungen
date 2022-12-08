@@ -4,6 +4,7 @@ import map.PatternTest;
 import map.extensions.CheckConnectivityTest;
 import map.extensions.DistanceFillTest;
 import map.extensions.FloodFillTest;
+import map.extensions.RegionFillTest;
 import map.extensions.RegionManagerTest;
 import map.extensions.FindAndReplaceTest;
 import map.RegionMapTest;
@@ -26,6 +27,7 @@ class TestSuite extends massive.munit.TestSuite
 		add(map.extensions.CheckConnectivityTest);
 		add(map.extensions.DistanceFillTest);
 		add(map.extensions.FloodFillTest);
+		add(map.extensions.RegionFillTest);
 		add(map.extensions.RegionManagerTest);
 		add(map.extensions.FindAndReplaceTest);
 		add(map.RegionMapTest);

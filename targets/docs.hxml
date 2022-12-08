@@ -1,12 +1,3 @@
 ## BUILD DOCS
--cp src
---macro include('', true, null, ['src'])
-
--lib seedyrng
--lib dropecho.ds
--lib dropecho.interop
--lib dox
-
 -D doc-gen
-
 -xml artifacts/docs.xml

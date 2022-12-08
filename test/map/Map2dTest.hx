@@ -177,56 +177,55 @@ class Map2dTest {
 		// trace(map);
 	}
 }
-
-	// @Test
-	// public function bspMapTest() {
-	//   var opts = {
-	//     width: 24,
-	//     height: 12,
-	//     start_fill_percent: 64,
-	//     // tile_floor: 1,
-	//     // tile_wall: 0,
-	//     seed: "0"
-	//   };
-	//   var sample = WalkGenerator.generate(opts);
-  //
-	//   // var bsp = new Generator({
-	//   //   width: 12,
-	//   //   height: 8,
-	//   //   minWidth: 3,
-	//   //   minHeight: 3,
-	//   //   depth: 1,
-	//   //   ratio: .95
-	//   // }).generate();
-  //
-	//   // var sample = RoomGenerator.buildRooms(bsp);
-  //
-	//   // var sample = new Map2d(4, 4);
-	//   // sample._mapData = [
-	//   //   1, 1, 1, 1,
-	//   //   1, 0, 0, 0,
-	//   //   1, 0, 1, 0,
-	//   //   1, 0, 0, 0,
-	//   // ];
-  //
-	//   // var sample = new Map2d(3, 3);
-	//   // sample._mapData = [0, 1, 1, 1, 1, 1, 1, 1, 1];
-	//   // sample._mapData = [1, 1, 1, 0, 0, 0, 0, 0, 0];
-	//   // var sample = new Map2d(5, 5);
-	//   // sample._mapData = [
-	//   //   0, 0, 1, 0, 0,
-	//   //   0, 1, 1, 1, 0,
-	//   //   1, 1, 1, 1, 1,
-	//   //   0, 1, 1, 1, 0,
-	//   //   0, 0, 1, 0, 0
-	//   // ];
-  //
-	//   trace(sample.toPrettyString());
-	//   var gen = new ConvChain(sample);
-	//   var map = gen.generate(80, 40, 3, 0.1, 4);
-  //
-	//   // trace(map.toPrettyString());
-	//   Assert.isTrue(true);
-	// }
-  //
-  //
+// @Test
+// public function bspMapTest() {
+//   var opts = {
+//     width: 24,
+//     height: 12,
+//     start_fill_percent: 64,
+//     // tile_floor: 1,
+//     // tile_wall: 0,
+//     seed: "0"
+//   };
+//   var sample = WalkGenerator.generate(opts);
+//
+//   // var bsp = new Generator({
+//   //   width: 12,
+//   //   height: 8,
+//   //   minWidth: 3,
+//   //   minHeight: 3,
+//   //   depth: 1,
+//   //   ratio: .95
+//   // }).generate();
+//
+//   // var sample = RoomGenerator.buildRooms(bsp);
+//
+//   // var sample = new Map2d(4, 4);
+//   // sample._mapData = [
+//   //   1, 1, 1, 1,
+//   //   1, 0, 0, 0,
+//   //   1, 0, 1, 0,
+//   //   1, 0, 0, 0,
+//   // ];
+//
+//   // var sample = new Map2d(3, 3);
+//   // sample._mapData = [0, 1, 1, 1, 1, 1, 1, 1, 1];
+//   // sample._mapData = [1, 1, 1, 0, 0, 0, 0, 0, 0];
+//   // var sample = new Map2d(5, 5);
+//   // sample._mapData = [
+//   //   0, 0, 1, 0, 0,
+//   //   0, 1, 1, 1, 0,
+//   //   1, 1, 1, 1, 1,
+//   //   0, 1, 1, 1, 0,
+//   //   0, 0, 1, 0, 0
+//   // ];
+//
+//   trace(sample.toPrettyString());
+//   var gen = new ConvChain(sample);
+//   var map = gen.generate(80, 40, 3, 0.1, 4);
+//
+//   // trace(map.toPrettyString());
+//   Assert.isTrue(true);
+// }
+//
+//

@@ -1,8 +1,1 @@
--cp src
-
--lib seedyrng
--lib dropecho.ds
--lib dropecho.interop
-
---macro include('', true, null, ['src'])
 -python dist/python/dropecho_dungen.py

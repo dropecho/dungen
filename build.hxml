@@ -1,3 +1,14 @@
+-lib seedyrng
+-lib dropecho.ds
+-lib dropecho.interop
+
+-cp src
+-D dce=no
+
+--macro include('', true, null, ['src'])
+
+--each
+
 ## JS BUILD
 --next
 targets/js.hxml
@@ -6,9 +17,9 @@ targets/js.hxml
 --next
 targets/cs.hxml
 
-## CS BUILD
---next
-targets/docs.hxml
+## Docs BUILD
+# --next
+# targets/docs.hxml
 
 ## PYTHON
 # --next

@@ -1,7 +1,5 @@
 package dropecho.dungen;
 
-using dropecho.dungen.map.Map2dExtensions;
-
 @:expose("dungen.Tile2d")
 @:struct
 class Tile2d {
@@ -18,6 +16,17 @@ class Tile2d {
 
 @:expose("dungen.Map2d")
 @:nativeGen
+@:using(dropecho.dungen.map.Map2dExtensions)
+@:using(dropecho.dungen.map.extensions.CheckConnectivity)
+@:using(dropecho.dungen.map.extensions.DistanceFill)
+@:using(dropecho.dungen.map.extensions.FindAndReplace)
+@:using(dropecho.dungen.map.extensions.FloodFill)
+@:using(dropecho.dungen.map.extensions.GetFirstTileOfType)
+@:using(dropecho.dungen.map.extensions.Neighbors)
+@:using(dropecho.dungen.map.extensions.RegionFill)
+@:using(dropecho.dungen.map.extensions.RegionManager)
+@:using(dropecho.dungen.map.extensions.Splat)
+@:using(dropecho.dungen.map.extensions.Utils)
 class Map2d {
 	public var _width:Int = 0;
 	public var _height:Int = 0;
@@ -45,8 +54,8 @@ class Map2d {
 	/**
 	 * Returns the array index representing the x,y coord of a tile.
 	 *
-	 * @param x - The x coord to get the index for.
-	 * @param y - The y coord to get the index for.
+	 * @param x The x coord to get the index for.
+	 * @param y The y coord to get the index for.
 	 * @return The index of the x,y coord.
 	 */
 	inline public function XYtoIndex(x:Int, y:Int):Int {
@@ -55,12 +64,12 @@ class Map2d {
 
 	/**
 	 * Return a Tile2d ({x,y} object), for the given array index.
-	 * @param index - The index to change into an x,y position.
+	 * @param index The index to change into an x,y position.
 	 * @return The object with the x,y coords.
 	 */
 	public function IndexToXY(index:Int):Tile2d {
 		var x = Std.int(index % _width), y = Std.int(index / _width);
-		return new Tile2d(x,y);
+		return new Tile2d(x, y);
 	}
 
 	/**
