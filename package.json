@@ -10,10 +10,10 @@
   "license": "MIT",
   "scripts": {
     "test": "haxelib run munit t",
-    "build": "npm run build:haxe && npm run build:docs && npm run build:example",
+    "build": "npm run build:haxe && npm run build:example",
     "build:haxe": "haxe build.hxml",
     "build:docs": "haxelib run dox -i artifacts/docs.xml -o docs/docs --toplevel-package dropecho.dungen -D source-path http://github.com/dropecho/dungen/blob/master/src -D website http://github.com/dropecho/dungen --title 'Dungen API Documentation'",
-    "build:example": "cp dist/js/cjs/index.js docs/dropecho.dungen.js"
+    "build:example": "cp dist/js/cjs/index.cjs docs/dropecho.dungen.js"
   },
   "files": [
     "dist/js/**/*"
