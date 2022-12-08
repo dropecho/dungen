@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/dropecho/dungen/compare/1.4.0...1.5.0) (2022-12-08)
+
+
+### Bug Fixes
+
+* Add additional build targets. ([a8808c0](https://github.com/dropecho/dungen/commit/a8808c02499dd64df5ce194df9e043812d0925a8))
+
+
+### Features
+
+* Lots of misc fixes, upgraded to new build system. ([9d85548](https://github.com/dropecho/dungen/commit/9d8554831411b3699b8da13872f1c1e9a77b99d7))
+
 # [1.4.0](https://github.com/dropecho/dungen/compare/1.3.0...1.4.0) (2021-03-20)
 
 
