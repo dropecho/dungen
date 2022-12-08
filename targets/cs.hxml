@@ -1,2 +1,9 @@
+# C#
+
+# DEFINES
+-D dll_import
 -D no-root
--cs dist/cs/dropecho.dungen
+-D dll
+
+# OUTPUT
+-cs dist/cs/dropecho.langgen

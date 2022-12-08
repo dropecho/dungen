@@ -4,10 +4,6 @@
   "description": "A dungeon generator.",
   "author": "vantreeseba <vantreeseba@gmail.com>",
   "repository": "github:dropecho/dungen",
-  "main": "dist/js/dropecho.dungen.js",
-  "files": [
-    "dist/js/dropecho.dungen.js"
-  ],
   "publishConfig": {
     "access": "public"
   },
@@ -17,17 +13,28 @@
     "build": "npm run build:haxe && npm run build:docs && npm run build:example",
     "build:haxe": "haxe build.hxml",
     "build:docs": "haxelib run dox -i artifacts/docs.xml -o docs/docs --toplevel-package dropecho.dungen -D source-path http://github.com/dropecho/dungen/blob/master/src -D website http://github.com/dropecho/dungen --title 'Dungen API Documentation'",
-    "build:example": "cp dist/js/dropecho.dungen.js docs/dropecho.dungen.js"
+    "build:example": "cp dist/js/cjs/index.js docs/dropecho.dungen.js"
   },
+  "files": [
+    "dist/js/**/*"
+  ],
   "devDependencies": {
-    "@semantic-release/changelog": "^5.0.1",
-    "@semantic-release/commit-analyzer": "^8.0.1",
-    "@semantic-release/exec": "^5.0.0",
-    "@semantic-release/git": "^9.0.0",
-    "@semantic-release/github": "^7.0.7",
-    "@semantic-release/npm": "^7.0.5",
-    "@semantic-release/release-notes-generator": "^9.0.1",
-    "semantic-release": "^17.1.1",
-    "semantic-release-haxelib": "^0.4.0"
+    "@semantic-release/changelog": "^6.0.2",
+    "@semantic-release/commit-analyzer": "^9.0.2",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^8.0.7",
+    "@semantic-release/npm": "^9.0.1",
+    "@semantic-release/release-notes-generator": "^10.0.3",
+    "semantic-release": "^19.0.5",
+    "semantic-release-haxelib": "^1.1.0"
+  },
+  "type": "module",
+  "main": "./dist/js/cjs/index.cjs",
+  "exports": {
+    ".": {
+      "require": "./dist/js/cjs/index.cjs",
+      "import": "./dist/js/esm/index.js"
+    }
   }
 }

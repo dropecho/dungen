@@ -1,8 +1,11 @@
 ## JS
 
+# LIBRARIES
+-lib genes
+
 # DEFINES
 -D js-es=6
 -D source-map-content
 
 # OUTPUT 
--js dist/js/cjs/index.cjs 
+-js dist/js/esm/index.js 
