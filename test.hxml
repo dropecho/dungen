@@ -1,19 +1,18 @@
 -cp src
 -cp test
-# actual libs
+
 -lib seedyrng
 -lib dropecho.ds 
 -lib dropecho.interop 
+-lib dropecho.testing 
+-lib utest
 
-#test libs
--lib munit
--lib hamcrest
+--each
 
--main TestMain
+--next
+-lib hxnodejs
+-js artifacts/js_test.cjs
 
 # -cs artifacts/cs_test/
 # -python artifacts/python_test/
-
-# -neko artifacts/test/neko_test.n
--lib hxnodejs
--js artifacts/test/js_test.cjs
+# -neko artifacts/neko_test.n

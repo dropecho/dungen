@@ -67,8 +67,9 @@ class Map2d {
 	 * @param index The index to change into an x,y position.
 	 * @return The object with the x,y coords.
 	 */
-	public function IndexToXY(index:Int):Tile2d {
-		var x = Std.int(index % _width), y = Std.int(index / _width);
+	public inline function IndexToXY(index:Int):Tile2d {
+		var x = Std.int(index % _width);
+		var y = Std.int(index / _width);
 		return new Tile2d(x, y);
 	}
 
@@ -122,7 +123,8 @@ class Map2d {
 	 * @return a string representing the map. 
 	 */
 	public function toString():String {
-		var output = "\n MAP2d: \n\n";
+		//     var output = "\n MAP2d: \n\n";
+		var output = "\n";
 
 		for (y in 0..._height) {
 			for (x in 0..._width) {

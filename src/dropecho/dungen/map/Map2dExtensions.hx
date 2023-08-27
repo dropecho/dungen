@@ -15,14 +15,14 @@ class Map2dExtensions {
 	}
 
 	public static function clone(map:Map2d, mapData:Array<Int> = null) {
-		var clone = new Map2d(map._width, map._height);
+		var cloned = new Map2d(map._width, map._height);
 		if (mapData != null) {
-			clone._mapData = mapData;
+			cloned._mapData = mapData;
 		} else {
 			for (i in 0...map._mapData.length) {
-				clone._mapData[i] = map._mapData[i];
+				cloned._mapData[i] = map._mapData[i];
 			}
 		}
-		return clone;
+		return cloned;
 	}
 }

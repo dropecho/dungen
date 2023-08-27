@@ -1,6 +1,7 @@
 package export;
 
-import massive.munit.Assert;
+import utest.Assert;
+import utest.Test;
 import dropecho.dungen.bsp.Generator;
 import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.Map2d;
@@ -10,43 +11,23 @@ import dropecho.dungen.export.TiledExporter;
 import sys.io.File;
 #end
 
-class TiledExporterTest {
+class TiledExporterTests extends Test {
 	public var map:Map2d;
 
-	@Test
-	public function ca_map_test() {
-		var params = {
-			steps: [
-				{
-					reps: 4,
-					r1_cutoff: 5,
-					r2_cutoff: 2
-				},
-				{
-					reps: 3,
-					r1_cutoff: 5,
-					r2_cutoff: 0
-				}
-			],
-			height: 32,
-			width: 32,
-			tile_floor: 2,
-			tile_wall: 1,
-			start_fill_percent: 45
-		};
+	public function test_ca_map() {
+		var params = new CA_PARAMS();
 
 		var map = CAGenerator.generate(params);
-    var json = TiledExporter.export(map);
+		var json = TiledExporter.export(map);
 
 		#if !js
-    File.saveContent("artifacts/ca.json", json);
+		File.saveContent("artifacts/ca.json", json);
 		#end
 
 		Assert.isTrue(true);
 	}
 
-	@Test
-	public function bsp_map_test() {
+	public function test_bsp_map() {
 		var genOpts = {
 			width: 64,
 			height: 64,
@@ -60,10 +41,10 @@ class TiledExporterTest {
 		var tree = gen.generate();
 		var map = RoomGenerator.buildRooms(tree);
 
-    var json = TiledExporter.export(map);
+		var json = TiledExporter.export(map);
 
 		#if !js
-    File.saveContent("artifacts/bsp.json", json);
+		File.saveContent("artifacts/bsp.json", json);
 		#end
 
 		Assert.isTrue(true);

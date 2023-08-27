@@ -61,11 +61,13 @@ class Pattern extends Map2d {
 		}
 
 		inline function rotate(p:Array<Int>) {
-			return pattern((x, y) -> p[n - 1 - y + x * n]);
+			var length = _mapData.length;
+			return pattern((x, y) -> p[(n - x - 1) * n + y]);
 		}
 
 		inline function reflect(p:Array<Int>) {
-			return pattern((x, y) -> p[n - 1 - x + y * n]);
+			var length = _mapData.length;
+			return pattern((x, y) -> p[length - (n * y + 1) - x]);
 		}
 
 		inline function hash(p:Array<Int>) {
@@ -73,8 +75,9 @@ class Pattern extends Map2d {
 			var power = 1;
 
 			for (i in 0...p.length) {
-				result += p[p.length - 1 - i] != 0 ? power : 0;
-				power *= 2;
+				var val = p[p.length - 1 - i];
+				result += val << i + 1;
+				//         result += val != 0 ? power : 0;
 			}
 
 			return result;

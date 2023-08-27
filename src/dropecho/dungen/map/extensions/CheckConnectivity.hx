@@ -8,6 +8,8 @@ class CheckConnectivity {
 	public static function checkConnectivity(map:Map2d, tile:Int = 0, diagonal:Bool = true):Bool {
 		// get random non-filled tile
 		var firstTile = map.getFirstTileOfType(tile);
+
+		// If no tiles of the given type are found, default to false.
 		if (firstTile == null) {
 			return false;
 		}

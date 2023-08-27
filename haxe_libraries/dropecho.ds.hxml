@@ -1,0 +1,4 @@
+# @install: lix --silent download "haxelib:/dropecho.ds#1.5.1" into dropecho.ds/1.5.1/haxelib
+-lib dropecho.interop
+-cp ${HAXE_LIBCACHE}/dropecho.ds/1.5.1/haxelib/src/
+-D dropecho.ds=1.5.1

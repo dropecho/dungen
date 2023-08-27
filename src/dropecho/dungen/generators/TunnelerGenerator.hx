@@ -41,7 +41,13 @@ private class Tunneler {
 	var direction:Int;
 	var lifeSpan:Int;
 
-	public function new(map:Map2d, position:Tile2d, width:Int = 1, direction:Int = 2, lifeSpan:Int = 5) {
+	public function new(
+		map:Map2d,
+		position:Tile2d,
+		width:Int = 1,
+		direction:Int = 2,
+		lifeSpan:Int = 5
+	) {
 		this.map = map;
 		this.position = position;
 		this.width = width;

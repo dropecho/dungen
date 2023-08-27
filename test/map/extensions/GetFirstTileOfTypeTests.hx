@@ -1,47 +1,42 @@
-package map.helpers;
+package map.extensions;
 
-import massive.munit.Assert;
+import utest.Assert;
+import utest.Test;
 import dropecho.dungen.Map2d;
 
-using dropecho.dungen.map.helpers.GetFirstTileOfType;
+using dropecho.dungen.map.extensions.GetFirstTileOfType;
 
-class GetFirstTileOfType {
+class GetFirstTileOfTypeTests extends Test {
 	var map:Map2d;
 
-	@Before
 	public function setup() {
 		map = new Map2d(8, 8, 0);
 	}
 
-	@Test
-	public function get_first_empty_of_0_on_0_filled_map_should_return_non_null_tile() {
+	public function test_get_first_empty_of_0_on_0_filled_map_should_return_non_null_tile() {
 		var firstEmpty = map.getFirstTileOfType(0);
 		Assert.isTrue(firstEmpty != null);
 	}
 
-	@Test
-	public function get_first_empty_of_1_on_0_filled_map_should_return_null() {
+	public function test_get_first_empty_of_1_on_0_filled_map_should_return_null() {
 		var firstEmpty = map.getFirstTileOfType(1);
 		Assert.isTrue(firstEmpty == null);
 	}
 
-	// @Test
-	// public function get_first_empty_of_0_on_random_0_1_filled_map_should_return_non_null_tile() {
+	// public function test_get_first_empty_of_0_on_random_0_1_filled_map_should_return_non_null_tile() {
 	//   map.fillMapRandomly(1, 0, 50);
 	//   var firstEmpty = map.getFirstTileOfType(0);
 	//   Assert.isTrue(firstEmpty != null);
 	// }
 
-	@Test
-	public function get_first_empty_of_1_on_manually_filled_array_without_ignore_array_should_return_non_null() {
+	public function test_get_first_empty_of_1_on_manually_filled_array_without_ignore_array_should_return_non_null() {
 		map.set(0, 0, 1);
 
 		var firstEmpty = map.getFirstTileOfType(1);
 		Assert.isTrue(firstEmpty != null);
 	}
 
-	@Test
-	public function get_first_empty_of_1_on_manually_filled_array_with_ignore_array_should_return_null() {
+	public function test_get_first_empty_of_1_on_manually_filled_array_with_ignore_array_should_return_null() {
 		map.set(0, 0, 1);
 
 		var ignore = map.IndexToXY(0);

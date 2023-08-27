@@ -5,35 +5,42 @@ using Lambda;
 import haxe.ds.IntMap;
 import dropecho.dungen.Map2d;
 
-using dropecho.dungen.map.extensions.Neighbors;
-
 @:expose("dungen.FloodFill")
 class FloodFill {
-	public static function floodFill(map:Map2d, startX:Int, startY:Int, tile:Int = 0, diagonal:Bool = true):Array<Tile2d> {
-		var closed = new IntMap<Tile2d>();
-		var open = new Array<Tile2d>();
+	public static function floodFill(
+		map:Map2d,
+		x:Int,
+		y:Int,
+		value:Int = 0,
+		diagonal:Bool = true
+	):Array<Tile2d> {
+		var visited = new IntMap<Tile2d>();
+		var queue = new Array<Tile2d>();
 		var neighbors = new Array<Tile2d>();
 
-		var currentTile = map.IndexToXY(map.XYtoIndex(startX, startY));
-		open.push(currentTile);
+		var currentTile = map.IndexToXY(map.XYtoIndex(x, y));
+		queue.push(currentTile);
 
 		function whereHasNotBeenVisited(tile) {
-			return closed.get(map.XYtoIndex(tile.x, tile.y)) == null;
+			return visited.get(map.XYtoIndex(tile.x, tile.y)) == null;
 		}
 
-		function whereTileIsSameType(t) {
-			return map.get(t.x, t.y) == tile;
+		function whereTileIsSameType(tile) {
+			return map.get(tile.x, tile.y) == value;
 		}
 
-		while (open.length > 0) {
-			currentTile = open.pop();
+		while (queue.length > 0) {
+			currentTile = queue.pop();
 
-			closed.set(map.XYtoIndex(currentTile.x, currentTile.y), currentTile);
-			neighbors = map.getNeighbors(currentTile.x, currentTile.y, 1, diagonal).filter(whereHasNotBeenVisited).filter(whereTileIsSameType);
+			visited.set(map.XYtoIndex(currentTile.x, currentTile.y), currentTile);
+			neighbors = map
+				.getNeighbors(currentTile.x, currentTile.y, 1, diagonal)
+				.filter(whereHasNotBeenVisited)
+				.filter(whereTileIsSameType);
 
-			open = open.concat(neighbors);
+			queue = queue.concat(neighbors);
 		}
 
-		return closed.array();
+		return visited.array();
 	}
 }

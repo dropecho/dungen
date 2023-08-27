@@ -20,7 +20,9 @@ class RoomGenerator {
 	public static function buildRooms(tree:BSPTree<BSPData>, ?opts:Dynamic = null):Map2d {
 		var params = Extender.defaults(new RoomParams(), opts);
 
-		var rootvalue = tree.getRoot().value;
+		var rootvalue = tree
+			.getRoot()
+			.value;
 		var map = new Map2d(rootvalue.width, rootvalue.height, params.tileWall);
 
 		function makeRoom(node:BSPNode<BSPData>):Bool {

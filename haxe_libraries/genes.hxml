@@ -1,0 +1,7 @@
+# @install: lix --silent download "haxelib:/genes#0.4.9" into genes/0.4.9/haxelib
+-lib helder.set
+-cp ${HAXE_LIBCACHE}/genes/0.4.9/haxelib/src
+-D genes=0.4.9
+# -D js-es=6
+--macro genes.Generator.use()
+--macro addMetadata('@:genes.disableNativeAccessors', 'haxe.Exception')

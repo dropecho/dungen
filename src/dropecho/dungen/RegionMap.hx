@@ -143,14 +143,21 @@ class RegionMap extends Map2d {
 				var val = _mapData[XYtoIndex(x, y)];
 
 				if (regions.exists(val)) {
-					var tiles = regions.get(val).tiles;
+					var tiles = regions
+						.get(val)
+						.tiles;
+
 					for (i in 0...tiles.length) {
 						if (tiles[i].x == x && tiles[i].y == y) {
 							output += val;
 						}
 					}
 				} else if (borders.exists(val)) {
-					for (tile in borders.get(val).tiles) {
+					var tiles = borders
+						.get(val)
+						.tiles;
+
+					for (tile in tiles) {
 						if (tile.x == x && tile.y == y) {
 							output += (val - 127);
 						}
@@ -176,7 +183,10 @@ class RegionMap extends Map2d {
 				var val = _mapData[XYtoIndex(x, y)];
 
 				if (regions.exists(val)) {
-					var tiles = regions.get(val).tiles;
+					var tiles = regions
+						.get(val)
+						.tiles;
+
 					for (i in 0...tiles.length) {
 						if (tiles[i].x == x && tiles[i].y == y) {
 							isRegion = true;
@@ -184,16 +194,18 @@ class RegionMap extends Map2d {
 					}
 				}
 				if (borders.exists(val)) {
-					for (tile in borders.get(val).tiles) {
+					var tiles = borders
+						.get(val)
+						.tiles;
+
+					for (tile in tiles) {
 						if (tile.x == x && tile.y == y) {
 							isBorder = true;
 						}
 					}
 				}
 
-				// output += isBorder ? '1' : '0';
 				output += isBorder ? 'b' : isRegion ? 'r' : ' ';
-				// output += val;
 			}
 			output += "\n";
 		}

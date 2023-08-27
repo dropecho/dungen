@@ -4,8 +4,6 @@ import dropecho.dungen.generators.RandomGenerator;
 import dropecho.interop.Extender;
 import dropecho.dungen.Map2d;
 
-using dropecho.dungen.map.extensions.Neighbors;
-
 typedef CA_PARAM_STEP = {
 	reps:Int,
 	r1_cutoff:Int,
@@ -44,30 +42,33 @@ class CA_PARAMS {
 
 @:expose("dungen.CAGenerator")
 class CAGenerator {
-	public static function generate(?opts:Dynamic = null):Map2d {
-		var params:CA_PARAMS = Extender.defaults(new CA_PARAMS(), opts);
+	public static function generate(?opts:CA_PARAMS = null):Map2d {
+		var params = opts == null ? new CA_PARAMS() : opts;
 		var map = RandomGenerator.generate(params);
+
+		var temp = map.clone();
 
 		for (step in params.steps) {
 			for (_ in 0...step.reps) {
-				buildFromCA(map, params, step);
+				buildFromCA(temp, map, params, step);
 			}
 		}
 
 		return map;
 	}
 
-	private static function buildFromCA(map:Map2d, params:CA_PARAMS, step:CA_PARAM_STEP):Void {
-		var temp = new Map<Int, Int>();
-
+	private static function buildFromCA(
+		temp:Map2d,
+		map:Map2d,
+		params:CA_PARAMS,
+		step:CA_PARAM_STEP
+	):Void {
 		var alive_tile_type = step.invert ? params.tile_floor : params.tile_wall;
 		var dead_tile_type = step.invert ? params.tile_wall : params.tile_floor;
 
 		for (x in 0...params.width) {
 			for (y in 0...params.height) {
 				var nCount = map.getNeighborCount(x, y, alive_tile_type);
-				var nCount2 = map.getNeighborCount(x, y, alive_tile_type, 2);
-				var pos = map.XYtoIndex(x, y);
 				if (!params.useOtherType) {
 					var is_alive = map.get(x, y) == alive_tile_type;
 
@@ -79,20 +80,18 @@ class CAGenerator {
 						is_alive = false;
 					}
 
-					temp.set(pos, is_alive ? alive_tile_type : dead_tile_type);
+					temp.set(x, y, is_alive ? alive_tile_type : dead_tile_type);
 				} else {
+					var nCount2 = map.getNeighborCount(x, y, alive_tile_type, 2);
 					if (nCount >= step.r1_cutoff || nCount2 <= step.r2_cutoff) {
-						temp.set(pos, dead_tile_type);
+						temp.set(x, y, dead_tile_type);
 					} else {
-						temp.set(pos, alive_tile_type);
+						temp.set(x, y, alive_tile_type);
 					}
 				}
 			}
 		}
 
-		for (i in temp.keys()) {
-			var pos = map.IndexToXY(i);
-			map.set(pos.x, pos.y, temp[i]);
-		}
+		map._mapData = temp._mapData.copy();
 	}
 }

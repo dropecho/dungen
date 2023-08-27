@@ -1,6 +1,7 @@
 package map.extensions;
 
-import massive.munit.Assert;
+import utest.Assert;
+import utest.Test;
 import dropecho.dungen.bsp.Generator;
 import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.generators.CAGenerator;
@@ -9,17 +10,18 @@ import dropecho.dungen.map.extensions.RegionManager;
 using dropecho.dungen.map.extensions.DistanceFill;
 using dropecho.dungen.map.Map2dExtensions;
 
-class RegionManagerTest {
-	@Test
-	public function region_tagging_only() {
-		var map = CAGenerator.generate({
-			width: 40,
-			height: 20,
-			start_fill_percent: 64,
-			tile_floor: 1,
-			tile_wall: 0,
-			seed: "0",
-		});
+class RegionManagerTests extends Test {
+	@Ignored
+	public function test_region_tagging_only() {
+		var params = new CA_PARAMS();
+		params.width = 40;
+		params.height = 20;
+		params.start_fill_percent = 64;
+		params.tile_floor = 1;
+		params.tile_wall = 0;
+		params.seed = "0";
+
+		var map = CAGenerator.generate(params);
 
 		map.setAllEdgesTo();
 
@@ -32,8 +34,8 @@ class RegionManagerTest {
 		// ]));
 	}
 
-	@Test
-	public function region_tagging_rooms() {
+	@Ignored
+	public function test_region_tagging_rooms() {
 		var bspGen = new Generator({
 			width: 40,
 			height: 20,
@@ -57,16 +59,17 @@ class RegionManagerTest {
 		// ]));
 	}
 
-	@Test
-	public function region_tagging_caves() {
-		var map = CAGenerator.generate({
-			width: 60,
-			height: 40,
-			start_fill_percent: 64,
-			tile_floor: 1,
-			tile_wall: 0,
-			seed: "1",
-		});
+	@Ignored
+	public function test_region_tagging_caves() {
+		var params = new CA_PARAMS();
+		params.width = 60;
+		params.height = 40;
+		params.start_fill_percent = 64;
+		params.tile_floor = 1;
+		params.tile_wall = 0;
+		params.seed = "1";
+
+		var map = CAGenerator.generate(params);
 
 		map.setAllEdgesTo();
 

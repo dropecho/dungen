@@ -4,6 +4,7 @@
 -lib genes
 
 # DEFINES
+-D dts
 -D js-es=6
 -D source-map-content
 

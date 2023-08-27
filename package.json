@@ -9,7 +9,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "haxelib run munit t",
+    "install": "lix download",
+    "test": "haxelib run dropecho.testing",
     "build": "npm run build:haxe && npm run build:example",
     "build:haxe": "haxe build.hxml",
     "build:docs": "haxelib run dox -i artifacts/docs.xml -o docs/docs --toplevel-package dropecho.dungen -D source-path http://github.com/dropecho/dungen/blob/master/src -D website http://github.com/dropecho/dungen --title 'Dungen API Documentation'",

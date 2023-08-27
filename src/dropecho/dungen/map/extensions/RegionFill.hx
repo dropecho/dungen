@@ -2,28 +2,9 @@ package dropecho.dungen.map.extensions;
 
 import haxe.ds.IntMap;
 import dropecho.dungen.Map2d;
+import dropecho.ds.Queue;
 
 using Lambda;
-
-class Queue<T> {
-	var data:Array<T>;
-
-	public function new() {
-		this.data = new Array<T>();
-	}
-
-	public function enqueue(value:T) {
-		data.unshift(value);
-	}
-
-	public function dequeue():T {
-		return data.pop();
-	}
-
-	public function length():Int {
-		return data.length;
-	}
-}
 
 @:expose("dungen.RegionFill")
 class RegionFill {
@@ -36,7 +17,7 @@ class RegionFill {
 
 		var currentIndex = -1;
 
-		while (q.length() > 0) {
+		while (q.length > 0) {
 			var current = q.dequeue();
 			if (map.get(current.x, current.y) == value) {
 				break;

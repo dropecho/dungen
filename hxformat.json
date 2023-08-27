@@ -1,0 +1,21 @@
+{
+  "wrapping": {
+    "functionSignature": {
+      "defaultWrap": "noWrap",
+      "rules": [
+        {
+          "conditions": [
+            {
+              "cond": "lineLength >= n",
+              "value": 100
+            }
+          ],
+          "type": "onePerLine"
+        }
+      ]
+    },
+    "methodChain": {
+      "defaultWrap": "onePerLine"
+    }
+  }
+}

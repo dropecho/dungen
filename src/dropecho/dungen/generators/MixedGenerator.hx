@@ -52,7 +52,10 @@ class MixedGenerator {
 			var roomStartX:Int = node.value.x + 1;
 			var roomStartY:Int = node.value.y + 1;
 
-			var cave = CAGenerator.generate({height: node.value.height, width: node.value.width});
+			var params = new CA_PARAMS();
+			params.height = node.value.height;
+			params.width = node.value.width;
+			var cave = CAGenerator.generate(params);
 
 			for (x in 0...cave._width) {
 				for (y in 0...cave._height) {

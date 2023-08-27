@@ -92,7 +92,11 @@ class RegionManager {
 		return cleanedMap;
 	}
 
-	public static function findAndTagBorders(map:Map2d, borderType:Int = 1, startTag:Int = 2):Map2d {
+	public static function findAndTagBorders(
+		map:Map2d,
+		borderType:Int = 1,
+		startTag:Int = 2
+	):Map2d {
 		var borderMap = new Map2d(map._width, map._height);
 
 		for (i in 0...map._mapData.length) {
