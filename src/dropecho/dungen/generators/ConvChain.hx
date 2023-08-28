@@ -1,18 +1,9 @@
 package dropecho.dungen.generators;
 
-/**
- * ConvChain constructor
- * @param {Array|Uint8Array} sample Sample pattern as a flat array or a 2D array
- * @param {int|Array} [sampleSize] Indicate the width and height of the sample when used with a flat array, if omitted assume the sample is a square
- * @constructor
- */
 import seedyrng.Random;
 import dropecho.dungen.generators.RandomGenerator;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.map.Pattern;
-
-using dropecho.dungen.map.Map2dExtensions;
-using dropecho.dungen.map.extensions.Utils;
 
 @:expose("dungen.ConvChain")
 class ConvChain {
@@ -90,7 +81,13 @@ class ConvChain {
 	 * @param {Int} changes - How many rounds of changes to apply.
 	 * @return {Void}
 	 */
-	public function applyChanges(field:Map2d, weights:Array<Float>, n:Int, temperature:Float, changes:Int):Void {
+	public function applyChanges(
+		field:Map2d,
+		weights:Array<Float>,
+		n:Int,
+		temperature:Float,
+		changes:Int
+	):Void {
 		var r:Int;
 		var q:Float;
 		var x:Int;

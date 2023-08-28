@@ -1,0 +1,3 @@
+# @install: lix --silent download "haxelib:/seedyrng#1.1.0" into seedyrng/1.1.0/haxelib
+-cp ${HAXE_LIBCACHE}/seedyrng/1.1.0/haxelib/src/
+-D seedyrng=1.1.0

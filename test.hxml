@@ -1,19 +1,33 @@
 -cp src
 -cp test
-# actual libs
+
 -lib seedyrng
 -lib dropecho.ds 
 -lib dropecho.interop 
+-lib dropecho.testing 
+-lib utest
 
-#test libs
--lib munit
--lib hamcrest
+--each
 
--main TestMain
+# --next
+# -lib hxnodejs
+# -D js-es=6
+# -js artifacts/js_test.cjs
 
-# -cs artifacts/cs_test/
-# -python artifacts/python_test/
-
-# -neko artifacts/test/neko_test.n
+# --next
 -lib hxnodejs
--js artifacts/test/js_test.cjs
+-lib genes
+-D dts
+# -D js-es=6
+
+-js artifacts/js_esm_test/test.js
+
+--next
+# -D net-ver=40
+# -cs artifacts/cs_test
+
+# --next
+# -python artifacts/python_test
+
+# --next
+# -neko artifacts/neko_test.n

@@ -4,6 +4,7 @@
 -D dll_import
 -D no-root
 -D dll
+-D net-ver=40
 
 # OUTPUT
 -cs dist/cs/dropecho.langgen

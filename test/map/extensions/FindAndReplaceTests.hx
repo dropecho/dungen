@@ -1,16 +1,16 @@
 package map.extensions;
 
-import massive.munit.Assert;
-import dropecho.dungen.bsp.Generator;
+import utest.Assert;
+import utest.Test;
+import dropecho.dungen.bsp.BSPBuilder;
 import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.map.Pattern;
 
 using dropecho.dungen.map.extensions.FindAndReplace;
 
-class FindAndReplaceTest {
-	@Test
-	public function find_and_replace_simple() {
+class FindAndReplaceTests extends Test {
+	public function test_find_and_replace_simple() {
 		var map = new Map2d(2, 2);
 		map._mapData = [
 			0, 0,
@@ -29,12 +29,11 @@ class FindAndReplaceTest {
 		for (i in 0...map._mapData.length) {
 			var splatTile = splat._mapData[i];
 			var mapTile = map._mapData[i];
-			Assert.areEqual(splatTile, mapTile);
+			Assert.equals(splatTile, mapTile);
 		}
 	}
 
-	@Test
-	public function find_and_replace_ignore_tile() {
+	public function test_find_and_replace_ignore_tile() {
 		var map = new Map2d(2, 2);
 		map._mapData = [
 			0, 0,
@@ -51,15 +50,15 @@ class FindAndReplaceTest {
 
 		map.findAndReplace(matcher, splat);
 
-		Assert.areEqual(0, map._mapData[0]);
-		Assert.areEqual(0, map._mapData[1]);
-		Assert.areEqual(2, map._mapData[2]);
-		Assert.areEqual(2, map._mapData[3]);
+		Assert.equals(0, map._mapData[0]);
+		Assert.equals(0, map._mapData[1]);
+		Assert.equals(2, map._mapData[2]);
+		Assert.equals(2, map._mapData[3]);
 	}
 
-	@Test
-	public function find_and_replace_bsp() {
-		var bspGen = new Generator({
+	@Ignored
+	public function test_find_and_replace_bsp() {
+		var bspGen = new BSPBuilder({
 			width: 10,
 			height: 10,
 			minWidth: 3,

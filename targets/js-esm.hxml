@@ -1,10 +1,14 @@
 ## JS
 
+# THIS MUST NOT BE USED, it causes output to be incorrect due to
+# conflict with genes.
+# -D js-es=6
+
 # LIBRARIES
 -lib genes
 
 # DEFINES
--D js-es=6
+-D dts
 -D source-map-content
 
 # OUTPUT 

@@ -1,0 +1,4 @@
+# @install: lix --silent download "haxelib:/dropecho.testing#1.1.4" into dropecho.testing/1.1.4/haxelib
+# @run: haxelib run-dir dropecho.testing "${HAXE_LIBCACHE}/dropecho.testing/1.1.4/haxelib"
+-cp ${HAXE_LIBCACHE}/dropecho.testing/1.1.4/haxelib/src/
+-D dropecho.testing=1.1.4
