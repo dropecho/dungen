@@ -1,6 +1,6 @@
 {
   "name": "@dropecho/dungen",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "A dungeon generator.",
   "author": "vantreeseba <vantreeseba@gmail.com>",
   "repository": "github:dropecho/dungen",
