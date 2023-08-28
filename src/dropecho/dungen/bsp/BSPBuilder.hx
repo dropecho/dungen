@@ -6,8 +6,8 @@ import dropecho.ds.BSPNode;
 import dropecho.ds.BSPTree;
 import dropecho.interop.Extender;
 
-@:expose("dungen.BSPGeneratorConfig")
-class BSPGeneratorConfig {
+// @:expose("dungen.BSPGeneratorConfig")
+class BSPBuilderConfig {
 	public var width:Int = 120;
 	public var height:Int = 60;
 	public var minHeight:Int = 10;
@@ -20,12 +20,11 @@ class BSPGeneratorConfig {
 }
 
 @:expose("dungen.BSPGenerator")
-class Generator extends BSPGeneratorConfig {
+class BSPBuilder extends BSPBuilderConfig {
 	public var random:Random = new Random();
 
 	public function new(?ops:Dynamic = null) {
 		Extender.extendThis(this, ops);
-		random.setStringSeed(this.seed);
 	}
 
 	public function generate():BSPTree<BSPData> {

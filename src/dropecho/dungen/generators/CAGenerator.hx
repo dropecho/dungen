@@ -1,7 +1,6 @@
 package dropecho.dungen.generators;
 
 import dropecho.dungen.generators.RandomGenerator;
-import dropecho.interop.Extender;
 import dropecho.dungen.Map2d;
 
 typedef CA_PARAM_STEP = {

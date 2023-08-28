@@ -2,25 +2,25 @@ package bsp;
 
 import utest.Assert;
 import utest.Test;
-import dropecho.dungen.bsp.Generator;
+import dropecho.dungen.bsp.BSPBuilder;
 import dropecho.dungen.bsp.BSPData;
 import dropecho.ds.BSPNode;
 import dropecho.ds.algos.InOrderTraversal;
 
-class GeneratorTests extends Test {
-	var generator:Generator;
+class BSPBuilderTests extends Test {
+	var builder:BSPBuilder;
 	var visitor:InOrderTraversal;
 	var testCount:Int = 1;
 
 	public function setup() {
-		generator = new Generator();
+		builder = new BSPBuilder();
 		visitor = new InOrderTraversal();
 		visitor.visited.resize(0);
 	}
 
 	public function test_given_a_depth_of_0_it_should_generate_a_single_node() {
-		generator.depth = 0;
-		var root = generator
+		builder.depth = 0;
+		var root = builder
 			.generate()
 			.root;
 
@@ -28,8 +28,8 @@ class GeneratorTests extends Test {
 	}
 
 	public function test_given_a_depth_of_1_it_should_generate_a_single_level_tree() {
-		generator.depth = 1;
-		var root = generator
+		builder.depth = 1;
+		var root = builder
 			.generate()
 			.root;
 
@@ -39,10 +39,10 @@ class GeneratorTests extends Test {
 	}
 
 	public function test_given_a_min_height_every_generated_node_should_have_a_greater_height() {
-		generator.depth = 50;
-		generator.minHeight = 10;
-		generator.ratio = 1;
-		var root = generator
+		builder.depth = 50;
+		builder.minHeight = 10;
+		builder.ratio = 1;
+		var root = builder
 			.generate()
 			.root;
 
@@ -53,10 +53,10 @@ class GeneratorTests extends Test {
 	}
 
 	public function test_given_a_min_width_every_generated_node_should_have_a_greater_width() {
-		generator.depth = 50;
-		generator.minWidth = 10;
-		generator.ratio = 1;
-		var tree = generator.generate();
+		builder.depth = 50;
+		builder.minWidth = 10;
+		builder.ratio = 1;
+		var tree = builder.generate();
 
 		visitor.run(tree.root, function(node:BSPNode<BSPData>) {
 			Assert.isTrue(node.value.width >= 10);
@@ -65,22 +65,21 @@ class GeneratorTests extends Test {
 	}
 
 	public function test_given_a_min_width_every_generated_node_should_have_a_ratio_greater_than_given() {
-		generator.depth = 4;
-		var root = generator
+		builder.depth = 4;
+		var root = builder
 			.generate()
 			.root;
 
 		visitor.run(root, function(node:BSPNode<BSPData>) {
-			Assert.isTrue(node.value.width / node.value.height >= generator.ratio
-				|| node.value.height / node.value.width >= generator.ratio);
+			Assert.isTrue(node.value.width / node.value.height >= builder.ratio || node.value.height / node.value.width >= builder.ratio);
 			return true;
 		});
 	}
 
 	public function test_given_a_tree_every_set_of_child_nodes_should_add_up_to_the_height_and_width_of_their_parents() {
 		for (_ in 0...testCount) {
-			generator.depth = 4;
-			var tree = generator.generate();
+			builder.depth = 4;
+			var tree = builder.generate();
 
 			visitor.run(tree.root, function(node:BSPNode<BSPData>) {
 				if (node.hasLeft() && node.hasRight()) {
@@ -105,8 +104,8 @@ class GeneratorTests extends Test {
 
 	public function test_given_a_tree_every_leafs_area_should_add_up_to_root_area() {
 		for (_ in 0...testCount) {
-			generator.depth = 4;
-			var tree = generator.generate();
+			builder.depth = 4;
+			var tree = builder.generate();
 			var rootArea = tree.root.value.height * tree.root.value.width;
 			var leafArea:Float = 0;
 
@@ -123,8 +122,8 @@ class GeneratorTests extends Test {
 
 	public function test_given_a_tree_every_non_leaf_should_have_2_children() {
 		for (_ in 0...testCount) {
-			generator.depth = 4;
-			var tree = generator.generate();
+			builder.depth = 4;
+			var tree = builder.generate();
 
 			visitor.run(tree.root, function(node:BSPNode<BSPData>) {
 				if (node.hasLeft() && node.hasRight()) {

@@ -139,62 +139,61 @@ class RegionManager {
 	}
 
 	public static function expandRegionsByOne(map:Map2d, startTag:Int = 3) {
-		var tilesToPaint = new Map<Int, Int>();
+		var expandedMap = Map2dExtensions.clone(map);
+		var calls = 0;
 
-		for (x in 0...map._width) {
-			for (y in 0...map._height) {
-				var tileVal = map.get(x, y);
-				if (tileVal < startTag) {
-					var neighbors = map.getNeighbors(x, y);
-					for (n in neighbors) {
-						if (n.val >= startTag) {
-							tilesToPaint.set(map.XYtoIndex(x, y), n.val);
-						}
-					}
+		for (tile in map.tiles()) {
+			calls++;
+			if (tile.val >= startTag) {
+				continue;
+			}
+			for (n in map.getNeighbors(tile.x, tile.y)) {
+				if (n.val < startTag) {
+					continue;
 				}
+				expandedMap.set(tile.x, tile.y, n.val);
 			}
 		}
 
-		for (index => value in tilesToPaint) {
-			map._mapData[index] = value;
-		}
+		trace('calls: ${calls}');
 
-		return map;
+		return expandedMap;
 	}
 
 	public static function expandRegions(map:Map2d, startTag:Int = 3, eatWalls = false) {
-		for (_ in 0...100) {
-			for (currentTag in startTag...startTag + 500) {
-				var tilesToPaint = new Array<Int>();
-				for (x in 0...map._width) {
-					for (y in 0...map._height) {
-						if (map.get(x, y) == currentTag) {
-							var neighbors = map.getNeighbors(x, y, 1, true);
-							for (n in neighbors) {
-								if (n.val < startTag) {
-									if (!eatWalls && n.val == 0) {
-										continue;
-									}
-									var nWalls = map.getNeighborCount(n.x, n.y, 0, 1, true);
-									var nOpen = 0;
-									for (i in 1...startTag) {
-										nOpen += map.getNeighborCount(n.x, n.y, i, 1, true);
-									}
-									var nTag = map.getNeighborCount(n.x, n.y, currentTag, 1, true);
-									if (nWalls + nOpen + nTag == 8) {
-										tilesToPaint.push(map.XYtoIndex(n.x, n.y));
-									}
-								}
-							}
-						}
-					}
-				}
-
-				for (c in tilesToPaint) {
-					map._mapData[c] = currentTag;
-				}
-			}
-		}
+		//     for (_ in 0...100) {
+		//       for (currentTag in startTag...startTag + 500) {
+		//         var tilesToPaint = new Array<Int>();
+		//         for (x in 0...map._width) {
+		//           for (y in 0...map._height) {
+		//             if (map.get(x, y) == currentTag) {
+		//               var neighbors = map.getNeighbors(x, y, 1, true);
+		//               for (n in neighbors) {
+		//                 if (n.val < startTag) {
+		//                   if (!eatWalls && n.val == 0) {
+		//                     continue;
+		//                   }
+		//                   var nWalls = map.getNeighborCount(n.x, n.y, 0, 1, true);
+		//                   var nOpen = 0;
+		//                   for (i in 1...startTag) {
+		//                     nOpen += map.getNeighborCount(n.x, n.y, i, 1, true);
+		//                   }
+		//                   var nTag = map.getNeighborCount(n.x, n.y, currentTag, 1, true);
+		//                   if (nWalls + nOpen + nTag == 8) {
+		//                     tilesToPaint.push(map.XYtoIndex(n.x, n.y));
+		//                   }
+		//                 }
+		//               }
+		//             }
+		//           }
+		//         }
+		//
+		//         for (c in tilesToPaint) {
+		//           map._mapData[c] = currentTag;
+		//         }
+		//       }
+		//     }
+		expandRegionsByOne(map, startTag = 3);
 		return map;
 	}
 }

@@ -1588,18 +1588,17 @@ class dropecho_ds_BSPTree extends dropecho_ds_Graph {
 		this.addNode(this.root);
 	}
 	getParent(node) {
-		return this.outNeighbors(node,function(id,data) {
-			return data == "parent";
-		})[0];
+		return node.parent;
 	}
 	getChildren(node) {
-		return this.outNeighbors(node,function(id,data) {
-			if(data != "left") {
-				return data == "right";
-			} else {
-				return true;
-			}
-		});
+		let children = [];
+		if(node.left != null) {
+			children.push(node.left);
+		}
+		if(node.right != null) {
+			children.push(node.right);
+		}
+		return children;
 	}
 	getRoot() {
 		return this.root;
@@ -1613,13 +1612,7 @@ class dropecho_ds_BSPTree extends dropecho_ds_Graph {
 		while(_g_index < _g_keys.length) {
 			let node = _g_access[_g_keys[_g_index++]];
 			let tmp;
-			if(this.outNeighbors(node,function(id,data) {
-				if(data != "left") {
-					return data == "right";
-				} else {
-					return true;
-				}
-			}).length == 0) {
+			if(node.isLeaf()) {
 				tmp = node;
 			} else {
 				continue;
@@ -1814,6 +1807,32 @@ Object.assign(dropecho_dungen_Tile2d.prototype, {
 	,y: null
 	,val: null
 });
+class dropecho_dungen_TileIterator {
+	constructor(map) {
+		this.current = 0;
+		this.map = map;
+	}
+	hasNext() {
+		return this.current < this.map._mapData.length;
+	}
+	next() {
+		let _this = this.map;
+		let index = this.current++;
+		let x = index % _this._width | 0;
+		let y = index / _this._width | 0;
+		let tile = new dropecho_dungen_Tile2d(x,y);
+		let _this1 = this.map;
+		tile.val = _this1._mapData[_this1._width * tile.y + tile.x];
+		return tile;
+	}
+}
+$hxClasses["dropecho.dungen.TileIterator"] = dropecho_dungen_TileIterator;
+dropecho_dungen_TileIterator.__name__ = "dropecho.dungen.TileIterator";
+Object.assign(dropecho_dungen_TileIterator.prototype, {
+	__class__: dropecho_dungen_TileIterator
+	,map: null
+	,current: null
+});
 class dropecho_dungen_Map2d {
 	constructor(width,height,initTileData) {
 		if(dropecho_dungen_Map2d._hx_skip_constructor) {
@@ -1843,6 +1862,9 @@ class dropecho_dungen_Map2d {
 			let i = _g++;
 			this._mapData[i] = initTileData;
 		}
+	}
+	tiles() {
+		return new dropecho_dungen_TileIterator(this);
 	}
 	XYtoIndex(x,y) {
 		return this._width * y + x;
@@ -2145,27 +2167,9 @@ Object.assign(dropecho_dungen_RegionMap.prototype, {
 	,borders: null
 	,graph: null
 });
-class dropecho_dungen_bsp_BSPData {
-	constructor(ops) {
-		this.y = 0;
-		this.x = 0;
-		this.height = 0;
-		this.width = 0;
-		dropecho_interop_Extender.extendThis(this,ops);
-	}
-}
-$hxClasses["dropecho.dungen.bsp.BSPData"] = $hx_exports["dungen"]["BSPData"] = dropecho_dungen_bsp_BSPData;
-dropecho_dungen_bsp_BSPData.__name__ = "dropecho.dungen.bsp.BSPData";
-Object.assign(dropecho_dungen_bsp_BSPData.prototype, {
-	__class__: dropecho_dungen_bsp_BSPData
-	,width: null
-	,height: null
-	,x: null
-	,y: null
-});
-class dropecho_dungen_bsp_BSPGeneratorConfig {
+class dropecho_dungen_bsp_BSPBuilderConfig {
 	constructor() {
-		if(dropecho_dungen_bsp_BSPGeneratorConfig._hx_skip_constructor) {
+		if(dropecho_dungen_bsp_BSPBuilderConfig._hx_skip_constructor) {
 			return;
 		}
 		this._hx_constructor();
@@ -2182,10 +2186,10 @@ class dropecho_dungen_bsp_BSPGeneratorConfig {
 		this.width = 120;
 	}
 }
-$hxClasses["dropecho.dungen.bsp.BSPGeneratorConfig"] = $hx_exports["dungen"]["BSPGeneratorConfig"] = dropecho_dungen_bsp_BSPGeneratorConfig;
-dropecho_dungen_bsp_BSPGeneratorConfig.__name__ = "dropecho.dungen.bsp.BSPGeneratorConfig";
-Object.assign(dropecho_dungen_bsp_BSPGeneratorConfig.prototype, {
-	__class__: dropecho_dungen_bsp_BSPGeneratorConfig
+$hxClasses["dropecho.dungen.bsp.BSPBuilderConfig"] = dropecho_dungen_bsp_BSPBuilderConfig;
+dropecho_dungen_bsp_BSPBuilderConfig.__name__ = "dropecho.dungen.bsp.BSPBuilderConfig";
+Object.assign(dropecho_dungen_bsp_BSPBuilderConfig.prototype, {
+	__class__: dropecho_dungen_bsp_BSPBuilderConfig
 	,width: null
 	,height: null
 	,minHeight: null
@@ -2196,18 +2200,17 @@ Object.assign(dropecho_dungen_bsp_BSPGeneratorConfig.prototype, {
 	,y: null
 	,seed: null
 });
-class dropecho_dungen_bsp_Generator extends dropecho_dungen_bsp_BSPGeneratorConfig {
+class dropecho_dungen_bsp_BSPBuilder extends dropecho_dungen_bsp_BSPBuilderConfig {
 	constructor(ops) {
-		dropecho_dungen_bsp_BSPGeneratorConfig._hx_skip_constructor = true;
+		dropecho_dungen_bsp_BSPBuilderConfig._hx_skip_constructor = true;
 		super();
-		dropecho_dungen_bsp_BSPGeneratorConfig._hx_skip_constructor = false;
+		dropecho_dungen_bsp_BSPBuilderConfig._hx_skip_constructor = false;
 		this._hx_constructor(ops);
 	}
 	_hx_constructor(ops) {
 		this.random = new seedyrng_Random();
 		super._hx_constructor();
 		dropecho_interop_Extender.extendThis(this,ops);
-		this.random.setStringSeed(this.seed);
 	}
 	generate() {
 		this.random.setStringSeed(this.seed);
@@ -2258,12 +2261,30 @@ class dropecho_dungen_bsp_Generator extends dropecho_dungen_bsp_BSPGeneratorConf
 		node.setRight(new dropecho_ds_BSPNode(rData));
 	}
 }
-$hxClasses["dropecho.dungen.bsp.Generator"] = $hx_exports["dungen"]["BSPGenerator"] = dropecho_dungen_bsp_Generator;
-dropecho_dungen_bsp_Generator.__name__ = "dropecho.dungen.bsp.Generator";
-dropecho_dungen_bsp_Generator.__super__ = dropecho_dungen_bsp_BSPGeneratorConfig;
-Object.assign(dropecho_dungen_bsp_Generator.prototype, {
-	__class__: dropecho_dungen_bsp_Generator
+$hxClasses["dropecho.dungen.bsp.BSPBuilder"] = $hx_exports["dungen"]["BSPGenerator"] = dropecho_dungen_bsp_BSPBuilder;
+dropecho_dungen_bsp_BSPBuilder.__name__ = "dropecho.dungen.bsp.BSPBuilder";
+dropecho_dungen_bsp_BSPBuilder.__super__ = dropecho_dungen_bsp_BSPBuilderConfig;
+Object.assign(dropecho_dungen_bsp_BSPBuilder.prototype, {
+	__class__: dropecho_dungen_bsp_BSPBuilder
 	,random: null
+});
+class dropecho_dungen_bsp_BSPData {
+	constructor(ops) {
+		this.y = 0;
+		this.x = 0;
+		this.height = 0;
+		this.width = 0;
+		dropecho_interop_Extender.extendThis(this,ops);
+	}
+}
+$hxClasses["dropecho.dungen.bsp.BSPData"] = $hx_exports["dungen"]["BSPData"] = dropecho_dungen_bsp_BSPData;
+dropecho_dungen_bsp_BSPData.__name__ = "dropecho.dungen.bsp.BSPData";
+Object.assign(dropecho_dungen_bsp_BSPData.prototype, {
+	__class__: dropecho_dungen_bsp_BSPData
+	,width: null
+	,height: null
+	,x: null
+	,y: null
 });
 class dropecho_dungen_export_TiledExporter {
 	static export(map) {
@@ -3885,41 +3906,29 @@ class dropecho_dungen_map_extensions_RegionManager {
 		if(startTag == null) {
 			startTag = 3;
 		}
-		let tilesToPaint = new haxe_ds_IntMap();
-		let _g = 0;
-		let _g1 = map._width;
-		while(_g < _g1) {
-			let x = _g++;
-			let _g1 = 0;
-			let _g2 = map._height;
-			while(_g1 < _g2) {
-				let y = _g1++;
-				let tileVal = map._mapData[map._width * y + x];
-				if(tileVal < startTag) {
-					let neighbors = dropecho_dungen_map_extensions_Neighbors.getNeighbors(map,x,y);
-					let _g = 0;
-					while(_g < neighbors.length) {
-						let n = neighbors[_g];
-						++_g;
-						if(n.val >= startTag) {
-							tilesToPaint.h[map._width * y + x] = n.val;
-						}
-					}
+		let expandedMap = dropecho_dungen_map_Map2dExtensions.clone(map);
+		let calls = 0;
+		let tile = new dropecho_dungen_TileIterator(map);
+		while(tile.hasNext()) {
+			let tile1 = tile.next();
+			++calls;
+			if(tile1.val >= startTag) {
+				continue;
+			}
+			let _g = 0;
+			let _g1 = dropecho_dungen_map_extensions_Neighbors.getNeighbors(map,tile1.x,tile1.y);
+			while(_g < _g1.length) {
+				let n = _g1[_g];
+				++_g;
+				if(n.val < startTag) {
+					continue;
 				}
+				let index = expandedMap._width * tile1.y + tile1.x;
+				expandedMap._mapData[index] = n.val;
 			}
 		}
-		let map1 = tilesToPaint;
-		let _g_map = map1;
-		let _g_keys = map1.keys();
-		while(_g_keys.hasNext()) {
-			let key = _g_keys.next();
-			let _g_value = _g_map.get(key);
-			let _g_key = key;
-			let index = _g_key;
-			let value = _g_value;
-			map._mapData[index] = value;
-		}
-		return map;
+		haxe_Log.trace("calls: " + calls,{ fileName : "src/dropecho/dungen/map/extensions/RegionManager.hx", lineNumber : 158, className : "dropecho.dungen.map.extensions.RegionManager", methodName : "expandRegionsByOne"});
+		return expandedMap;
 	}
 	static expandRegions(map,startTag,eatWalls) {
 		if(eatWalls == null) {
@@ -3928,57 +3937,8 @@ class dropecho_dungen_map_extensions_RegionManager {
 		if(startTag == null) {
 			startTag = 3;
 		}
-		let _g = 0;
-		while(_g < 100) {
-			let _ = _g++;
-			let _g1 = startTag;
-			let _g2 = startTag + 500;
-			while(_g1 < _g2) {
-				let currentTag = _g1++;
-				let tilesToPaint = [];
-				let _g = 0;
-				let _g2 = map._width;
-				while(_g < _g2) {
-					let x = _g++;
-					let _g1 = 0;
-					let _g2 = map._height;
-					while(_g1 < _g2) {
-						let y = _g1++;
-						if(map._mapData[map._width * y + x] == currentTag) {
-							let neighbors = dropecho_dungen_map_extensions_Neighbors.getNeighbors(map,x,y,1,true);
-							let _g = 0;
-							while(_g < neighbors.length) {
-								let n = neighbors[_g];
-								++_g;
-								if(n.val < startTag) {
-									if(!eatWalls && n.val == 0) {
-										continue;
-									}
-									let nWalls = dropecho_dungen_map_extensions_Neighbors.getNeighborCount(map,n.x,n.y,0,1,true);
-									let nOpen = 0;
-									let _g = 1;
-									let _g1 = startTag;
-									while(_g < _g1) {
-										let i = _g++;
-										nOpen += dropecho_dungen_map_extensions_Neighbors.getNeighborCount(map,n.x,n.y,i,1,true);
-									}
-									let nTag = dropecho_dungen_map_extensions_Neighbors.getNeighborCount(map,n.x,n.y,currentTag,1,true);
-									if(nWalls + nOpen + nTag == 8) {
-										tilesToPaint.push(map._width * n.y + n.x);
-									}
-								}
-							}
-						}
-					}
-				}
-				let _g3 = 0;
-				while(_g3 < tilesToPaint.length) {
-					let c = tilesToPaint[_g3];
-					++_g3;
-					map._mapData[c] = currentTag;
-				}
-			}
-		}
+		startTag = 3;
+		dropecho_dungen_map_extensions_RegionManager.expandRegionsByOne(map,startTag);
 		return map;
 	}
 }
@@ -8139,7 +8099,7 @@ haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59
 StringTools.winMetaCharacters = haxe_SysTools.winMetaCharacters;
 StringTools.MIN_SURROGATE_CODE_POINT = 65536;
 dropecho_dungen_Map2d._hx_skip_constructor = false;
-dropecho_dungen_bsp_BSPGeneratorConfig._hx_skip_constructor = false;
+dropecho_dungen_bsp_BSPBuilderConfig._hx_skip_constructor = false;
 haxe_Int32._mul = Math.imul != null ? Math.imul : function(a,b) {
 	return a * (b & 65535) + (a * (b >>> 16) << 16 | 0) | 0;
 };

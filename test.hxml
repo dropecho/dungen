@@ -9,9 +9,18 @@
 
 --each
 
---next
+# --next
+# -lib hxnodejs
+# -D js-es=6
+# -js artifacts/js_test.cjs
+
+# --next
 -lib hxnodejs
--js artifacts/js_test.cjs
+-lib genes
+-D dts
+# -D js-es=6
+
+-js artifacts/js_esm_test/test.js
 
 --next
 # -D net-ver=40

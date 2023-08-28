@@ -2,7 +2,7 @@ package export;
 
 import utest.Assert;
 import utest.Test;
-import dropecho.dungen.bsp.Generator;
+import dropecho.dungen.bsp.BSPBuilder;
 import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.generators.CAGenerator;
@@ -37,7 +37,7 @@ class TiledExporterTests extends Test {
 			ratio: .65
 		};
 
-		var gen = new Generator(genOpts);
+		var gen = new BSPBuilder(genOpts);
 		var tree = gen.generate();
 		var map = RoomGenerator.buildRooms(tree);
 

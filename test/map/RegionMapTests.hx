@@ -5,7 +5,7 @@ import utest.Test;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.generators.CAGenerator;
 import dropecho.dungen.RegionMap;
-import dropecho.dungen.bsp.Generator;
+import dropecho.dungen.bsp.BSPBuilder;
 import dropecho.dungen.generators.RoomGenerator;
 
 using dropecho.dungen.map.extensions.DistanceFill;
@@ -43,7 +43,7 @@ class RegionMapTests extends Test {
 	}
 
 	public function test_bspMapTest() {
-		var bsp = new Generator({
+		var bsp = new BSPBuilder({
 			width: 32,
 			height: 24,
 			minWidth: 3,

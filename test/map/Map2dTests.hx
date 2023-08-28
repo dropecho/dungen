@@ -3,7 +3,7 @@ package map;
 import utest.Assert;
 import utest.Test;
 import dropecho.dungen.Map2d;
-import dropecho.dungen.bsp.Generator;
+import dropecho.dungen.bsp.BSPBuilder;
 // import dropecho.dungen.generators.ConvChain;
 // import dropecho.dungen.bsp.BSPData;
 import dropecho.dungen.generators.RoomGenerator;
@@ -139,7 +139,7 @@ class Map2dTests extends Test {
 
 	@Ignored
 	public function test_splat_should_place_sub_map_within_map() {
-		var bspGen = new Generator({
+		var bspGen = new BSPBuilder({
 			width: 10,
 			height: 10,
 			minWidth: 3,
@@ -161,56 +161,55 @@ class Map2dTests extends Test {
 		}
 		// trace(map);
 	}
+
+	public function test_bspMapTest() {
+		//     var opts = {
+		//       width: 24,
+		//       height: 12,
+		//       start_fill_percent: 64,
+		//       // tile_floor: 1,
+		//       // tile_wall: 0,
+		//       seed: "0"
+		//     };
+		//     var sample = WalkGenerator.generate(opts);
+
+		var bsp = new BSPBuilder({
+			width: 32,
+			height: 32,
+			minWidth: 3,
+			minHeight: 3,
+			depth: 3,
+			ratio: .95
+		})
+			.generate();
+
+		var map = RoomGenerator.buildRooms(bsp);
+
+		//     var sample = new Map2d(4, 4);
+		//     sample._mapData = [
+		//       1, 1, 1, 1,
+		//       1, 0, 0, 0,
+		//       1, 0, 1, 0,
+		//       1, 0, 0, 0,
+		//     ];
+		//
+		// var sample = new Map2d(3, 3);
+		// sample._mapData = [0, 1, 1, 1, 1, 1, 1, 1, 1];
+		// sample._mapData = [1, 1, 1, 0, 0, 0, 0, 0, 0];
+		// var sample = new Map2d(5, 5);
+		// sample._mapData = [
+		//   0, 0, 1, 0, 0,
+		//   0, 1, 1, 1, 0,
+		//   1, 1, 1, 1, 1,
+		//   0, 1, 1, 1, 0,
+		//   0, 0, 1, 0, 0
+		// ];
+
+		//     trace(sample.toPrettyString());
+		//     var gen = new ConvChain(sample);
+		//     var map = gen.generate(80, 40, 3, 0.1, 4);
+
+		trace(map.toPrettyString());
+		Assert.isTrue(true);
+	}
 }
-//
-// public function test_bspMapTest() {
-//   var opts = {
-//     width: 24,
-//     height: 12,
-//     start_fill_percent: 64,
-//     // tile_floor: 1,
-//     // tile_wall: 0,
-//     seed: "0"
-//   };
-//   var sample = WalkGenerator.generate(opts);
-//
-//   // var bsp = new Generator({
-//   //   width: 12,
-//   //   height: 8,
-//   //   minWidth: 3,
-//   //   minHeight: 3,
-//   //   depth: 1,
-//   //   ratio: .95
-//   // }).generate();
-//
-//   // var sample = RoomGenerator.buildRooms(bsp);
-//
-//   // var sample = new Map2d(4, 4);
-//   // sample._mapData = [
-//   //   1, 1, 1, 1,
-//   //   1, 0, 0, 0,
-//   //   1, 0, 1, 0,
-//   //   1, 0, 0, 0,
-//   // ];
-//
-//   // var sample = new Map2d(3, 3);
-//   // sample._mapData = [0, 1, 1, 1, 1, 1, 1, 1, 1];
-//   // sample._mapData = [1, 1, 1, 0, 0, 0, 0, 0, 0];
-//   // var sample = new Map2d(5, 5);
-//   // sample._mapData = [
-//   //   0, 0, 1, 0, 0,
-//   //   0, 1, 1, 1, 0,
-//   //   1, 1, 1, 1, 1,
-//   //   0, 1, 1, 1, 0,
-//   //   0, 0, 1, 0, 0
-//   // ];
-//
-//   trace(sample.toPrettyString());
-//   var gen = new ConvChain(sample);
-//   var map = gen.generate(80, 40, 3, 0.1, 4);
-//
-//   // trace(map.toPrettyString());
-//   Assert.isTrue(true);
-// }
-//
-//

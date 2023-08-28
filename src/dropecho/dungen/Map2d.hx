@@ -14,6 +14,25 @@ class Tile2d {
 	};
 }
 
+class TileIterator {
+	var map:Map2d;
+	var current = 0;
+
+	public function new(map:Map2d) {
+		this.map = map;
+	}
+
+	public function hasNext():Bool {
+		return current < map._mapData.length;
+	}
+
+	public function next():Tile2d {
+		var tile = map.IndexToXY(current++);
+		tile.val = map.get(tile.x, tile.y);
+		return tile;
+	}
+}
+
 @:expose("dungen.Map2d")
 @:nativeGen
 @:using(dropecho.dungen.map.Map2dExtensions)
@@ -49,6 +68,10 @@ class Map2d {
 		for (i in 0...length) {
 			_mapData[i] = initTileData;
 		}
+	}
+
+	inline public function tiles():TileIterator {
+		return new TileIterator(this);
 	}
 
 	/**

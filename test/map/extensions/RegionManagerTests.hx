@@ -2,7 +2,7 @@ package map.extensions;
 
 import utest.Assert;
 import utest.Test;
-import dropecho.dungen.bsp.Generator;
+import dropecho.dungen.bsp.BSPBuilder;
 import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.generators.CAGenerator;
 import dropecho.dungen.map.extensions.RegionManager;
@@ -14,8 +14,8 @@ class RegionManagerTests extends Test {
 	@Ignored
 	public function test_region_tagging_only() {
 		var params = new CA_PARAMS();
-		params.width = 40;
-		params.height = 20;
+		params.width = 100;
+		params.height = 100;
 		params.start_fill_percent = 64;
 		params.tile_floor = 1;
 		params.tile_wall = 0;
@@ -27,18 +27,21 @@ class RegionManagerTests extends Test {
 
 		var distanceMap = map.distanceFill();
 		var regionmap = RegionManager.findAndTagRegions(distanceMap);
-		// trace(regionmap.toPrettyString([
-		//   '#', '+', '.', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'j', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-		//   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3',
-		//   '4', '5', '6', '7', '8', '9'
-		// ]));
+		regionmap = RegionManager.expandRegions(regionmap);
+		trace(regionmap.toPrettyString([
+			'#', '+', '.', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'j', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3',
+			'4', '5', '6', '7', '8', '9'
+		]));
+
+		Assert.isTrue(true);
 	}
 
 	@Ignored
 	public function test_region_tagging_rooms() {
-		var bspGen = new Generator({
-			width: 40,
-			height: 20,
+		var bspGen = new BSPBuilder({
+			width: 64,
+			height: 64,
 			minWidth: 6,
 			minHeight: 6,
 			depth: 4,
@@ -52,11 +55,13 @@ class RegionManagerTests extends Test {
 		var distanceMap = map.distanceFill();
 		var regionmap = RegionManager.findAndTagRegions(distanceMap);
 		regionmap = RegionManager.expandRegions(regionmap);
-		// trace(regionmap.toPrettyString([
-		//   '#', '+', '.', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'j', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-		//   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3',
-		//   '4', '5', '6', '7', '8', '9'
-		// ]));
+		//     trace(regionmap.toPrettyString([
+		//       '#', '+', '.', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'j', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+		//       'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3',
+		//       '4', '5', '6', '7', '8', '9'
+		//     ]));
+
+		Assert.isTrue(true);
 	}
 
 	@Ignored

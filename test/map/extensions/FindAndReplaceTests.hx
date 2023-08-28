@@ -2,7 +2,7 @@ package map.extensions;
 
 import utest.Assert;
 import utest.Test;
-import dropecho.dungen.bsp.Generator;
+import dropecho.dungen.bsp.BSPBuilder;
 import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.map.Pattern;
@@ -58,7 +58,7 @@ class FindAndReplaceTests extends Test {
 
 	@Ignored
 	public function test_find_and_replace_bsp() {
-		var bspGen = new Generator({
+		var bspGen = new BSPBuilder({
 			width: 10,
 			height: 10,
 			minWidth: 3,
