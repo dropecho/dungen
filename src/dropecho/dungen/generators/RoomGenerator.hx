@@ -1,11 +1,11 @@
 package dropecho.dungen.generators;
 
-import seedyrng.Random;
-import dropecho.interop.Extender;
-import dropecho.ds.BSPTree;
 import dropecho.ds.BSPNode;
-import dropecho.dungen.bsp.BSPData;
+import dropecho.ds.BSPTree;
 import dropecho.ds.algos.PostOrderTraversal;
+import dropecho.dungen.bsp.BSPData;
+import dropecho.interop.Extender;
+import seedyrng.Random;
 
 class RoomParams {
 	public var tileCorridor:Int = 1;
@@ -44,7 +44,7 @@ class RoomGenerator {
 
 			for (x in startX...endX) {
 				for (y in startY...endY) {
-					map.set(x, y, 2);
+					map.set(x, y, params.tileFloor);
 				}
 			}
 

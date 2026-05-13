@@ -84,7 +84,7 @@ class RegionMapTests extends Test {
 
 		var map = CAGenerator.generate(params);
 
-		map.setAllEdgesTo();
+		map.setMapBorderTo();
 
 		var regionmap = new RegionMap(map, 2);
 

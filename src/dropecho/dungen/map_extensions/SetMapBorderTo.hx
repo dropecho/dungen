@@ -1,6 +1,6 @@
 package dropecho.dungen.map_extensions;
 
-function setAllEdgesTo(map:Map2d, tileType:Int = 0) {
+function setMapBorderTo(map:Map2d, tileType:Int = 0) {
 	for (x in 0...map._width) {
 		map.set(x, 0, tileType);
 		map.set(x, map._height - 1, tileType);

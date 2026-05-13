@@ -16,9 +16,7 @@
       "import": "./dist/js/esm/index.js"
     }
   },
-  "files": [
-    "dist/js/**/*"
-  ],
+  "files": ["dist/js/**/*"],
   "scripts": {
     "install": "lix download",
     "test": "lix dropecho.testing",
@@ -26,6 +24,7 @@
     "build:haxe": "haxe build.hxml",
     "build:docs": "haxelib run dox -i artifacts/docs.xml -o docs/docs --toplevel-package dropecho.dungen -D source-path http://github.com/dropecho/dungen/blob/master/src -D website http://github.com/dropecho/dungen --title 'Dungen API Documentation'",
     "build:example": "cp dist/js/cjs/index.cjs docs/dropecho.dungen.js",
+    "build:bundle": "npx esbuild docs/index.js --bundle --outfile=docs/index.min.js",
     "clean": "rm -rf dist && rm -rf artifacts"
   },
   "devDependencies": {

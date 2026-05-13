@@ -4,12 +4,11 @@ import dropecho.dungen.generators.VillageGenerator;
 import utest.Assert;
 import utest.Test;
 import dropecho.dungen.Map2d;
-import dropecho.dungen.bsp.BSPBuilder; // import dropecho.dungen.generators.ConvChain;
-import dropecho.dungen.generators.RoomGenerator; // import dropecho.dungen.generators.MixedGenerator;
+import dropecho.dungen.bsp.BSPBuilder;
+import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.generators.CellularGenerator;
 
 class Map2dTests extends Test {
-	@Ignored
 	public function test_splat_should_place_sub_map_within_map() {
 		var bspGen = new BSPBuilder({
 			width: 10,
@@ -32,9 +31,39 @@ class Map2dTests extends Test {
 			}
 		}
 		// trace(map);
+		Assert.isTrue(true);
 	}
 
 	public function test_bsp_map() {
+		var bsp = new BSPBuilder({
+			width: 32,
+			height: 32,
+			minWidth: 3,
+			minHeight: 3,
+			depth: 3,
+			ratio: .95
+		})
+			.generate();
+
+		var params = new RoomParams();
+		params.padding = 2;
+		params.tileFloor = 1;
+		params.tileCorridor = 2;
+		params.tileWall = 0;
+		//     params.minHeight = 3;
+		//     params.minWidth = 3;
+
+		var map = RoomGenerator.buildRooms(bsp, params);
+//     trace(map.toString());
+
+		#if dungen_pretty_examples
+		//     trace(map.toPrettyString(['█', '·', '/']));
+		#end
+
+		Assert.isTrue(true);
+	}
+
+	public function test_village_map() {
 		var bsp = new BSPBuilder({
 			width: 32,
 			height: 32,
@@ -49,11 +78,15 @@ class Map2dTests extends Test {
 		var params = new VillageParams();
 		params.padding = 2;
 		var map = VillageGenerator.buildVillages(bsp, params);
+
+		#if dungen_pretty_examples
 		//     trace(map.toPrettyString(['#', '.']));
+		//     trace(map.toPrettyString(['█', '·']));
+		#end
+
 		Assert.isTrue(true);
 	}
 
-	@Ignored
 	public function test_cellular_map() {
 		var params = new CELLULAR_PARAMS();
 		params.start_fill_percent = 30;
@@ -62,7 +95,11 @@ class Map2dTests extends Test {
 		params.bornCount = 3;
 
 		var map = CellularGenerator.generate(params);
-		//     trace(map.toPrettyString(['#', '.']));
+
+		#if dungen_pretty_examples
+		//       trace(map.toPrettyString(['█', '·']));
+		#end
+
 		Assert.isTrue(true);
 	}
 }

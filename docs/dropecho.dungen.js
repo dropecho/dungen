@@ -2475,6 +2475,17 @@ class dropecho_dungen_generators_FloorPlanGenerator {
 }
 $hxClasses["dropecho.dungen.generators.FloorPlanGenerator"] = $hx_exports["dungen"]["FloorPlanGenerator"] = dropecho_dungen_generators_FloorPlanGenerator;
 dropecho_dungen_generators_FloorPlanGenerator.__name__ = "dropecho.dungen.generators.FloorPlanGenerator";
+class dropecho_dungen_generators_MAZE_$PARAMS {
+}
+$hxClasses["dropecho.dungen.generators.MAZE_PARAMS"] = $hx_exports["dungen"]["MAZE_PARAMS"] = dropecho_dungen_generators_MAZE_$PARAMS;
+dropecho_dungen_generators_MAZE_$PARAMS.__name__ = "dropecho.dungen.generators.MAZE_PARAMS";
+class dropecho_dungen_generators_MazeGenerator {
+	static generate(opts) {
+		return new dropecho_dungen_Map2d(10,10);
+	}
+}
+$hxClasses["dropecho.dungen.generators.MazeGenerator"] = $hx_exports["dungen"]["MazeGenerator"] = dropecho_dungen_generators_MazeGenerator;
+dropecho_dungen_generators_MazeGenerator.__name__ = "dropecho.dungen.generators.MazeGenerator";
 class dropecho_dungen_generators_MixedGenerator {
 	static buildRooms(tree,opts) {
 		let random = new seedyrng_Random();
@@ -2654,7 +2665,7 @@ class dropecho_dungen_generators_RoomGenerator {
 				let x = _g++;
 				let _g1 = startY;
 				let _g2 = endY;
-				while(_g1 < _g2) map._mapData[map._width * _g1++ + x] = 2;
+				while(_g1 < _g2) map._mapData[map._width * _g1++ + x] = params.tileFloor;
 			}
 			let random = new seedyrng_Random();
 			let h = node.value.height;
@@ -3153,24 +3164,19 @@ class dropecho_dungen_map_$extensions_GetFirstTileOfType {
 		if(tileVal == null) {
 			tileVal = 0;
 		}
-		let isIgnored = function(check) {
-			if(ignore == null) {
-				return false;
-			}
-			return Lambda.find(ignore,function(tile) {
-				if(tile.x == check.x) {
-					return tile.y == check.y;
-				} else {
-					return false;
-				}
-			}) != null;
-		};
 		let _g = new dropecho_dungen_TileIterator(map);
 		while(_g.current < _g.map._mapData.length) {
 			let _this = _g.map;
 			let index = _g.current++;
 			let tile = new dropecho_dungen_Tile2d(index % _this._width,index / _this._width | 0,_this._mapData[index]);
-			if(isIgnored(tile)) {
+			let check = tile;
+			if(ignore == null ? false : Lambda.find(ignore,function(tile) {
+				if(tile.x == check.x) {
+					return tile.y == check.y;
+				} else {
+					return false;
+				}
+			}) != null) {
 				continue;
 			}
 			if(tile.val == tileVal) {
@@ -3351,7 +3357,7 @@ function dropecho_dungen_map_$extensions_Rect_contains(r1,r2) {
 		return false;
 	}
 }
-function dropecho_dungen_map_$extensions_SetAllEdgesTo_setAllEdgesTo(map,tileType) {
+function dropecho_dungen_map_$extensions_SetMapBorderTo_setMapBorderTo(map,tileType) {
 	if(tileType == null) {
 		tileType = 0;
 	}

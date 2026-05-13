@@ -1,22 +1,21 @@
-var ctx = document.querySelector('#canvas').getContext('2d');
-var convChainCtx = document.querySelector('#cccanvas').getContext('2d');
-var timeDiv = document.querySelector('#time');
+import * as dungen from './dropecho.dungen/index.js';
 
-let colors = ['#333', '#aaa'];
+const ctx = document.querySelector('#canvas').getContext('2d');
+const convChainCtx = document.querySelector('#cccanvas').getContext('2d');
+const timeDiv = document.querySelector('#time');
 
-var convChainMap;
-var map;
+const colors = ['#333', '#aaa'];
 
-var bsp = new dungen.BSPGenerator({
+const bsp = new dungen.BSPBuilder({
   height: 128,
   width: 128,
 });
 
-var roomGenParams = {
+const roomGenParams = {
   padding: 0,
 };
 
-var caveGenParams = {
+const caveGenParams = {
   steps: [
     {
       reps: 4,
@@ -39,7 +38,7 @@ var caveGenParams = {
   useOtherType: false,
 };
 
-var convChainParams = {
+const convChainParams = {
   width: 128,
   height: 128,
   n: 3,
@@ -47,12 +46,12 @@ var convChainParams = {
   iterations: 20,
 };
 
-var regionParams = {
+const regionParams = {
   depth: 2,
   expand: false,
 };
 
-var opts = {
+const opts = {
   type: 'room',
   seed: '0',
   mapScale: 10,
@@ -65,12 +64,12 @@ var opts = {
     this.generateConvChain(Math.round(Math.random() * 99999999).toString());
   },
 
-  generateConvChain: function (seed = '0') {
+  generateConvChain: (seed = '0') => {
     convChainCtx.clearRect(0, 0, 1024, 1024);
 
-    var gen = new dungen.ConvChain(map);
+    const gen = new dungen.ConvChain(map);
     gen.rng.setStringSeed(seed);
-    var convChainMap = gen.generate(
+    const convChainMap = gen.generate(
       convChainParams.width,
       convChainParams.height,
       convChainParams.n,
@@ -78,9 +77,9 @@ var opts = {
       convChainParams.iterations,
     );
 
-    convChainMap._mapData.forEach(function (tile, i) {
-      var pos = convChainMap.IndexToXY(i);
-      convChainCtx.fillStyle = tile == 0 ? '#333' : '#aaa';
+    convChainMap._mapData.forEach((tile, i) => {
+      const pos = convChainMap.indexToXY(i);
+      convChainCtx.fillStyle = tile === 0 ? '#333' : '#aaa';
       convChainCtx.fillRect(
         pos.x * opts.mapScale,
         pos.y * opts.mapScale,
@@ -90,7 +89,8 @@ var opts = {
     });
   },
 
-  generate: function () {
+  generate: () => {
+    let map;
     const start = performance.now();
     switch (opts.type) {
       case 'cave':
@@ -117,44 +117,44 @@ var opts = {
     const end = performance.now();
     const time = end - start;
 
-    timeDiv.innerHTML = 'generation time in ms: ' + time.toFixed(2);
+    timeDiv.innerHTML = `generation time in ms: ${time.toFixed(2)}`;
 
     convChainCtx.clearRect(0, 0, 1024, 1024);
     ctx.clearRect(0, 0, 1024, 1024);
 
-    map._mapData.forEach(function (tile, i) {
-      var pos = map.IndexToXY(i);
+    map._mapData.forEach((tile, i) => {
+      const pos = map.indexToXY(i);
       ctx.fillStyle = colors[tile];
       ctx.fillRect(pos.x * opts.mapScale, pos.y * opts.mapScale, opts.mapScale, opts.mapScale);
     });
   },
 
-  generateRegions: function () {
+  generateRegions: () => {
     const start = performance.now();
-    var regionmap = new dungen.RegionMap(map, regionParams.depth, regionParams.expand);
+    const regionmap = new dungen.RegionMap(map, regionParams.depth, regionParams.expand);
     const end = performance.now();
     const time = end - start;
 
-    timeDiv.innerHTML = 'generation time in ms: ' + time.toFixed(2);
+    timeDiv.innerHTML = `generation time in ms: ${time.toFixed(2)}`;
 
-    var regionColors = [...colors];
-    for (var i = 0; i < 256; i++) {
-      regionColors.push('#' + Math.random().toString(16).substr(2, 6));
+    const regionColors = [...colors];
+    for (let i = 0; i < 256; i++) {
+      regionColors.push(`#${Math.random().toString(16).substr(2, 6)}`);
     }
 
-    regionmap._mapData.forEach(function (tile, i) {
-      var pos = map.IndexToXY(i);
+    regionmap._mapData.forEach((tile, i) => {
+      const pos = map.indexToXY(i);
       ctx.fillStyle = regionColors[tile];
       ctx.fillRect(pos.x * opts.mapScale, pos.y * opts.mapScale, opts.mapScale, opts.mapScale);
     });
   },
-  generateJson: function () {
-    var json = dungen.TiledExporter.export(map);
+  generateJson: () => {
+    const json = dungen.TiledExporter.export(map);
     document.querySelector('#json').value = json;
   },
 };
 
-var gui = new dat.GUI();
+const gui = new dat.GUI();
 const optsTypeController = gui.add(opts, 'type', ['room', 'cave', 'walk', 'random', 'mixed']);
 gui.add(opts, 'seed', '0').listen();
 gui.add(opts, 'mapScale', 2, 16).step(1);
@@ -163,7 +163,7 @@ colorsGui.addColor(colors, '0').name('wall');
 colorsGui.addColor(colors, '1').name('walkable');
 
 function addRoomGui() {
-  var roomGui = gui.addFolder('room');
+  const roomGui = gui.addFolder('room');
   roomGui.add(bsp, 'width', 16, 2048).step(1);
   roomGui.add(bsp, 'height', 16, 2048).step(1);
   roomGui.add(bsp, 'minWidth', 2, 32).step(1);
@@ -176,19 +176,19 @@ function addRoomGui() {
 }
 
 function addCaveGui() {
-  var caveGui = gui.addFolder('cave');
+  const caveGui = gui.addFolder('cave');
   caveGui.add(caveGenParams, 'width', 16, 512);
   caveGui.add(caveGenParams, 'height', 16, 512);
   caveGui.add(caveGenParams, 'start_fill_percent', 0, 100).step(1);
   caveGui.add(caveGenParams, 'useOtherType');
 
-  var step1 = caveGui.addFolder('step1');
+  const step1 = caveGui.addFolder('step1');
   step1.add(caveGenParams.steps[0], 'reps', 1, 10).step(1);
   step1.add(caveGenParams.steps[0], 'r1_cutoff', 0, 10).step(1);
   step1.add(caveGenParams.steps[0], 'r2_cutoff', 0, 10).step(1);
   step1.add(caveGenParams.steps[0], 'invert');
 
-  var step2 = caveGui.addFolder('step2');
+  const step2 = caveGui.addFolder('step2');
   step2.add(caveGenParams.steps[1], 'reps', 1, 10).step(1);
   step2.add(caveGenParams.steps[1], 'r1_cutoff', 0, 10).step(1);
   step2.add(caveGenParams.steps[1], 'r2_cutoff', 0, 10).step(1);
@@ -198,8 +198,8 @@ function addCaveGui() {
   return caveGui;
 }
 
-let roomGui = addRoomGui();
-let caveGui = addCaveGui();
+const roomGui = addRoomGui();
+const caveGui = addCaveGui();
 optsTypeController.onChange((newValue) => {
   switch (newValue) {
     case 'room':
@@ -230,21 +230,7 @@ optsTypeController.onChange((newValue) => {
 gui.add(opts, 'generate');
 gui.add(opts, 'generateNewSeed');
 
-function addConvChainGui() {
-  var convchaingui = gui.addFolder('ConvChain');
-  convchaingui.add(convChainParams, 'width', 16, 512);
-  convchaingui.add(convChainParams, 'height', 16, 512);
-  convchaingui.add(convChainParams, 'n', 2, 8).step(1);
-
-  gui.add(opts, 'generateConvChain');
-  gui.add(opts, 'generateConvChainNewSeed');
-}
-
-// function addRegionGui() {
-var regiongui = gui.addFolder('Regions');
+const regiongui = gui.addFolder('Regions');
 regiongui.add(regionParams, 'depth', 1, 10).step(1);
 regiongui.add(regionParams, 'expand');
 gui.add(opts, 'generateRegions');
-// }
-
-// gui.add(opts, "generateJson");

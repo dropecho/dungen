@@ -6,6 +6,18 @@ import dropecho.ds.BSPNode;
 import dropecho.ds.BSPTree;
 import dropecho.interop.Extender;
 
+typedef BSPBuilderConfigProps = {
+	?width:Int,
+	?height:Int,
+	?minHeight:Int,
+	?minWidth:Int,
+	?depth:Int,
+	?ratio:Float,
+	?x:Int,
+	?y:Int,
+	?seed:String
+}
+
 // @:expose("dungen.BSPGeneratorConfig")
 class BSPBuilderConfig {
 	public var width:Int = 120;
@@ -23,7 +35,7 @@ class BSPBuilderConfig {
 class BSPBuilder extends BSPBuilderConfig {
 	public var random:Random = new Random();
 
-	public function new(?ops:Dynamic = null) {
+	public function new(?ops:BSPBuilderConfigProps = null) {
 		Extender.extendThis(this, ops);
 	}
 

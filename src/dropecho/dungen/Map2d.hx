@@ -6,7 +6,7 @@ import dropecho.dungen.Tile2d;
 @:nativeGen
 @:using(dropecho.dungen.map_extensions.Rect)
 @:using(dropecho.dungen.map_extensions.BresenhamLine)
-@:using(dropecho.dungen.map_extensions.SetAllEdgesTo)
+@:using(dropecho.dungen.map_extensions.SetMapBorderTo)
 @:using(dropecho.dungen.map_extensions.Clone)
 @:using(dropecho.dungen.map_extensions.BFS)
 @:using(dropecho.dungen.map_extensions.CheckConnectivity)

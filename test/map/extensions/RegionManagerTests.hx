@@ -20,7 +20,7 @@ class RegionManagerTests extends Test {
 
 		var map = CAGenerator.generate(params);
 
-		map.setAllEdgesTo();
+		map.setMapBorderTo();
 
 		var distanceMap = map.distanceFill();
 		var regionmap = RegionManager.findAndTagRegions(distanceMap);
@@ -73,7 +73,7 @@ class RegionManagerTests extends Test {
 
 		var map = CAGenerator.generate(params);
 
-		map.setAllEdgesTo();
+		map.setMapBorderTo();
 
 		// trace(map.toPrettyString());
 

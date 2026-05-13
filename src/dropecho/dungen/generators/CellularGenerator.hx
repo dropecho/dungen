@@ -35,9 +35,9 @@ class CellularGenerator {
 				}
 				if (tile.val == params.tile_wall && neighborCount > params.bornCount) {
 					temp.set(tile.x, tile.y, params.tile_floor);
+				} else {
+					temp.set(tile.x, tile.y, params.tile_wall);
 				}
-
-				temp.set(tile.x, tile.y, params.tile_wall);
 			}
 			map._mapData = temp._mapData.copy();
 			temp = map.clone();
