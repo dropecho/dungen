@@ -16,7 +16,6 @@ class TiledExporterTests extends Test {
 
 	public function test_ca_map() {
 		var params = new CA_PARAMS();
-
 		var map = CAGenerator.generate(params);
 		var json = TiledExporter.export(map);
 
@@ -24,7 +23,10 @@ class TiledExporterTests extends Test {
 		File.saveContent("artifacts/ca.json", json);
 		#end
 
-		Assert.isTrue(true);
+		var parsed:Dynamic = haxe.Json.parse(json);
+		Assert.equals(map._width, parsed.width);
+		Assert.equals(map._height, parsed.height);
+		Assert.equals(map._mapData.length, (parsed.layers[0].data : Array<Int>).length);
 	}
 
 	public function test_bsp_map() {
@@ -47,6 +49,9 @@ class TiledExporterTests extends Test {
 		File.saveContent("artifacts/bsp.json", json);
 		#end
 
-		Assert.isTrue(true);
+		var parsed:Dynamic = haxe.Json.parse(json);
+		Assert.equals(map._width, parsed.width);
+		Assert.equals(map._height, parsed.height);
+		Assert.equals(map._mapData.length, (parsed.layers[0].data : Array<Int>).length);
 	}
 }

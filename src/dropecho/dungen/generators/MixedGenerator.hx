@@ -9,16 +9,27 @@ import dropecho.dungen.bsp.BSPData;
 import dropecho.ds.algos.InOrderTraversal;
 import dropecho.ds.algos.PostOrderTraversal;
 
+typedef MixedConfigProps = {
+	?tile_wall:Int,
+	?tile_floor:Int,
+	?cave_percent:Int,
+	?seed:String
+}
+
+class MixedParams {
+	public var tile_wall:Int = 0;
+	public var tile_floor:Int = 1;
+	public var cave_percent:Int = 20;
+	public var seed:String = "0";
+
+	public function new() {}
+}
+
 @:expose("dungen.MixedGenerator")
 class MixedGenerator {
-	public static function buildRooms(tree:BSPTree<BSPData>, opts:Dynamic):Map2d {
+	public static function buildRooms(tree:BSPTree<BSPData>, ?opts:MixedConfigProps = null):Map2d {
 		var random = new Random();
-		var params = Extender.defaults({
-			tile_wall: 0,
-			tile_floor: 1,
-			cave_percent: 20,
-			seed: "0"
-		}, opts);
+		var params = Extender.defaults(new MixedParams(), opts);
 		random.setStringSeed(params.seed);
 
 		var rootvalue = tree.root.value;

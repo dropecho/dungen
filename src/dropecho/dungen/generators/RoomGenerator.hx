@@ -1,20 +1,18 @@
 package dropecho.dungen.generators;
 
-import dropecho.ds.BSPNode;
-import dropecho.ds.BSPTree;
-import dropecho.ds.algos.PostOrderTraversal;
-import dropecho.dungen.bsp.BSPData;
-import dropecho.interop.Extender;
 import seedyrng.Random;
+import dropecho.interop.Extender;
+import dropecho.ds.BSPTree;
+import dropecho.ds.BSPNode;
+import dropecho.dungen.bsp.BSPData;
+import dropecho.ds.algos.PostOrderTraversal;
 
 class RoomParams {
 	public var tileCorridor:Int = 1;
 	public var tileFloor:Int = 1;
 	public var tileWall:Int = 0;
 	public var padding:Int = 0;
-
-	public var minWidth:Int = 1;
-	public var minHeight:Int = 1;
+	public var seed:String = "0";
 
 	public function new() {};
 }
@@ -23,6 +21,9 @@ class RoomParams {
 class RoomGenerator {
 	public static function buildRooms(tree:BSPTree<BSPData>, ?opts:Dynamic = null):Map2d {
 		var params = Extender.defaults(new RoomParams(), opts);
+
+		var random = new Random();
+		random.setStringSeed(params.seed);
 
 		var rootvalue = tree
 			.getRoot()
@@ -34,41 +35,26 @@ class RoomGenerator {
 				return true;
 			}
 
-			var lPad = Std.int(params.padding / 2) + params.padding % 2;
+			var lPad = Std.int(params.padding / 2);
 			var rPad = Std.int(params.padding / 2) + params.padding % 2;
 
-			var startX:Int = node.value.x + lPad;
-			var startY:Int = node.value.y + lPad;
-			var endX:Int = (node.value.x + node.value.width) - rPad;
-			var endY:Int = (node.value.y + node.value.height) - rPad;
+			var roomStartX:Int = node.value.x + 1 + lPad;
+			var roomStartY:Int = node.value.y + 1 + lPad;
+			var roomEndX:Int = (node.value.x + node.value.width) - 1 - rPad;
+			var roomEndY:Int = (node.value.y + node.value.height) - 1 - rPad;
 
-			for (x in startX...endX) {
-				for (y in startY...endY) {
+			if (roomStartX != 1) {
+				roomStartX -= 1;
+			}
+			if (roomStartY != 1) {
+				roomStartY -= 1;
+			}
+
+			for (x in roomStartX...roomEndX) {
+				for (y in roomStartY...roomEndY) {
 					map.set(x, y, params.tileFloor);
 				}
 			}
-
-			var random = new Random();
-			var w = node.value.width;
-			var h = node.value.height;
-			var mw = params.minWidth;
-			var mh = params.minHeight;
-
-			startX = startX + random.randomInt(0, w - mw - params.padding);
-			startY = startY + random.randomInt(0, h - mh - params.padding);
-			endX = startX + random.randomInt(mw, (endX - startX));
-			endY = startY + random.randomInt(mh, (endY - startY));
-
-			for (x in startX...endX) {
-				for (y in startY...endY) {
-					map.set(x, y, params.tileFloor);
-				}
-			}
-
-			node.value.x = startX;
-			node.value.y = startY;
-			node.value.width = endX - startX;
-			node.value.height = endY - startY;
 
 			return true;
 		}

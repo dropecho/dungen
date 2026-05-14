@@ -7,11 +7,20 @@ import dropecho.ds.BSPNode;
 import dropecho.dungen.bsp.BSPData;
 import dropecho.ds.algos.PostOrderTraversal;
 
+typedef VillageConfigProps = {
+	?tileCorridor:Int,
+	?tileFloor:Int,
+	?tileWall:Int,
+	?padding:Int,
+	?seed:String
+}
+
 class VillageParams {
 	public var tileCorridor:Int = 1;
 	public var tileFloor:Int = 1;
 	public var tileWall:Int = 0;
 	public var padding:Int = 0;
+	public var seed:String = "0";
 
 	public function new() {};
 }
@@ -25,7 +34,7 @@ class VillageParams {
 
 @:expose("dungen.VillageGenerator")
 class VillageGenerator {
-	public static function buildVillages(tree:BSPTree<BSPData>, ?opts:Dynamic = null):Map2d {
+	public static function buildVillages(tree:BSPTree<BSPData>, ?opts:VillageConfigProps = null):Map2d {
 		var params = Extender.defaults(new VillageParams(), opts);
 
 		var rootvalue = tree
@@ -33,6 +42,7 @@ class VillageGenerator {
 			.value;
 		var map = new Map2d(rootvalue.width, rootvalue.height, params.tileCorridor);
 		var rnd = new Random();
+		rnd.setStringSeed(params.seed);
 
 		function makeVillage(node:BSPNode<BSPData>):Bool {
 			if (node.isLeaf() == false) {

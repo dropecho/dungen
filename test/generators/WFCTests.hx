@@ -12,7 +12,6 @@ class WFCTests extends Test {
 		map = new Map2d(4, 4, 0);
 	}
 
-	@Ignored
 	public function test_makes_pattern() {
 		map._mapData = [
 			1, 2, 3, 4,
@@ -24,13 +23,13 @@ class WFCTests extends Test {
 		var foo = new WFC(map, 2);
 		var bar = foo.getPossibilities();
 
-		//     trace(bar);
+		Assert.isTrue(bar.keys().hasNext());
 
-		//     for (i in 0...bar[0].patterns.length) {
-		//       trace(bar[0]
-		//         .indexToMap(i)
-		//         .toPrettyString()
-		//       );
-		//     }
+		for (key in bar.keys()) {
+			Assert.isTrue(Std.isOfType(key, Int));
+			var value = bar.get(key);
+			Assert.notNull(value);
+			Assert.equals(4, value.length);
+		}
 	}
 }
