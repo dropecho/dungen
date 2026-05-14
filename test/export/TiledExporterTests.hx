@@ -15,7 +15,7 @@ class TiledExporterTests extends Test {
 	public var map:Map2d;
 
 	public function test_ca_map() {
-		var params = new CA_PARAMS();
+		var params = new CAParams();
 		var map = CAGenerator.generate(params);
 		var json = TiledExporter.export(map);
 

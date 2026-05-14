@@ -3,6 +3,11 @@
 Single source of truth for all AI agents working on this project.
 See `.agents/` for deeper reference docs.
 
+## Agent Instructions
+
+- **Always use the `haxe` skill** when reading or writing any `.hx` or `.hxml` file.
+- **Always use the Haxe LSP** (`LSP` tool) for navigating code — go-to-definition, find references, hover types — before grepping or reading files manually.
+
 ---
 
 ## Project Overview

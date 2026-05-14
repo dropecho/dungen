@@ -22,11 +22,11 @@ class WFC {
 				var data = sample.getRect({
 					x: x,
 					y: y,
-					width: 2,
-					height: 2
+					width: this.n,
+					height: this.n
 				});
 
-				patterns.push(Pattern.init(2, data));
+				patterns.push(Pattern.init(this.n, data));
 			}
 		}
 

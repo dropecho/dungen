@@ -95,7 +95,7 @@ class RegionManager {
 	):Map2d {
 		var borderMap = new Map2d(map._width, map._height);
 
-		for (tile in borderMap) {
+		for (tile in map) {
 			var value = tile.val == borderType ? 1 : 0;
 			borderMap.set(tile.x, tile.y, value);
 		}
@@ -278,6 +278,6 @@ class RegionManager {
 				}
 			}
 		}
-		return map;
+		return expandedMap;
 	}
 }

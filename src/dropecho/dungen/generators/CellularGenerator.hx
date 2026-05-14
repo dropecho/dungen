@@ -2,9 +2,22 @@ package dropecho.dungen.generators;
 
 import dropecho.dungen.Map2d;
 import dropecho.dungen.generators.RandomGenerator;
+import dropecho.interop.Extender;
 
-@:expose("dungen.CELLULAR_PARAMS")
-class CELLULAR_PARAMS {
+typedef CellularConfigProps = {
+	?height:Int,
+	?width:Int,
+	?tile_floor:Int,
+	?tile_wall:Int,
+	?start_fill_percent:Int,
+	?seed:String,
+	?bornCount:Int,
+	?surviveCount:Int,
+	?passes:Int
+}
+
+@:expose("dungen.CellularParams")
+class CellularParams {
 	public var height:Int = 64;
 	public var width:Int = 64;
 	public var tile_floor:Int = 1;
@@ -21,8 +34,8 @@ class CELLULAR_PARAMS {
 
 @:expose("dungen.CellularGenerator")
 class CellularGenerator {
-	public static function generate(?opts:CELLULAR_PARAMS = null):Map2d {
-		var params = opts == null ? new CELLULAR_PARAMS() : opts;
+	public static function generate(?opts:CellularConfigProps = null):Map2d {
+		var params:CellularParams = Extender.defaults(new CellularParams(), opts);
 		var map = RandomGenerator.generate(params);
 
 		var temp = map.clone();

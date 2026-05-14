@@ -88,7 +88,7 @@ class Map2dTests extends Test {
 	}
 
 	public function test_cellular_map() {
-		var params = new CELLULAR_PARAMS();
+		var params = new CellularParams();
 		params.start_fill_percent = 30;
 		params.passes = 2;
 		params.surviveCount = 4;

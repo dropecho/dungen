@@ -2,6 +2,7 @@ package dropecho.dungen.generators;
 
 import dropecho.dungen.generators.RandomGenerator;
 import dropecho.dungen.Map2d;
+import dropecho.interop.Extender;
 
 typedef CA_PARAM_STEP = {
 	reps:Int,
@@ -10,8 +11,19 @@ typedef CA_PARAM_STEP = {
 	invert:Bool
 }
 
-@:expose("dungen.CA_PARAMS")
-class CA_PARAMS {
+typedef CAConfigProps = {
+	?steps:Array<CA_PARAM_STEP>,
+	?height:Int,
+	?width:Int,
+	?tile_floor:Int,
+	?tile_wall:Int,
+	?start_fill_percent:Int,
+	?seed:String,
+	?useOtherType:Bool
+}
+
+@:expose("dungen.CAParams")
+class CAParams {
 	public var steps:Array<CA_PARAM_STEP> = new Array<CA_PARAM_STEP>();
 	public var height:Int = 64;
 	public var width:Int = 64;
@@ -39,10 +51,11 @@ class CA_PARAMS {
 	}
 }
 
+
 @:expose("dungen.CAGenerator")
 class CAGenerator {
-	public static function generate(?opts:CA_PARAMS = null):Map2d {
-		var params = opts == null ? new CA_PARAMS() : opts;
+	public static function generate(?opts:CAConfigProps = null):Map2d {
+		var params:CAParams = Extender.defaults(new CAParams(), opts);
 		var map = RandomGenerator.generate(params);
 
 		var temp = map.clone();
@@ -59,7 +72,7 @@ class CAGenerator {
 	private static function buildFromCA(
 		temp:Map2d,
 		map:Map2d,
-		params:CA_PARAMS,
+		params:CAParams,
 		step:CA_PARAM_STEP
 	):Void {
 		var alive_tile_type = step.invert ? params.tile_floor : params.tile_wall;

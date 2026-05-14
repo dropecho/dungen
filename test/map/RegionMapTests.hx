@@ -74,7 +74,7 @@ class RegionMapTests extends Test {
 	}
 
 	public function test_CATest() {
-		var params = new CA_PARAMS();
+		var params = new CAParams();
 		params.width = 64;
 		params.height = 32;
 		params.start_fill_percent = 60;

@@ -8,9 +8,8 @@ import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.generators.CAGenerator;
 
 class RegionManagerTests extends Test {
-	@Ignored
 	public function test_region_tagging_only() {
-		var params = new CA_PARAMS();
+		var params = new CAParams();
 		params.width = 100;
 		params.height = 100;
 		params.start_fill_percent = 64;
@@ -19,22 +18,18 @@ class RegionManagerTests extends Test {
 		params.seed = "0";
 
 		var map = CAGenerator.generate(params);
-
 		map.setMapBorderTo();
 
 		var distanceMap = map.distanceFill();
 		var regionmap = RegionManager.findAndTagRegions(distanceMap);
 		regionmap = RegionManager.expandRegions(regionmap);
-		trace(regionmap.toPrettyString([
-			'#', '+', '.', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'j', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3',
-			'4', '5', '6', '7', '8', '9'
-		]));
 
-		Assert.isTrue(true);
+		Assert.notNull(regionmap);
+		Assert.equals(100, regionmap._width);
+		Assert.equals(100, regionmap._height);
+		Assert.isTrue(regionmap._mapData.filter(v -> v > 2).length > 0);
 	}
 
-	@Ignored
 	public function test_region_tagging_rooms() {
 		var bspGen = new BSPBuilder({
 			width: 64,
@@ -47,23 +42,18 @@ class RegionManagerTests extends Test {
 
 		var map = RoomGenerator.buildRooms(bspGen.generate());
 
-		// trace(map.toPrettyString());
-
 		var distanceMap = map.distanceFill();
 		var regionmap = RegionManager.findAndTagRegions(distanceMap);
 		regionmap = RegionManager.expandRegions(regionmap);
-		//     trace(regionmap.toPrettyString([
-		//       '#', '+', '.', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'j', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-		//       'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3',
-		//       '4', '5', '6', '7', '8', '9'
-		//     ]));
 
-		Assert.isTrue(true);
+		Assert.notNull(regionmap);
+		Assert.equals(64, regionmap._width);
+		Assert.equals(64, regionmap._height);
+		Assert.isTrue(regionmap._mapData.filter(v -> v > 2).length > 0);
 	}
 
-	@Ignored
 	public function test_region_tagging_caves() {
-		var params = new CA_PARAMS();
+		var params = new CAParams();
 		params.width = 60;
 		params.height = 40;
 		params.start_fill_percent = 64;
@@ -72,26 +62,15 @@ class RegionManagerTests extends Test {
 		params.seed = "1";
 
 		var map = CAGenerator.generate(params);
-
 		map.setMapBorderTo();
-
-		// trace(map.toPrettyString());
 
 		var distanceMap = map.distanceFill();
 		var regionmap = RegionManager.findAndTagRegions(distanceMap);
 		regionmap = RegionManager.expandRegions(regionmap);
-		// trace(regionmap.toPrettyString([
-		//   '#', '+', '.', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'j', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-		//   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3',
-		//   '4', '5', '6', '7', '8', '9'
-		// ]));
 
-		for (i in 0...regionmap._mapData.length) {
-			if (regionmap._mapData[i] > 1) {
-				regionmap._mapData[i] = 2;
-			}
-		}
-
-		// trace(regionmap.toPrettyString(["#", "+", "."]));
+		Assert.notNull(regionmap);
+		Assert.equals(60, regionmap._width);
+		Assert.equals(40, regionmap._height);
+		Assert.isTrue(regionmap._mapData.filter(v -> v > 2).length > 0);
 	}
 }

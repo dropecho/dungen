@@ -31,7 +31,7 @@ class BSPBuilderConfig {
 	public var seed:String = "0";
 }
 
-@:expose("dungen.BSPGenerator")
+@:expose("dungen.BSPBuilder")
 class BSPBuilder extends BSPBuilderConfig {
 	public var random:Random = new Random();
 
@@ -125,75 +125,4 @@ class BSPBuilder extends BSPBuilderConfig {
 		return;
 	}
 
-	//   private function makeSplit(node:BSPNode<BSPData>):Void {
-	//     var val = node.value;
-	//     var lData:BSPData;
-	//     var rData:BSPData;
-	//
-	//     // Times two because you need to fit two child nodes into this one.
-	//     if (val.width < minWidth * 2 && val.height < minHeight * 2) {
-	//       return;
-	//     }
-	//
-	//     var splitAt = 0;
-	//     var splitHeight:Bool = random.random() > 0.5;
-	//
-	//     // Change split direction if one dir is smaller than the ratio allows
-	//     if (val.width >= val.height * ratio) {
-	//       splitHeight = false;
-	//     } else if (val.height >= val.width * ratio) {
-	//       splitHeight = true;
-	//     } else {
-	//       return;
-	//     }
-	//
-	//     if (splitHeight) {
-	//       var rnd = random.randomInt(minHeight, Std.int(minHeight * 2));
-	//       splitAt = rnd - 1;
-	//       var rHeight = val.height - splitAt;
-	//
-	//       if (rHeight < minHeight) {
-	//         return;
-	//       }
-	//
-	//       lData = new BSPData({
-	//         height: splitAt,
-	//         width: val.width,
-	//         x: val.x,
-	//         y: val.y
-	//       });
-	//       rData = new BSPData({
-	//         height: rHeight,
-	//         width: val.width,
-	//         x: val.x,
-	//         y: val.y + splitAt
-	//       });
-	//     } else {
-	//       //       splitAt = random.randomInt(0, val.width - (minWidth * 2)) + minWidth;
-	//       var rnd = random.randomInt(minWidth, Std.int(minWidth * 2));
-	//       splitAt = rnd - 1;
-	//       var rWidth = val.width - splitAt;
-	//       if (rWidth < minHeight) {
-	//         return;
-	//       }
-	//
-	//       lData = new BSPData({
-	//         height: val.height,
-	//         width: splitAt,
-	//         x: val.x,
-	//         y: val.y
-	//       });
-	//       rData = new BSPData({
-	//         height: val.height,
-	//         width: rWidth,
-	//         x: val.x + splitAt,
-	//         y: val.y
-	//       });
-	//     }
-	//
-	//     node.setLeft(new BSPNode(lData));
-	//     node.setRight(new BSPNode(rData));
-	//
-	//     return;
-	//   }
 }

@@ -25,8 +25,8 @@ class ConvChain {
 		var size = Std.int(Math.pow(2, n * n));
 		var weights = [for (_ in 0...(size)) 0.0];
 
-		for (x in 0...sample._height) {
-			for (y in 0...sample._width) {
+		for (x in 0...sample._width) {
+			for (y in 0...sample._height) {
 				var rect = sample.getRect({
 					x: x,
 					y: y,

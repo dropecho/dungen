@@ -7,7 +7,7 @@ import dropecho.dungen.generators.CAGenerator;
 
 class CAGeneratorTests extends Test {
 	public function test_generated_map_has_correct_width() {
-		var params = new CA_PARAMS();
+		var params = new CAParams();
 		params.width = 32;
 		params.height = 16;
 		var map = CAGenerator.generate(params);
@@ -15,7 +15,7 @@ class CAGeneratorTests extends Test {
 	}
 
 	public function test_generated_map_has_correct_height() {
-		var params = new CA_PARAMS();
+		var params = new CAParams();
 		params.width = 32;
 		params.height = 16;
 		var map = CAGenerator.generate(params);
@@ -23,7 +23,7 @@ class CAGeneratorTests extends Test {
 	}
 
 	public function test_generated_map_contains_both_floor_and_wall_tiles() {
-		var params = new CA_PARAMS();
+		var params = new CAParams();
 		params.width = 32;
 		params.height = 32;
 		params.seed = "test";
@@ -35,12 +35,12 @@ class CAGeneratorTests extends Test {
 	}
 
 	public function test_same_seed_produces_identical_map_data() {
-		var params1 = new CA_PARAMS();
+		var params1 = new CAParams();
 		params1.width = 32;
 		params1.height = 32;
 		params1.seed = "deterministic";
 
-		var params2 = new CA_PARAMS();
+		var params2 = new CAParams();
 		params2.width = 32;
 		params2.height = 32;
 		params2.seed = "deterministic";

@@ -7,11 +7,23 @@ import dropecho.ds.BSPNode;
 import dropecho.dungen.bsp.BSPData;
 import dropecho.ds.algos.PostOrderTraversal;
 
+typedef RoomConfigProps = {
+	?tileCorridor:Int,
+	?tileFloor:Int,
+	?tileWall:Int,
+	?padding:Int,
+	?minWidth:Int,
+	?minHeight:Int,
+	?seed:String
+}
+
 class RoomParams {
 	public var tileCorridor:Int = 1;
 	public var tileFloor:Int = 1;
 	public var tileWall:Int = 0;
 	public var padding:Int = 0;
+	public var minWidth:Int = 0;
+	public var minHeight:Int = 0;
 	public var seed:String = "0";
 
 	public function new() {};
@@ -19,7 +31,7 @@ class RoomParams {
 
 @:expose("dungen.RoomGenerator")
 class RoomGenerator {
-	public static function buildRooms(tree:BSPTree<BSPData>, ?opts:Dynamic = null):Map2d {
+	public static function buildRooms(tree:BSPTree<BSPData>, ?opts:RoomConfigProps = null):Map2d {
 		var params = Extender.defaults(new RoomParams(), opts);
 
 		var random = new Random();
