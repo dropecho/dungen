@@ -1,9 +1,9 @@
 package dropecho.dungen.generators;
 
-import seedyrng.Random;
-import dropecho.dungen.generators.RandomGenerator;
 import dropecho.dungen.Map2d;
-import dropecho.dungen.map.Pattern;
+import dropecho.dungen.Pattern;
+import dropecho.dungen.generators.RandomGenerator;
+import seedyrng.Random;
 
 @:expose("dungen.ConvChain")
 class ConvChain {
@@ -25,8 +25,8 @@ class ConvChain {
 		var size = Std.int(Math.pow(2, n * n));
 		var weights = [for (_ in 0...(size)) 0.0];
 
-		for (x in 0...sample._height) {
-			for (y in 0...sample._width) {
+		for (x in 0...sample._width) {
+			for (y in 0...sample._height) {
 				var rect = sample.getRect({
 					x: x,
 					y: y,
@@ -34,8 +34,8 @@ class ConvChain {
 					height: n
 				}, true);
 				var p = Pattern.init(n, rect);
-				for (h in 0...p.hashes.length) {
-					weights[p.hashes[h]] += 1;
+				for (h in 0...p._hashes.length) {
+					weights[p._hashes[h]] += 1;
 				}
 			}
 		}

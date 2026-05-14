@@ -1,57 +1,64 @@
 package dropecho.dungen.generators;
 
 import seedyrng.Random;
+import dropecho.interop.Extender;
 import dropecho.dungen.Map2d;
+
+typedef TunnelerConfigProps = {
+	var ?width:Int;
+	var ?height:Int;
+	var ?tile_floor:Int;
+	var ?tile_wall:Int;
+	var ?seed:String;
+	var ?numTunnelers:Int;
+	var ?lifeSpan:Int;
+}
+
+@:noDoc
+class TunnelerParams {
+	public var width:Int = 64;
+	public var height:Int = 64;
+	public var tile_floor:Int = 1;
+	public var tile_wall:Int = 0;
+	public var seed:String = "0";
+	public var numTunnelers:Int = 3;
+	public var lifeSpan:Int = 200;
+
+	public function new() {}
+}
 
 @:expose("dungen.TunnelerGenerator")
 class TunnelerGenerator {
-	public static function generate(?params:Dynamic):Map2d {
-		var height:Int = params.height;
-		var width:Int = params.width;
-
-		var tile_floor:Int = params.tile_floor;
-		var tile_wall:Int = params.tile_wall;
-		var start_fill_percent:Int = params.start_fill_percent;
-		var countOfFilled:Int = 0;
-		var totalCount:Int = height * width;
-
-		var map = new Map2d(width, height, tile_wall);
-
-		var walkerPos = {x: Std.int(width / 2), y: Std.int(height / 2)};
-
-		map.set(walkerPos.x, walkerPos.y, 0);
-		return map;
-	}
-
-	private static function getEntrancePosition(map:Map2d):Tile2d {
+	public static function generate(?opts:TunnelerConfigProps):Map2d {
+		var params:TunnelerConfigProps = Extender.defaults(new TunnelerParams(), opts);
 		var random:Random = new Random();
-		var top = random.randomInt(0, 1) == 1;
-		var right = random.randomInt(0, 1) == 1;
-		// var start = {x:Std.int(map._width/2), y:0};
+		random.setStringSeed(params.seed);
 
-		// return start;
-		return null;
+		var map = new Map2d(params.width, params.height, params.tile_wall);
+		var centerX = Std.int(params.width / 2);
+		var centerY = Std.int(params.height / 2);
+
+		for (_ in 0...params.numTunnelers) {
+			var tunneler = new Tunneler(map, new Tile2d(centerX, centerY), params.tile_floor, random, params.lifeSpan);
+			tunneler.run();
+		}
+
+		return map;
 	}
 }
 
 private class Tunneler {
 	var map:Map2d;
 	var position:Tile2d;
-	var width:Int;
-	var direction:Int;
+	var tileFloor:Int;
+	var random:Random;
 	var lifeSpan:Int;
 
-	public function new(
-		map:Map2d,
-		position:Tile2d,
-		width:Int = 1,
-		direction:Int = 2,
-		lifeSpan:Int = 5
-	) {
+	public function new(map:Map2d, position:Tile2d, tileFloor:Int, random:Random, lifeSpan:Int) {
 		this.map = map;
 		this.position = position;
-		this.width = width;
-		this.direction = direction;
+		this.tileFloor = tileFloor;
+		this.random = random;
 		this.lifeSpan = lifeSpan;
 	}
 
@@ -59,7 +66,21 @@ private class Tunneler {
 		var ticks = 0;
 
 		while (ticks < lifeSpan) {
-			// do tunnel
+			map.set(position.x, position.y, tileFloor);
+
+			var direction = random.randomInt(0, 3);
+
+			position.y += direction == 0 ? -1 : 0;
+			position.y += direction == 2 ? 1 : 0;
+			position.x += direction == 1 ? -1 : 0;
+			position.x += direction == 3 ? 1 : 0;
+
+			if (position.x < 0) position.x = 0;
+			if (position.x >= map._width) position.x = map._width - 1;
+			if (position.y < 0) position.y = 0;
+			if (position.y >= map._height) position.y = map._height - 1;
+
+			ticks++;
 		}
 	}
 }

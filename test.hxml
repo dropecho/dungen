@@ -1,28 +1,44 @@
 -cp src
 -cp test
 
+# -D analyzer-optimize
+# -D dungen_pretty_examples
+
 -lib seedyrng
 -lib dropecho.ds 
 -lib dropecho.interop 
 -lib dropecho.testing 
 -lib utest
+-lib instrument
+
+# -D profiler-console-summary-reporter
+# -D profiler-console-hierarchy-reporter
+# -D coverage-console-summary-reporter
+# -D coverage-console-package-summary-reporter
+-D coverage-console-file-summary-reporter
+
+-D coverage-lcov-reporter=artifacts/lcov.info
+# -D profiler-csv-reporter=artifacts/profile.csv
+
+--macro instrument.Instrumentation.coverage([], ['src'], [])
+# --macro instrument.Instrumentation.profiling([], ['src'], [])
+# -D instrument-quiet
+
+# -D UTEST_PATTERN=test_distance_fill
 
 --each
 
+--next
+-lib hxnodejs
+# -D js-es=6
+-js artifacts/js_test.cjs
+
 # --next
 # -lib hxnodejs
-# -D js-es=6
-# -js artifacts/js_test.cjs
+# -lib genes
+# -js artifacts/js_esm_test/test.js
 
 # --next
--lib hxnodejs
--lib genes
--D dts
-# -D js-es=6
-
--js artifacts/js_esm_test/test.js
-
---next
 # -D net-ver=40
 # -cs artifacts/cs_test
 

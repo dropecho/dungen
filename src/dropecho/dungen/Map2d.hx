@@ -1,51 +1,24 @@
 package dropecho.dungen;
 
-@:expose("dungen.Tile2d")
-@:struct
-class Tile2d {
-	public var x:Int;
-	public var y:Int;
-	public var val:Int;
-
-	public function new(x:Int, y:Int, ?val:Int) {
-		this.x = x;
-		this.y = y;
-		this.val = val;
-	};
-}
-
-class TileIterator {
-	var map:Map2d;
-	var current = 0;
-
-	public function new(map:Map2d) {
-		this.map = map;
-	}
-
-	public function hasNext():Bool {
-		return current < map._mapData.length;
-	}
-
-	public function next():Tile2d {
-		var tile = map.IndexToXY(current++);
-		tile.val = map.get(tile.x, tile.y);
-		return tile;
-	}
-}
+import dropecho.dungen.Tile2d;
 
 @:expose("dungen.Map2d")
 @:nativeGen
-@:using(dropecho.dungen.map.Map2dExtensions)
-@:using(dropecho.dungen.map.extensions.CheckConnectivity)
-@:using(dropecho.dungen.map.extensions.DistanceFill)
-@:using(dropecho.dungen.map.extensions.FindAndReplace)
-@:using(dropecho.dungen.map.extensions.FloodFill)
-@:using(dropecho.dungen.map.extensions.GetFirstTileOfType)
-@:using(dropecho.dungen.map.extensions.Neighbors)
-@:using(dropecho.dungen.map.extensions.RegionFill)
-@:using(dropecho.dungen.map.extensions.RegionManager)
-@:using(dropecho.dungen.map.extensions.Splat)
-@:using(dropecho.dungen.map.extensions.Utils)
+@:using(dropecho.dungen.map_extensions.Rect)
+@:using(dropecho.dungen.map_extensions.BresenhamLine)
+@:using(dropecho.dungen.map_extensions.SetMapBorderTo)
+@:using(dropecho.dungen.map_extensions.Clone)
+@:using(dropecho.dungen.map_extensions.BFS)
+@:using(dropecho.dungen.map_extensions.CheckConnectivity)
+@:using(dropecho.dungen.map_extensions.DistanceFill)
+@:using(dropecho.dungen.map_extensions.FindAndReplace)
+@:using(dropecho.dungen.map_extensions.FloodFill)
+@:using(dropecho.dungen.map_extensions.GetFirstTileOfType)
+@:using(dropecho.dungen.map_extensions.Neighbors)
+@:using(dropecho.dungen.map_extensions.Splat)
+@:using(dropecho.dungen.map_extensions.Utils)
+@:using(dropecho.dungen.regions.extensions.RegionFill)
+@:using(dropecho.dungen.regions.RegionManager)
 class Map2d {
 	public var _width:Int = 0;
 	public var _height:Int = 0;
@@ -55,10 +28,10 @@ class Map2d {
 		_width = width;
 		_height = height;
 		_mapData = new Array<Int>();
-		this.initializeData(initTileData);
+		this._initializeData(initTileData);
 	}
 
-	private function initializeData(initTileData:Int):Void {
+	private function _initializeData(initTileData:Int):Void {
 		if (initTileData == -1) {
 			return;
 		}
@@ -70,7 +43,10 @@ class Map2d {
 		}
 	}
 
-	inline public function tiles():TileIterator {
+	/**
+	 * This exists so you can do "for tile in map".
+	 */
+	inline public function iterator():TileIterator {
 		return new TileIterator(this);
 	}
 
@@ -85,15 +61,19 @@ class Map2d {
 		return (_width * y) + x;
 	}
 
+	inline public function tileToIndex(tile:Tile2d):Int {
+		return XYtoIndex(tile.x, tile.y);
+	}
+
 	/**
 	 * Return a Tile2d ({x,y} object), for the given array index.
 	 * @param index The index to change into an x,y position.
 	 * @return The object with the x,y coords.
 	 */
-	public inline function IndexToXY(index:Int):Tile2d {
-		var x = Std.int(index % _width);
+	public inline function indexToXY(index:Int):Tile2d {
+		var x = index % _width;
 		var y = Std.int(index / _width);
-		return new Tile2d(x, y);
+		return new Tile2d(x, y, _mapData[index]);
 	}
 
 	/**
@@ -103,10 +83,7 @@ class Map2d {
 	 * @param data - The value to set as the tile.
 	 */
 	inline public function set(x:Int, y:Int, data:Int):Void {
-		var index = XYtoIndex(x, y);
-		// if (index < _mapData.length) {
-		_mapData[index] = data;
-		// }
+		_mapData[XYtoIndex(x, y)] = data;
 	}
 
 	/**
@@ -124,6 +101,7 @@ class Map2d {
 	 * @param [char] - The characters to use for each tile type by index. 
 	 * @return A string representing the map. 
 	 */
+	@ignoreInstrument
 	public function toPrettyString(char:Array<String> = null) {
 		if (char == null) {
 			char = [" ", ".", ",", "`"];
@@ -145,6 +123,7 @@ class Map2d {
 	 * Returns the map as a string.
 	 * @return a string representing the map. 
 	 */
+	@ignoreInstrument
 	public function toString():String {
 		//     var output = "\n MAP2d: \n\n";
 		var output = "\n";

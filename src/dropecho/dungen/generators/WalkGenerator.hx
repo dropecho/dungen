@@ -44,7 +44,7 @@ class WalkGenerator {
 
 		var walkerPos = {x: Std.int(params.width / 2), y: Std.int(params.height / 2)};
 
-		map.set(walkerPos.x, walkerPos.y, 0);
+		map.set(walkerPos.x, walkerPos.y, params.tile_floor);
 		var counter = 0;
 		var direction = random.randomInt(0, 3);
 

@@ -8,18 +8,25 @@
     "access": "public"
   },
   "license": "MIT",
+  "type": "module",
+  "main": "./dist/js/cjs/index.cjs",
+  "exports": {
+    ".": {
+      "require": "./dist/js/cjs/index.cjs",
+      "import": "./dist/js/esm/index.js"
+    }
+  },
+  "files": ["dist/js/**/*"],
   "scripts": {
     "install": "lix download",
-    "test": "haxelib run dropecho.testing",
+    "test": "lix dropecho.testing",
     "build": "npm run build:haxe && npm run build:example",
     "build:haxe": "haxe build.hxml",
     "build:docs": "haxelib run dox -i artifacts/docs.xml -o docs/docs --toplevel-package dropecho.dungen -D source-path http://github.com/dropecho/dungen/blob/master/src -D website http://github.com/dropecho/dungen --title 'Dungen API Documentation'",
     "build:example": "cp dist/js/cjs/index.cjs docs/dropecho.dungen.js",
+    "build:bundle": "npx esbuild docs/index.js --bundle --outfile=docs/index.min.js",
     "clean": "rm -rf dist && rm -rf artifacts"
   },
-  "files": [
-    "dist/js/**/*"
-  ],
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.2",
     "@semantic-release/commit-analyzer": "^9.0.2",
@@ -30,13 +37,5 @@
     "@semantic-release/release-notes-generator": "^10.0.3",
     "semantic-release": "^19.0.5",
     "semantic-release-haxelib": "^1.1.0"
-  },
-  "type": "module",
-  "main": "./dist/js/cjs/index.cjs",
-  "exports": {
-    ".": {
-      "require": "./dist/js/cjs/index.cjs",
-      "import": "./dist/js/esm/index.js"
-    }
   }
 }

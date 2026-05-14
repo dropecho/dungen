@@ -3,6 +3,15 @@ package dropecho.dungen.generators;
 import seedyrng.Random;
 import dropecho.interop.Extender;
 
+typedef RandomConfigProps = {
+	?height:Int,
+	?width:Int,
+	?tile_floor:Int,
+	?tile_wall:Int,
+	?start_fill_percent:Int,
+	?seed:String
+}
+
 class RandomParams {
 	public var height:Int = 64;
 	public var width:Int = 64;
@@ -16,7 +25,7 @@ class RandomParams {
 
 @:expose("dungen.RandomGenerator")
 class RandomGenerator {
-	public static function generate(?opts:Dynamic = null):Map2d {
+	public static function generate(?opts:RandomConfigProps = null):Map2d {
 		var params:RandomParams = Extender.defaults(new RandomParams(), opts);
 
 		var random:Random = new Random();

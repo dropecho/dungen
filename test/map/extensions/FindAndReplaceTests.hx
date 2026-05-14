@@ -5,9 +5,7 @@ import utest.Test;
 import dropecho.dungen.bsp.BSPBuilder;
 import dropecho.dungen.generators.RoomGenerator;
 import dropecho.dungen.Map2d;
-import dropecho.dungen.map.Pattern;
-
-using dropecho.dungen.map.extensions.FindAndReplace;
+import dropecho.dungen.Pattern;
 
 class FindAndReplaceTests extends Test {
 	public function test_find_and_replace_simple() {

@@ -4,13 +4,9 @@ import utest.Assert;
 import utest.Test;
 import dropecho.dungen.Map2d;
 import dropecho.dungen.generators.CAGenerator;
-import dropecho.dungen.RegionMap;
+import dropecho.dungen.regions.RegionMap;
 import dropecho.dungen.bsp.BSPBuilder;
 import dropecho.dungen.generators.RoomGenerator;
-
-using dropecho.dungen.map.extensions.DistanceFill;
-using dropecho.dungen.map.extensions.Utils;
-using dropecho.dungen.map.Map2dExtensions;
 
 class RegionMapTests extends Test {
 	public function test_manualTest() {
@@ -29,9 +25,9 @@ class RegionMapTests extends Test {
 
 		var regionMap = new RegionMap(map, 2, false);
 
-		// var borderMap = RegionManager.findAndTagBorders(map, 1);
+		//     var borderMap = RegionManager.findAndTagBorders(map, 1);
 
-		//     trace(regionMap.toPrettyString(['`', '.', '1', '2', '3', '4', '5', '6', '7', '8', '9']));
+		//     trace(regionMap.toPrettyString(['#', '.', '1', '2', '3', '4', '5', '6', '7', '8', '9']));
 		//     trace(regionMap.toRegionBorderString());
 		// trace(borderMap.toPrettyString([' ', '.', '1', '2', '3', '4','5', '6', '7', '8', '9']));
 		// trace(borderMap);
@@ -44,12 +40,12 @@ class RegionMapTests extends Test {
 
 	public function test_bspMapTest() {
 		var bsp = new BSPBuilder({
-			width: 32,
+			width: 48,
 			height: 24,
 			minWidth: 3,
 			minHeight: 3,
-			depth: 3,
-			ratio: .95,
+			depth: 4,
+			ratio: 1,
 		})
 			.generate();
 
@@ -58,25 +54,27 @@ class RegionMapTests extends Test {
 			tileFloor: 2,
 			padding: 1
 		});
-		//     trace(map.toPrettyString());
 
 		var regionMap = new RegionMap(map, 2, false);
 
 		// var borderMap = RegionManager.findAndTagBorders(map, 1);
 
-		// trace(regionMap.toPrettyString([' ', '.', '1', '2', '3', '4','5', '6', '7', '8', '9']));
+		//     trace(regionMap.toString());
+		//     trace(regionMap.toPrettyString([
+		//       '#', '.', '.', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+		//     ]));
 		//     trace(regionMap.toRegionBorderString());
 		// trace(borderMap.toPrettyString([' ', '.', '1', '2', '3', '4','5', '6', '7', '8', '9']));
 		// trace(borderMap);
 
-		//     trace(regionMap.toRegionBorderIdString());
+		//     trace(regionMap.toString());
 		// trace(regionMap.graph);
 
 		Assert.isTrue(regionMap != null);
 	}
 
 	public function test_CATest() {
-		var params = new CA_PARAMS();
+		var params = new CAParams();
 		params.width = 64;
 		params.height = 32;
 		params.start_fill_percent = 60;
@@ -86,7 +84,7 @@ class RegionMapTests extends Test {
 
 		var map = CAGenerator.generate(params);
 
-		map.setAllEdgesTo();
+		map.setMapBorderTo();
 
 		var regionmap = new RegionMap(map, 2);
 

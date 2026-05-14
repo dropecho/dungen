@@ -3,7 +3,7 @@ package map.extensions;
 import utest.Assert;
 import utest.Test;
 import dropecho.dungen.Map2d;
-import dropecho.dungen.map.extensions.CheckConnectivity;
+import dropecho.dungen.map_extensions.CheckConnectivity;
 
 class CheckConnectivityTests extends Test {
 	var map:Map2d;

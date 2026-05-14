@@ -1,8 +1,7 @@
 package dropecho.dungen.generators;
 
-import dropecho.dungen.generators.RandomGenerator;
 import dropecho.dungen.Map2d;
-import dropecho.dungen.map.Pattern;
+import dropecho.dungen.generators.RandomGenerator;
 
 @:expose("dungen.WFC")
 class WFC {
@@ -23,11 +22,11 @@ class WFC {
 				var data = sample.getRect({
 					x: x,
 					y: y,
-					width: 2,
-					height: 2
+					width: this.n,
+					height: this.n
 				});
 
-				patterns.push(Pattern.init(2, data));
+				patterns.push(Pattern.init(this.n, data));
 			}
 		}
 
@@ -35,9 +34,9 @@ class WFC {
 		var hashedPatterns = new Map<Int, Array<Int>>();
 
 		for (pattern in patterns) {
-			for (i in 0...pattern.patterns.length) {
-				var hash = pattern.hashes[i];
-				var variation = pattern.patterns[i];
+			for (i in 0...pattern._variations.length) {
+				var hash = pattern._hashes[i];
+				var variation = pattern._variations[i];
 
 				//         if (hashedPatterns.exists(hash)) {
 				//           var old = hashedPatterns.get(hash);

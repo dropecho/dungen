@@ -1,10 +1,8 @@
 package map.extensions;
 
-import utest.Test;
-import utest.Assert;
 import dropecho.dungen.Map2d;
-
-using dropecho.dungen.map.extensions.BresenhamLine;
+import utest.Assert;
+import utest.Test;
 
 class BresenhamLineTests extends Test {
 	var map:Map2d;
@@ -140,7 +138,7 @@ class BresenhamLineTests extends Test {
 
 	public function test_draws_diagonal_line_half_height() {
 		map.setLine(0, 0, 7, 4, 1);
-//     trace(map.toPrettyString(['0', '1']));
+		//     trace(map.toPrettyString(['0', '1']));
 		var expected = [
 			1, 0, 0, 0, 0, 0, 0, 0,
 			0, 1, 1, 0, 0, 0, 0, 0,

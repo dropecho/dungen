@@ -3,6 +3,7 @@ package map;
 import utest.Assert;
 import utest.Test;
 import dropecho.dungen.Map2d;
+import dropecho.dungen.Tile2d;
 
 class TileIteratorTests extends Test {
 	public function test_should_iterate_through_tiles() {
@@ -21,7 +22,7 @@ class TileIteratorTests extends Test {
 		var map = new Map2d(4, 4);
 
 		var count = 0;
-		for (tile in map.tiles()) {
+		for (tile in map) {
 			count++;
 		}
 

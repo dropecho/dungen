@@ -3,7 +3,7 @@ package map;
 import utest.Assert;
 import utest.Test;
 import dropecho.dungen.Map2d;
-import dropecho.dungen.map.Pattern.Pattern;
+import dropecho.dungen.Pattern;
 
 class PatternTests extends Test {
 	var map:Map2d;
@@ -24,21 +24,21 @@ class PatternTests extends Test {
 			0, 0, 1,
 			0, 0, 0
 		];
-		Assert.same(rot_90, pattern.patterns[1]);
+		Assert.same(rot_90, pattern._variations[1]);
 
 		var rot_180 = [
 			0, 0, 0,
 			0, 0, 0,
 			0, 1, 0
 		];
-		Assert.same(rot_180, pattern.patterns[2]);
+		Assert.same(rot_180, pattern._variations[2]);
 
 		var rot_270 = [
 			0, 0, 0,
 			1, 0, 0,
 			0, 0, 0
 		];
-		Assert.same(rot_270, pattern.patterns[3]);
+		Assert.same(rot_270, pattern._variations[3]);
 	}
 
 	public function test_should_reflect() {
@@ -53,28 +53,28 @@ class PatternTests extends Test {
 			0, 0, 0,
 			0, 1, 0
 		];
-		Assert.same(expected_reflection_orig, pattern.patterns[4]);
+		Assert.same(expected_reflection_orig, pattern._variations[4]);
 
 		var expected_reflection_rot_90 = [
 			0, 0, 0,
 			1, 0, 0,
 			0, 0, 0
 		];
-		Assert.same(expected_reflection_rot_90, pattern.patterns[5]);
+		Assert.same(expected_reflection_rot_90, pattern._variations[5]);
 
 		var expected_reflection_rot_180 = [
 			0, 1, 0,
 			0, 0, 0,
 			0, 0, 0
 		];
-		Assert.same(expected_reflection_rot_180, pattern.patterns[6]);
+		Assert.same(expected_reflection_rot_180, pattern._variations[6]);
 
 		var expected_reflection_rot_270 = [
 			0, 0, 0,
 			0, 0, 1,
 			0, 0, 0
 		];
-		Assert.same(expected_reflection_rot_270, pattern.patterns[7]);
+		Assert.same(expected_reflection_rot_270, pattern._variations[7]);
 	}
 
 	public function test_symmetry_should_return_all_the_same() {
@@ -91,7 +91,7 @@ class PatternTests extends Test {
 		];
 
 		for (e in 0...7) {
-			Assert.same(expected, pattern.patterns[e + 1]);
+			Assert.same(expected, pattern._variations[e + 1]);
 		}
 	}
 }
