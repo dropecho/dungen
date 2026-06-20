@@ -1,0 +1,28 @@
+# Code coverage build (run via `npm run coverage`).
+#
+# Builds a dedicated `CoverageMain` entry point — same `*Tests.hx` auto-discovery
+# as the normal suite, but it calls `Sys.exit` on completion so the `instrument`
+# lcov reporter flushes. Compiling + running this writes `lcov.info` to the
+# project root (SF paths are relative to it), matching `.dropecho.testing.json`'s
+# `coverage_reporter`.
+
+-cp src
+-cp test
+
+-lib seedyrng
+-lib dropecho.ds
+-lib dropecho.interop
+-lib utest
+-lib dropecho.testing
+-lib hxnodejs
+-lib instrument
+
+-D js-es=6
+
+# Instrument every type under src/ in the dropecho.dungen package, and emit an
+# lcov report when the run exits.
+--macro instrument.Instrumentation.coverage(['dropecho.dungen'], ['src'], [])
+-D coverage-lcov-reporter
+
+-main CoverageMain
+-js artifacts/coverage_test.cjs

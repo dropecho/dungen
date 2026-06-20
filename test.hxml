@@ -12,14 +12,14 @@
 
 -D analyzer-optimize
 
-# Code coverage via the `instrument` library. It instruments every type under
-# `src/` in the `dropecho.dungen` package and, at the end of the test run,
-# writes an lcov report to `artifacts/lcov.info` (the reporter name mirrors
-# `.dropecho.testing.json`'s `coverage_reporter`; SF paths are relative to the
-# project root, so run lcov tooling from there).
--lib instrument
---macro instrument.Instrumentation.coverage(['dropecho.dungen'], ['src'], [])
--D coverage-lcov-reporter
+# Compile the whole library so the suite links every module, not just what the
+# tests reach.
+--macro include('', true, null, ['src'])
+
+# Code coverage is a separate build — see `coverage.hxml` / `npm run coverage`.
+# The `dropecho.testing` runner here never calls `Sys.exit`, which the
+# `instrument` lcov reporter needs in order to flush, so coverage can't be
+# produced from this hxml.
 
 # Narrow a run to a single test while debugging, e.g.:
 # -D UTEST_PATTERN=test_distance_fill
