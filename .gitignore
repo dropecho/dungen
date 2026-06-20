@@ -10,3 +10,7 @@ lcov.info
 .vim/
 lang_tests/**/*.dll
 lang_tests/**/*.exe
+lang_tests/**/dropecho.dungen.js
+
+# stray test export output (TiledExporter)
+test.png
