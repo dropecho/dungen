@@ -1,8 +1,12 @@
-node_modules/
+node_modules
+.nyc_output
+build
+report
+dist
 artifacts
+lcov.info
 *.swp
 .temp
-node_modules
+.vim/
 lang_tests/**/*.dll
 lang_tests/**/*.exe
-dist

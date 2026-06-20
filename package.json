@@ -1,7 +1,7 @@
 {
   "name": "@dropecho/dungen",
   "version": "1.5.0",
-  "description": "A dungeon generator.",
+  "description": "A procedural generation toolkit for games",
   "author": "vantreeseba <vantreeseba@gmail.com>",
   "repository": "github:dropecho/dungen",
   "publishConfig": {
@@ -10,6 +10,7 @@
   "license": "MIT",
   "type": "module",
   "main": "./dist/js/cjs/index.cjs",
+  "types": "./dist/js/esm/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/js/cjs/index.cjs",

@@ -1,31 +1,34 @@
+# Shared options — everything before `--each` is applied to every target below.
+
+# Source class path.
+-cp src
+
+# Library dependencies (resolved via lix / haxe_libraries).
 -lib seedyrng
 -lib dropecho.ds
 -lib dropecho.interop
 
--cp src
+# Pull every module under src/ into the build (not just those reachable from a
+# -main), so the whole library is compiled regardless of target entry point.
+--macro include('', true, null, ['src'])
+
+# Optimize the generated code. dce=no keeps the exposed API surface that nothing
+# internal references from being eliminated.
 -D analyzer-optimize
 -D dce=no
 
---macro include('', true, null, ['src'])
-
+# Apply everything above to each of the targets that follow.
 --each
 
-## JS BUILD
---next
+# Each target's options live in its own hxml under targets/.
 targets/js.hxml
-
-## JS BUILD
 --next
 targets/js-esm.hxml
 
-## CS BUILD
+# Opt-in targets — uncomment a pair to also build it.
 # --next
 # targets/cs.hxml
-
-# # Docs BUILD
 # --next
 # targets/docs.hxml
-
-## PYTHON
 # --next
-# targets/py.hxml
+# targets/python.hxml

@@ -1,32 +1,46 @@
 -cp src
 -cp test
 
+# Library dependencies plus the test stack. `dropecho.testing` auto-discovers
+# every `*Tests.hx` class on the classpath and injects the `--main` entry point
+# itself, so none is set here.
 -lib seedyrng
--lib dropecho.ds 
--lib dropecho.interop 
--lib dropecho.testing 
+-lib dropecho.ds
+-lib dropecho.interop
+-lib dropecho.testing
 -lib utest
 
+-D analyzer-optimize
+
+# Code coverage via the `instrument` library. It instruments every type under
+# `src/` in the `dropecho.dungen` package and, at the end of the test run,
+# writes an lcov report to `artifacts/lcov.info` (the reporter name mirrors
+# `.dropecho.testing.json`'s `coverage_reporter`; SF paths are relative to the
+# project root, so run lcov tooling from there).
+-lib instrument
+--macro instrument.Instrumentation.coverage(['dropecho.dungen'], ['src'], [])
+-D coverage-lcov-reporter
+
+# Narrow a run to a single test while debugging, e.g.:
 # -D UTEST_PATTERN=test_distance_fill
 
 --each
 
+# The suite runs on every runnable target below. These mirror the program
+# targets in targets/ — cs and docs are skipped (not runnable test programs) and
+# js-esm shares the js runtime, so neither adds test coverage.
+
+# JS (Node)
 --next
 -lib hxnodejs
 -D js-es=6
 -js artifacts/js_test.cjs
 
-# --next
-# -lib hxnodejs
-# -lib genes
-# -js artifacts/js_esm_test/test.js
-
+# C# — uncomment where mono is registered to exec the built .exe directly.
 # --next
 # -D net-ver=40
 # -cs artifacts/cs_test
 
+# Python
 # --next
 # -python artifacts/python_test
-
-# --next
-# -neko artifacts/neko_test.n
